@@ -1,0 +1,121 @@
+- platform: template
+  sensors:
+    ha_domain:
+      value_template: !secret ha_domain
+    api_password:
+      value_template: !secret api_password
+
+- platform: speedtest
+  minute:
+    - 21
+  monitored_conditions:
+    - ping
+    - download
+    - upload
+
+- platform: plex
+  host: !secret plex_host
+  username: !secret plex_user
+  password: !secret plex_pass
+  token: !secret plex_token
+
+- platform: lyft
+  client_id: !secret lyft_client
+  client_secret: !secret lyft_secret
+  start_latitude: !secret home_lat
+  start_longitude: !secret home_lon
+  end_latitude: 43.12771            # ROC Airport
+  end_longitude: -77.6690977
+
+- platform: uber
+  server_token: !secret uber_token
+  start_latitude: !secret home_lat
+  start_longitude: !secret home_lon
+  end_latitude: 43.12771            # ROC Airport
+  end_longitude: -77.6690977
+
+#- platform: fedex
+#  username: !secret fedex_user
+#  password: !secret fedex_pass
+
+- platform: ups
+  username: !secret ups_user
+  password: !secret ups_pass
+
+- platform: darksky
+  api_key: !secret darksky_key
+  monitored_conditions:
+#    - summary
+#    - icon
+#    - nearest_storm_distance
+#    - nearest_storm_bearing
+    - precip_type
+#    - precip_intensity
+    - precip_probability
+    - temperature
+    - apparent_temperature
+#    - dew_point
+    - wind_speed
+#    - wind_bearing
+#    - cloud_cover
+#    - humidity
+#    - pressure
+#    - visibility
+#    - ozone
+#    - minutely_summary
+    - hourly_summary
+    - daily_summary
+#    - temperature_max
+#    - temperature_min
+#    - apparent_temperature_max
+#    - apparent_temperature_min
+#    - precip_intensity_max
+
+- platform: radarr
+  api_key: !secret radarr_api
+  host: !secret radarr_host
+  port: !secret radarr_port
+  monitored_conditions:
+    - movies
+    - upcoming
+    - commands
+    - status
+
+- platform: sonarr
+  api_key: !secret sonarr_api
+  host: !secret sonarr_host
+  port: !secret sonarr_port
+  monitored_conditions:
+    - upcoming
+    - wanted
+    - commands
+
+- platform: deluge
+  host: !secret deluge_host
+  username: !secret deluge_user
+  password: !secret deluge_pass
+  monitored_variables:
+    - 'current_status'
+    - 'download_speed'
+    - 'upload_speed'
+
+- platform: cert_expiry
+  host: !secret root_domian
+
+- platform: systemmonitor
+  resources:
+    - type: disk_free
+      arg: /unraid/mnt/user
+    - type: disk_free
+      arg: /unraid/mnt/cache
+    - type: disk_free
+      arg: /unraid/mnt/disk1
+    - type: disk_free
+      arg: /unraid/mnt/disk2
+    - type: disk_free
+      arg: /unraid/mnt/disk3
+    - type: disk_free
+      arg: /unraid/mnt/disk4
+    - type: memory_use_percent
+    - type: processor_use
+    - type: since_last_boot

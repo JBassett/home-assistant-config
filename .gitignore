@@ -1,0 +1,35 @@
+# Secrets file
+secrets.yaml
+
+# Log File
+home-assistant.log
+
+# Known Devices
+known_devices.yaml
+
+*.pickle
+*.sqlite
+*.cookies
+.DS_Store
+.uuid
+.HA_VERSION
+
+#IDE Files
+.c9
+
+# Text to Speach Cache
+tts
+
+/www/avatars
+/www/snapshots
+
+#Z-Wave
+openzwave
+zwcfg_0xe2a2aae7.xml
+zwscene.xml
+OZW_Log.txt
+options.xml
+
+nest.conf
+html5_push_registrations.conf
+plex.conf

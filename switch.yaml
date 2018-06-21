@@ -1,0 +1,4 @@
+- platform: skybell
+  monitored_conditions:
+#    - do_not_disturb
+    - motion_sensor

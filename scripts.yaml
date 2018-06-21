@@ -1,0 +1,15 @@
+'1524963627395':
+  alias: Goodnight
+  sequence:
+  - data:
+      entity_id: group.outdoor_lights
+    service: light.turn_off
+'1524963751097':
+  alias: Goodnight
+  sequence:
+  - data:
+      entity_id: group.outdoor_lights
+    service: light.turn_off
+  - data:
+      entity_id: cover.garage_door_opener
+    service: cover.close_cover

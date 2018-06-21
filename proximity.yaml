@@ -1,0 +1,17 @@
+home_justin:
+  ignored_zones:
+    - zone.paychex__basket
+    - zone.rgh
+  tolerance: 50 # meters
+  devices:
+    - device_tracker.justin_pixel
+  unit_of_measurement: mi
+
+home_shannon:
+  ignored_zones:
+    - zone.paychex__basket
+    - zone.rgh
+  tolerance: 50 # meters
+  devices:
+    - device_tracker.shannon_motox4
+  unit_of_measurement: mi

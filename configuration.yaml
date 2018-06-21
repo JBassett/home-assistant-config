@@ -1,0 +1,147 @@
+homeassistant:
+  # Name of the location where Home Assistant is running
+  name: Home
+  # Location required to calculate the time the sun rises and sets
+  latitude: !secret home_lat
+  longitude: !secret home_lon
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  elevation: !secret elevation
+  # metric for Metric, imperial for Imperial
+  unit_system: imperial
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: !secret time_zone
+  customize: !include customize.yaml
+
+# Enables the frontend
+frontend:
+  themes: !include themes.yaml
+
+http: !include http.yaml
+
+map:
+
+panel_iframe:
+  sonarr:
+    title: 'Sonarr - TV'
+    icon: 'mdi:television-classic'
+    url: !secret sonarr_url
+  radarr:
+    title: 'Radarr - Movies'
+    icon: 'mdi:movie'
+    url: !secret radarr_url
+  ide:
+    title: 'IDE'
+    icon: 'mdi:keyboard'
+    url: !secret ide_url
+
+# Enables the config panels
+config:
+
+# Checks for available updates
+updater:
+
+# Discover some devices automatically
+#discovery:
+
+# Allows you to issue voice commands from the frontend in enabled browsers
+conversation:
+
+# Enables support for tracking state changes over time.
+history:
+  exclude:
+    entities:
+      - sensor.since_last_boot
+
+logger:
+  default: warn
+
+recorder:
+  purge_keep_days: 14
+  purge_interval: 2
+  db_url: !secret mariadb_url
+
+# View all events in a logbook
+logbook:
+  exclude:
+    entities:
+      - sensor.since_last_boot
+
+# Track the sun
+sun:
+
+# Text to speech
+tts:
+  platform: google
+
+zone: !include zone.yaml
+proximity: !include proximity.yaml
+
+google_assistant:
+  project_id: !secret google_assistant_project_id
+  client_id: !secret google_assistant_client_id
+  access_token: !secret google_assistant_access_token
+  exposed_domains:
+    - switch
+    - light
+    - conver
+    - media_player
+    - group
+    - fan
+    - scene
+    - script
+    - climate
+
+notify:
+  - name: web
+    platform: html5
+    gcm_api_key: !secret gcm_api_key
+    gcm_sender_id: !secret gcm_sender_id
+
+zwave:
+  usb_path: /zwaveusbstick
+  config_path: /config/openzwave/
+  device_config: !include zwave_device_config.yaml
+
+nest:
+  client_id: !secret nest_client_id
+  client_secret: !secret nest_client_secret
+
+skybell:
+  username: !secret skybell_user
+  password: !secret skybell_pass
+
+# Broken because of phantomjs not sure if going to be fixed.
+#usps:
+#  username: !secret usps_user
+#  password: !secret usps_pass
+#  driver: phantomjs
+
+weather:
+  - platform: darksky
+    api_key: !secret darksky_key
+
+sabnzbd:
+  host: !secret sabnzbd_host
+  port: !secret sabnzbd_port
+  api_key: !secret sabnzbd_api
+  sensors:
+    - 'current_status'
+    - 'speed'
+    - 'queue_size'
+    - 'queue_remaining'
+    - 'disk_size'
+    - 'disk_free'
+    - 'queue_count'
+
+automation: !include automations.yaml
+cover: !include cover.yaml
+binary_sensor: !include binary_sensor.yaml
+sensor: !include sensor.yaml
+switch: !include switch.yaml
+media_player: !include media_player.yaml
+device_tracker: !include device_tracker.yaml
+camera: !include camera.yaml
+light: !include light.yaml
+group: !include group.yaml
+shell_command: !include shell_command.yaml
+script: !include script.yaml
