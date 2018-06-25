@@ -1,10 +1,8 @@
 - platform: plex
 
-- platform: cast
-
+# Disable me when cast component config working!
 - platform: cast
   host: !secret google_home_host
-
 - platform: cast
   host: !secret master_bedroom_tv_host
 

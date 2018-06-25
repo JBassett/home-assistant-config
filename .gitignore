@@ -7,12 +7,14 @@ home-assistant.log
 # Known Devices
 known_devices.yaml
 
+*.token
 *.pickle
 *.sqlite
 *.cookies
 .DS_Store
 .uuid
 .HA_VERSION
+.config_entries.json
 
 #IDE Files
 .c9

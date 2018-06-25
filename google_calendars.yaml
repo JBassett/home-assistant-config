@@ -1,0 +1,42 @@
+
+- cal_id: !secret calendar_id_family
+  entities:
+  - device_id: family
+    ignore_availability: true
+    name: Family Calendar
+    track: true
+
+- cal_id: !secret calendar_id_shannon
+  entities:
+  - device_id: shannon
+    ignore_availability: true
+    name: Shannon's Calendar
+    track: true
+
+- cal_id: !secret calendar_id_work
+  entities:
+  - device_id: justin_work
+    ignore_availability: true
+    name: Justin's Work
+    track: true
+
+- cal_id: !secret calendar_id_justin
+  entities:
+  - device_id: justin
+    ignore_availability: true
+    name: Justin's Calendar
+    track: true
+
+- cal_id: '#contacts@group.v.calendar.google.com'
+  entities:
+  - device_id: contacts
+    ignore_availability: true
+    name: Contacts
+    track: false
+
+- cal_id: en.usa#holiday@group.v.calendar.google.com
+  entities:
+  - device_id: holidays_in_united_states
+    ignore_availability: true
+    name: Holidays in United States
+    track: false

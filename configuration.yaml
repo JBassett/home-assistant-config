@@ -91,6 +91,12 @@ google_assistant:
     - script
     - climate
 
+#This is for Google Calendar not all Google....
+google:
+  client_id: !secret google_calendar_key
+  client_secret: !secret google_calendar_secret
+  track_new_calendar: false
+
 notify:
   - name: web
     platform: html5
@@ -101,6 +107,12 @@ zwave:
   usb_path: /zwaveusbstick
   config_path: /config/openzwave/
   device_config: !include zwave_device_config.yaml
+
+# Broken in .72? https://github.com/home-assistant/home-assistant/issues/15097
+# cast:
+#   media_player:
+#   - host: !secret google_home_host
+#   - host: !secret master_bedroom_tv_host
 
 nest:
   client_id: !secret nest_client_id

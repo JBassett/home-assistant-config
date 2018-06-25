@@ -1,4 +1,4 @@
- - platform: skybell
-   monitored_conditions:
+- platform: skybell
+  monitored_conditions:
     - button
     - motion
