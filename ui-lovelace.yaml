@@ -3,15 +3,18 @@ views:
   - name: Home
     tab_icon: mdi:home
     cards:
+      - type: entities
+        title: Locations
+        entities:
+          - device_tracker.justin_pixel
+          - device_tracker.shannon_motox4
       - type: camera-preview
         title: Front Door
         entity: camera.front_door
-
       - type: entities
         title: Garage
         entities:
           - cover.garage_door_opener
-
       - type: entities
         title: Thermostat
         entities:
@@ -20,14 +23,12 @@ views:
           - sensor.family_room_thermostat_temperature
           - sensor.family_room_thermostat_target
           - sensor.family_room_thermostat_humidity
-
       - type: entities
         title: Outdoor Lights
         entities:
           - switch.porch_light
           - switch.drivewave_light
           - light.front_door
-
       - type: entities
         title: Ride Sharing
         entities:
@@ -102,7 +103,7 @@ views:
           - sensor.dark_sky_precip_probability
           - sensor.dark_sky_wind_speed
 
-  - name: Hardware
+  - name: Settings
     tab_icon: mdi:harddisk
     cards:
       - type: entities
@@ -152,6 +153,11 @@ views:
           - domain: zwave
         card_config:
           title: Z-Wave
+      - type: entity-filter
+        filter:
+          - domain: automation
+        card_config:
+          title: Automations
 
   - tab_icon: mdi:android-debug-bridge
     name: Debugging
