@@ -1,0 +1,162 @@
+name: Misty Way
+views:
+  - name: Home
+    tab_icon: mdi:home
+    cards:
+      - type: camera-preview
+        title: Front Door
+        entity: camera.front_door
+
+      - type: entities
+        title: Garage
+        entities:
+          - cover.garage_door_opener
+
+      - type: entities
+        title: Thermostat
+        entities:
+          - climate.family_room
+          - binary_sensor.family_room_thermostat_has_leaf
+          - sensor.family_room_thermostat_temperature
+          - sensor.family_room_thermostat_target
+          - sensor.family_room_thermostat_humidity
+
+      - type: entities
+        title: Outdoor Lights
+        entities:
+          - switch.porch_light
+          - switch.drivewave_light
+          - light.front_door
+
+      - type: entities
+        title: Ride Sharing
+        entities:
+          - sensor.lyft_time
+          - sensor.lyft_price
+          - sensor.lyft_plus_time
+          - sensor.lyft_plus_price
+          - sensor.uberx_time
+          - sensor.uberx_price
+          - sensor.uberxl_time
+          - sensor.uberxl_price
+
+  - name: First Floor
+    cards:
+      - type: media-control
+        entity: media_player.xboxone
+      - type: media-control
+        entity: media_player.lg_tv_remote
+      - type: media-control
+        entity: media_player.living_room_speaker
+      - type: entities
+        title: Office
+        entities:
+          - switch.office_outlet
+
+  - name: Second Floor
+    cards:
+      - type: media-control
+        entity: media_player.master_bedroom_tv
+
+  - name: Media
+    cards:
+      - type: media-control
+        entity: media_player.lg_tv_remote
+      - type: media-control
+        entity: media_player.xboxone
+      - type: entities
+        title: Plex
+        entities:
+          - sensor.plex
+      - type: entities
+        title: Movies
+        entities:
+          - sensor.radarr_upcoming
+          - sensor.radarr_movies
+          - sensor.radarr_status
+      - type: entities
+        title: TV Shows
+        entities:
+          - sensor.sonarr_upcoming
+          - sensor.sonarr_wanted
+
+  - name: Weather
+    tab_icon: mdi:weather-cloudy
+    cards:
+      - type: weather-forecast
+        entity: weather.dark_sky
+      - type: camera-preview
+        title: Radar
+        entity: camera.radar
+      - type: entities
+        title: Forcast
+        entities:
+          - sun.sun
+          - sensor.dark_sky_temperature
+          - sensor.dark_sky_apparent_temperature
+          - sensor.dark_sky_daily_low_temperature
+          - sensor.dark_sky_daily_high_temperature
+          - sensor.dark_sky_hourly_summary
+          - sensor.dark_sky_daily_summary
+          - sensor.dark_sky_precip
+          - sensor.dark_sky_precip_probability
+          - sensor.dark_sky_wind_speed
+
+  - name: Hardware
+    tab_icon: mdi:harddisk
+    cards:
+      - type: entities
+        title: Speedtest
+        entities:
+          - sensor.speedtest_download
+          - sensor.speedtest_upload
+          - sensor.speedtest_ping
+      - type: entities
+        title: PfSense
+        entities:
+          - sensor.ssl_certificate_expiry
+      - type: entities
+        title: Unraid
+        entities:
+          - sensor.processor_use
+          - sensor.memory_use_percent
+          - sensor.disk_free_unraidmntcache
+          - sensor.disk_free_unraidmntuser
+          - sensor.disk_free_unraidmntdisk1
+          - sensor.disk_free_unraidmntdisk2
+          - sensor.disk_free_unraidmntdisk3
+          - sensor.disk_free_unraidmntdisk4
+          - sensor.since_last_boot
+      - type: entities
+        title: Deluge
+        entities:
+          - sensor.deluge_status
+          - sensor.deluge_down_speed
+          - sensor.deluge_up_speed
+      - type: entities
+        title: Sabnzbd
+        entities:
+          - sensor.sabnzbd_status
+          - sensor.sabnzbd_speed
+          - sensor.sabnzbd_queue_count
+          - sensor.sabnzbd_queue
+          - sensor.sabnzbd_left
+          - sensor.sabnzbd_disk
+          - sensor.sabnzbd_disk_free
+      - type: entities
+        title: Devices
+        entities:
+          - binary_sensor.family_room_thermostat_online
+      - type: entity-filter
+        filter:
+          - domain: zwave
+        card_config:
+          title: Z-Wave
+
+  - tab_icon: mdi:android-debug-bridge
+    name: Debugging
+    cards:
+      - type: entity-filter
+        filter: [{}]
+        card_config:
+          title: All entities
