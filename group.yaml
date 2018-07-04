@@ -15,7 +15,7 @@ main_floor_view:
   view: yes
   name: Main Floor
   entities:
-    - media_player.xboxone
+    - media_player.plex_xboxone
     - media_player.lg_tv_remote
     - media_player.living_room_speaker
     - group.office
@@ -31,7 +31,7 @@ media_view:
   name: Media
   entities:
     - media_player.lg_tv_remote
-    - media_player.xboxone
+    - media_player.plex_xboxone
     - script.turn_on_xbox
     - group.plex
     - group.radarr
@@ -72,8 +72,8 @@ thermostat:
 outdoor_lights:
   name: Outdoor Lights
   entities:
-    - switch.porch_light
-    - switch.drivewave_light
+    - switch.porch_light_switch
+    - switch.driveway_light_switch
     - light.front_door
 
 weather:
@@ -101,8 +101,8 @@ ridesharing:
   entities:
     - sensor.lyft_time
     - sensor.lyft_price
-    - sensor.lyft_plus_time
-    - sensor.lyft_plus_price
+    - sensor.lyft_xl_time
+    - sensor.lyft_xl_price
     - sensor.uberx_time
     - sensor.uberx_price
     - sensor.uberxl_time
@@ -142,7 +142,7 @@ sabnzbd:
     - sensor.sabnzbd_queue
     - sensor.sabnzbd_left
     - sensor.sabnzbd_disk
-    - sensor.sabnzbd_disk_free 
+    - sensor.sabnzbd_disk_free
 
 usps:
   name: United Postal Service

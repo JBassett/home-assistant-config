@@ -16,14 +16,14 @@
 - cal_id: !secret calendar_id_work
   entities:
   - device_id: justin_work
-    ignore_availability: true
+    ignore_availability: false
     name: Justin's Work
     track: true
 
 - cal_id: !secret calendar_id_justin
   entities:
   - device_id: justin
-    ignore_availability: true
+    ignore_availability: false
     name: Justin's Calendar
     track: true
 

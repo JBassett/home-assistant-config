@@ -1,76 +1,65 @@
 climate.family_room:
+  config_entry_id: c518eae6ea3c47ff807de73ef108d556
   name:
   platform: nest
   unique_id: J3RcMnLIjfKnAw8rphG62-3pT4wdE6f1
-switch.porch_light:
-  name:
-  platform: zwave
-  unique_id: 2-72057594076282880
-media_player.pixel_2:
-  name:
-  platform: plex
-  unique_id: 96ff91e1c0615601-com-plexapp-android
-media_player.aftt:
-  name:
-  platform: plex
-  unique_id: 4f30a05bfaa09f1d-com-plexapp-android
-media_player.xboxone:
+media_player.plex_xboxone:
+  config_entry_id:
   name:
   platform: plex
   unique_id: bb1d3k332rrbbpy0gehrgue7
-media_player.chrome:
-  name:
-  platform: plex
-  unique_id: hdtqw0fowzyvoey8eva2s42o
-media_player.chrome_2:
-  name:
-  platform: plex
-  unique_id: jxroxn0og1lsp3cc7glh8gtw
-media_player.moto_x_4:
-  name:
-  platform: plex
-  unique_id: 4d7651fbfbb9815a-com-plexapp-android
-media_player.chrome_3:
-  name:
-  platform: plex
-  unique_id: cgyzpr6mto4bolitlm45rgdd
-switch.drivewave_light:
-  name:
-  platform: zwave
-  unique_id: 3-72057594093060096
-switch.office_outlet:
-  name:
-  platform: zwave
-  unique_id: 4-72057594109837312
-media_player.living_room_speaker:
-  name:
-  platform: cast
-  unique_id: 5ab0d204-c4aa-087d-1b55-af12ceb1957a
 media_player.master_bedroom_tv:
+  config_entry_id:
   name:
   platform: cast
   unique_id: f46ce797-9787-470d-7cf6-9426b61a5d07
+media_player.living_room_speaker:
+  config_entry_id:
+  name:
+  platform: cast
+  unique_id: 5ab0d204-c4aa-087d-1b55-af12ceb1957a
 zwave.z_stick:
+  config_entry_id:
   name:
   platform: zwave
   unique_id: node-1
 zwave.porch_light:
+  config_entry_id:
   name:
   platform: zwave
   unique_id: node-2
+switch.porch_light_switch:
+  config_entry_id:
+  name:
+  platform: zwave
+  unique_id: 2-72057594076282880
 zwave.driveway_light:
+  config_entry_id:
   name:
   platform: zwave
   unique_id: node-3
+switch.driveway_light_switch:
+  config_entry_id:
+  name:
+  platform: zwave
+  unique_id: 3-72057594093060096
 zwave.office_outlet:
+  config_entry_id:
   name:
   platform: zwave
   unique_id: node-4
-media_player.chrome_4:
+switch.office_outlet_switch:
+  config_entry_id:
   name:
-  platform: plex
-  unique_id: 3nby9o79sih60iqjofbrll56
-media_player.chrome_5:
+  platform: zwave
+  unique_id: 4-72057594109837312
+media_player.j9c1iln0cjr6n4kljoc9fc65:
+  config_entry_id:
   name:
   platform: plex
   unique_id: j9c1iln0cjr6n4kljoc9fc65
+media_player.hdtqw0fowzyvoey8eva2s42o:
+  config_entry_id:
+  name:
+  platform: plex
+  unique_id: hdtqw0fowzyvoey8eva2s42o

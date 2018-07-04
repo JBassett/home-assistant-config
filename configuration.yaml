@@ -15,8 +15,6 @@ homeassistant:
 # Enables the frontend
 frontend:
   javascript_version: latest
-  extra_html_url:
-    - /local/lovelace.html
   themes: !include themes.yaml
 
 http: !include http.yaml
@@ -111,11 +109,10 @@ zwave:
   config_path: /config/openzwave/
   device_config: !include zwave_device_config.yaml
 
-# Broken in .72? https://github.com/home-assistant/home-assistant/issues/15097
 # cast:
 #   media_player:
-#   - host: !secret google_home_host
-#   - host: !secret master_bedroom_tv_host
+#     - host: !secret google_home_host
+#     - host: !secret master_bedroom_tv_host
 
 nest:
   client_id: !secret nest_client_id
@@ -160,3 +157,7 @@ light: !include light.yaml
 group: !include group.yaml
 shell_command: !include shell_command.yaml
 script: !include script.yaml
+#
+# sunpower:
+#   username: demo@sunpower.com
+#   password: sun

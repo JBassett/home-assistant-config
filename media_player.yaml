@@ -1,4 +1,5 @@
 - platform: plex
+  use_custom_entity_ids: true
 
 # Disable me when cast component config working!
 - platform: cast

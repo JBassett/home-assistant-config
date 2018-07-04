@@ -30,12 +30,12 @@ views:
           - switch.drivewave_light
           - light.front_door
       - type: entities
-        title: Ride Sharing
+        title: Ride Sharing to ROC
         entities:
           - sensor.lyft_time
           - sensor.lyft_price
-          - sensor.lyft_plus_time
-          - sensor.lyft_plus_price
+          - sensor.lyft_xl_time
+          - sensor.lyft_xl_price
           - sensor.uberx_time
           - sensor.uberx_price
           - sensor.uberxl_time
@@ -44,7 +44,7 @@ views:
   - name: First Floor
     cards:
       - type: media-control
-        entity: media_player.xboxone
+        entity: media_player.plex_xboxone
       - type: media-control
         entity: media_player.lg_tv_remote
       - type: media-control
@@ -64,7 +64,7 @@ views:
       - type: media-control
         entity: media_player.lg_tv_remote
       - type: media-control
-        entity: media_player.xboxone
+        entity: media_player.plex_xboxone
       - type: entities
         title: Plex
         entities:

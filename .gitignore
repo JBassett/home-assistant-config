@@ -35,3 +35,5 @@ options.xml
 nest.conf
 html5_push_registrations.conf
 plex.conf
+
+__pycache__/
