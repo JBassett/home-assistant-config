@@ -1,0 +1,18 @@
+- alias: '[Notification] Front Door Motion'
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.skybell_front_door_motion
+    from: 'off'
+    to: 'on'
+  condition: []
+  action:
+  - service: camera.snapshot
+    data:
+      entity_id: camera.front_door
+      filename: /config/www/snapshots/front_door.jpg
+  - service: notify.web
+    data_template:
+      title: Front Door
+      message: 'Someone at the door! {{ now().strftime("%H:%M") }}'
+      data:
+        image: 'https://{{states.sensor.ha_domain.state}}/local/snapshots/front_door.jpg?api_password={{states.sensor.api_password.state}}'

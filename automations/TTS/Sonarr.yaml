@@ -1,0 +1,11 @@
+- alias: '[TTS] New TV Episode'
+  trigger:
+  - platform: event
+    event_type: TV_EPISODE_DOWNLOADED
+    event_data: {}
+  condition: []
+  action:
+  - service: tts.google_say
+    data_template:
+      entity_id: media_player.living_room_speaker
+      message: 'Good news, I downloaded a new episode of {{ trigger.event.data["title"] }} from season {{ trigger.event.data["season"] }} that aired on {{ trigger.event.data["airdate"] }}.'

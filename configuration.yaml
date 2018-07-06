@@ -146,6 +146,7 @@ sabnzbd:
     - 'queue_count'
 
 automation: !include automations.yaml
+automation old: !include_dir_merge_list automations
 cover: !include cover.yaml
 binary_sensor: !include binary_sensor.yaml
 sensor: !include sensor.yaml
