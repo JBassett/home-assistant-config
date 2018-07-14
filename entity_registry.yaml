@@ -28,7 +28,7 @@ zwave.porch_light:
   name:
   platform: zwave
   unique_id: node-2
-switch.porch_light_switch:
+switch.porch_light:
   config_entry_id:
   name:
   platform: zwave
@@ -38,7 +38,7 @@ zwave.driveway_light:
   name:
   platform: zwave
   unique_id: node-3
-switch.driveway_light_switch:
+switch.driveway_light:
   config_entry_id:
   name:
   platform: zwave
@@ -48,7 +48,7 @@ zwave.office_outlet:
   name:
   platform: zwave
   unique_id: node-4
-switch.office_outlet_switch:
+switch.office_outlet:
   config_entry_id:
   name:
   platform: zwave

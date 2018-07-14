@@ -1,6 +1,10 @@
-name: Misty Way
+resources:
+  - url: /local/lovelace/monster-card.js?v=1
+    type: js
+
+title: Misty Way
 views:
-  - name: Home
+  - title: Home
     tab_icon: mdi:home
     cards:
       - type: entities
@@ -8,9 +12,11 @@ views:
         entities:
           - device_tracker.justin_pixel
           - device_tracker.shannon_motox4
-      - type: camera-preview
+      - type: picture-glance
         title: Front Door
-        entity: camera.front_door
+        camera_image: camera.front_door
+        entities: 
+          - light.front_door
       - type: entities
         title: Garage
         entities:
@@ -27,7 +33,7 @@ views:
         title: Outdoor Lights
         entities:
           - switch.porch_light
-          - switch.drivewave_light
+          - switch.driveway_light
           - light.front_door
       - type: entities
         title: Ride Sharing to ROC
@@ -41,7 +47,7 @@ views:
           - sensor.uberxl_time
           - sensor.uberxl_price
 
-  - name: First Floor
+  - title: First Floor
     cards:
       - type: media-control
         entity: media_player.plex_xboxone
@@ -54,13 +60,17 @@ views:
         entities:
           - switch.office_outlet
 
-  - name: Second Floor
+  - title: Second Floor
     cards:
       - type: media-control
         entity: media_player.master_bedroom_tv
 
-  - name: Media
+  - title: Media
     cards:
+      - type: entities
+        title: Xbox
+        entities:
+          - script.turn_on_xbox
       - type: media-control
         entity: media_player.lg_tv_remote
       - type: media-control
@@ -81,14 +91,14 @@ views:
           - sensor.sonarr_upcoming
           - sensor.sonarr_wanted
 
-  - name: Weather
+  - title: Weather
     tab_icon: mdi:weather-cloudy
     cards:
       - type: weather-forecast
         entity: weather.dark_sky
-      - type: camera-preview
+      - type: picture-glance
         title: Radar
-        entity: camera.radar
+        camera_image: camera.radar
       - type: entities
         title: Forcast
         entities:
@@ -103,7 +113,7 @@ views:
           - sensor.dark_sky_precip_probability
           - sensor.dark_sky_wind_speed
 
-  - name: Settings
+  - title: Settings
     tab_icon: mdi:harddisk
     cards:
       - type: entities
@@ -148,21 +158,25 @@ views:
         title: Devices
         entities:
           - binary_sensor.family_room_thermostat_online
-      - type: entity-filter
-        filter:
-          - domain: zwave
-        card_config:
+      - type: custom:monster-card
+        card:
           title: Z-Wave
-      - type: entity-filter
+          type: glance
         filter:
-          - domain: automation
-        card_config:
+          include:
+            - domain: zwave
+      - type: custom:monster-card
+        card:
           title: Automations
+        filter:
+          include: 
+            - domain: automation
 
   - tab_icon: mdi:android-debug-bridge
-    name: Debugging
+    title: Debugging
     cards:
-      - type: entity-filter
-        filter: [{}]
-        card_config:
+      - type: custom:monster-card
+        card:
           title: All entities
+        filter:
+          include: [{}]

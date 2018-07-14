@@ -72,8 +72,8 @@ thermostat:
 outdoor_lights:
   name: Outdoor Lights
   entities:
-    - switch.porch_light_switch
-    - switch.driveway_light_switch
+    - switch.porch_light
+    - switch.driveway_light
     - light.front_door
 
 weather:
