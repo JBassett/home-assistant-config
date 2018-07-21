@@ -15,7 +15,7 @@ views:
       - type: picture-glance
         title: Front Door
         camera_image: camera.front_door
-        entities: 
+        entities:
           - light.front_door
       - type: entities
         title: Garage
@@ -96,9 +96,10 @@ views:
     cards:
       - type: weather-forecast
         entity: weather.dark_sky
-      - type: picture-glance
+      - type: picture-entity
         title: Radar
-        camera_image: camera.radar
+        entity: camera.radar
+        show_info: false
       - type: entities
         title: Forcast
         entities:
@@ -169,7 +170,7 @@ views:
         card:
           title: Automations
         filter:
-          include: 
+          include:
             - domain: automation
 
   - tab_icon: mdi:android-debug-bridge
