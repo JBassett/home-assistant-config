@@ -15,6 +15,7 @@ known_devices.yaml
 .uuid
 .HA_VERSION
 .config_entries.json
+.storage
 
 #IDE Files
 .c9

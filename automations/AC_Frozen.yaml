@@ -5,7 +5,7 @@
     from: 'off'
     to: 'cooling'
     for:
-      hours: 2
+      hours: 4
   action:
     - service: tts.google_say
       data:

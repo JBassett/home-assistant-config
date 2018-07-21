@@ -3,7 +3,10 @@
   - platform: event
     event_type: MOVIE_DOWNLOADED
     event_data: {}
-  condition: []
+  condition:
+    condition: time
+    after: '07:00:00'
+    before: '23:00:00'
   action:
   - service: tts.google_say
     data_template:
