@@ -34,6 +34,13 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Required(CONF_USERNAME): cv.string,
 })
 
+SENSORS = {
+    'energyProduction': ['Sunpower Energy Production', 'energyProduction', 'kW', 'mdi:battery-charging-100'],
+    'energyConsumption': ['Sunpower Energy Consumption', 'energyConsumption', 'kW', 'mdi:battery-100'],
+    'powerProduction': ['Sunpower Power Production', 'powerProduction', 'kWh', 'mdi:battery-charging-90'],
+    'powerConsumption': ['Sunpower Power Consumption', 'powerConsumption', 'kWh', 'mdi:battery-50']
+}
+
 def setup_platform(hass, config, add_devices, discovery_info=None):
     """Setup the Sunpower systems"""
 
@@ -51,10 +58,10 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
         track_time_interval(hass, callUpdate, MIN_TIME_BETWEEN_UPDATES)
         # Add devices
         add_devices([
-            SunpowerCurrentProductionSensor(api=sunpowerApi),
-            SunpowerCurrentConsumptionSensor(api=sunpowerApi),
-            SunpowerCurrentProductionEnergySensor(api=sunpowerApi),
-            SunpowerCurrentConsumptionEnergySensor(api=sunpowerApi)], True)
+            SunpowerSensor(api=sunpowerApi, config=SENSORS['energyProduction']),
+            SunpowerSensor(api=sunpowerApi, config=SENSORS['energyConsumption']),
+            SunpowerSensor(api=sunpowerApi, config=SENSORS['powerProduction']),
+            SunpowerSensor(api=sunpowerApi, config=SENSORS['powerConsumption'])], True)
     else:
         _LOGGER.error("Issue authenticating with Sunpower, check credentials and try again.")
 
@@ -63,10 +70,10 @@ class SunpowerApi():
         self.username = username
         self.password = password
         self.token = ''
-        self.currentProduction = None
-        self.currentConsumption = None
-        self.currentProductionEnergy = None
-        self.currentConsumptionEnergy = None
+        self.energyProduction = None
+        self.energyConsumption = None
+        self.powerProduction = None
+        self.powerConsumption = None
 
     def authenticate(self):
         data = {
@@ -104,34 +111,26 @@ class SunpowerApi():
 
         response = requests.get('https://monitor.us.sunpower.com/CustomerPortal/SystemInfo/SystemInfo.svc/getRealTimeNetDisplay?id='+self.token).json()
         _LOGGER.debug("getRealTimeNetDisplay:\n%s", response)
-        self.currentProduction = response['Payload']['CurrentProduction']['value']
-        self.currentConsumption = response['Payload']['CurrentConsumption']['value']
+        self.energyProduction = response['Payload']['CurrentProduction']['value']
+        self.energyConsumption = response['Payload']['CurrentConsumption']['value']
 
         day = datetime.now().strftime('%Y-%m-%dT00:00:00')
         response = requests.get('https://monitor.us.sunpower.com/CustomerPortal/SystemInfo/SystemInfo.svc/getHourlyEnergyData?timestamp='+day+'&tokenId='+self.token).json()
         _LOGGER.debug("getHourlyEnergyData:\n%s", response)
         match = re.search('\,(?P<produced>[0-9\.]*)\,(?P<used>[0-9\.]*)\,(?P<unknown>[0-9\.]*)$', response['Payload'])
-        self.currentProductionEnergy = float(match.group('produced') or 0)
-        self.currentConsumptionEnergy = float(match.group('used') or 0)
+        self.powerProduction = float(match.group('produced') or 0)
+        self.powerConsumption = float(match.group('used') or 0)
 
-    def getCurrentProduction(self):
-        return self.currentProduction
-    def getCurrentConsumption(self):
-        return self.currentConsumption
-    def getCurrentProductionEnergy(self):
-        return self.currentProductionEnergy
-    def getCurrentConsumptionEnergy(self):
-        return self.currentConsumptionEnergy
+class SunpowerSensor(Entity):
 
-class SunpowerCurrentProductionSensor(Entity):
-    """Representation of Current Power."""
-
-    def __init__(self, api):
+    def __init__(self, api, config):
         """Initialize a current production sensor."""
-        self._name = 'Sunpower Current Production'
+        self._name = config[0]
+        self._stateAttribute = config[1]
+        self._unit = config[2]
+        self._icon = config[3]
         self._sunpower = api
         self._state = None
-
     @property
     def name(self):
         """Return the display name of this sensor."""
@@ -140,97 +139,13 @@ class SunpowerCurrentProductionSensor(Entity):
     @property
     def state(self):
         """Return the state of the sensor."""
-        return self._sunpower.getCurrentProduction()
+        return getattr(self._sunpower, self._stateAttribute)
 
     @property
     def unit_of_measurement(self):
         """Return the unit of measurement."""
-        return 'kW'
+        return self._unit
 
     @property
     def icon(self):
-         return 'mdi:battery-charging-100'
-
-class SunpowerCurrentConsumptionSensor(Entity):
-    """Representation of Current Power."""
-
-    def __init__(self, api):
-        """Initialize a current production sensor."""
-        self._name = 'Sunpower Current Consumption'
-        self._sunpower = api
-        self._state = None
-
-    @property
-    def name(self):
-        """Return the display name of this sensor."""
-        return self._name
-
-    @property
-    def state(self):
-        """Return the state of the sensor."""
-        return self._sunpower.getCurrentConsumption()
-
-    @property
-    def unit_of_measurement(self):
-        """Return the unit of measurement."""
-        return 'kW'
-
-    @property
-    def icon(self):
-         return 'mdi:battery-10'
-
-class SunpowerCurrentProductionEnergySensor(Entity):
-    """Representation of Current Power."""
-
-    def __init__(self, api):
-        """Initialize a current production sensor."""
-        self._name = 'Sunpower Energy Production'
-        self._sunpower = api
-        self._state = None
-
-    @property
-    def name(self):
-        """Return the display name of this sensor."""
-        return self._name
-
-    @property
-    def state(self):
-        """Return the state of the sensor."""
-        return self._sunpower.getCurrentProductionEnergy()
-
-    @property
-    def unit_of_measurement(self):
-        """Return the unit of measurement."""
-        return 'kWh'
-
-    @property
-    def icon(self):
-         return 'mdi:battery-charging-90'
-
-class SunpowerCurrentConsumptionEnergySensor(Entity):
-    """Representation of Current Power."""
-
-    def __init__(self, api):
-        """Initialize a current production sensor."""
-        self._name = 'Sunpower Energy Consumption'
-        self._sunpower = api
-        self._state = None
-
-    @property
-    def name(self):
-        """Return the display name of this sensor."""
-        return self._name
-
-    @property
-    def state(self):
-        """Return the state of the sensor."""
-        return self._sunpower.getCurrentConsumptionEnergy()
-
-    @property
-    def unit_of_measurement(self):
-        """Return the unit of measurement."""
-        return 'kWh'
-
-    @property
-    def icon(self):
-         return 'mdi:battery-50'
+         return self._icon
