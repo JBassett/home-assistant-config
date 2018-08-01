@@ -10,6 +10,7 @@ from datetime import datetime
 from homeassistant.components.sensor import PLATFORM_SCHEMA
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.entity import Entity
+from homeassistant.helpers.event import track_time_interval
 from homeassistant.util import Throttle
 
 _LOGGER = logging.getLogger(__name__)
@@ -44,6 +45,10 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
     # Setup connection with devices/cloud
     sunpowerApi = SunpowerApi(username=username, password=password)
     if(sunpowerApi.authenticate()):
+        sunpowerApi.updateData()
+        def callUpdate(event_time):
+            sunpowerApi.updateData()
+        track_time_interval(hass, callUpdate, MIN_TIME_BETWEEN_UPDATES)
         # Add devices
         add_devices([
             SunpowerCurrentProductionSensor(api=sunpowerApi),
@@ -59,9 +64,9 @@ class SunpowerApi():
         self.password = password
         self.token = ''
         self.currentProduction = None
-        self.currentConsumtion = None
+        self.currentConsumption = None
         self.currentProductionEnergy = None
-        self.currentConsumtionEnergy = None
+        self.currentConsumptionEnergy = None
 
     def authenticate(self):
         data = {
@@ -86,7 +91,6 @@ class SunpowerApi():
 
         return True
 
-    @Throttle(MIN_TIME_BETWEEN_UPDATES)
     def updateData(self):
         if(self.token == ''):
             return False
@@ -108,7 +112,7 @@ class SunpowerApi():
         _LOGGER.debug("getHourlyEnergyData:\n%s", response)
         match = re.search('\,(?P<produced>[0-9\.]*)\,(?P<used>[0-9\.]*)\,(?P<unknown>[0-9\.]*)$', response['Payload'])
         self.currentProductionEnergy = float(match.group('produced') or 0)
-        self.currentConsumtionEnergy = float(match.group('used') or 0)
+        self.currentConsumptionEnergy = float(match.group('used') or 0)
 
     def getCurrentProduction(self):
         return self.currentProduction
@@ -116,8 +120,8 @@ class SunpowerApi():
         return self.currentConsumption
     def getCurrentProductionEnergy(self):
         return self.currentProductionEnergy
-    def getCurrentConsumtionEnergy(self):
-        return self.currentConsumtionEnergy
+    def getCurrentConsumptionEnergy(self):
+        return self.currentConsumptionEnergy
 
 class SunpowerCurrentProductionSensor(Entity):
     """Representation of Current Power."""
@@ -147,13 +151,6 @@ class SunpowerCurrentProductionSensor(Entity):
     def icon(self):
          return 'mdi:battery-charging-100'
 
-    def update(self):
-        """
-        Fetch new state data for this entity.
-        This is the only method that should fetch new data for Home Assistant.
-        """
-        self._sunpower.updateData()
-
 class SunpowerCurrentConsumptionSensor(Entity):
     """Representation of Current Power."""
 
@@ -181,13 +178,6 @@ class SunpowerCurrentConsumptionSensor(Entity):
     @property
     def icon(self):
          return 'mdi:battery-10'
-
-    def update(self):
-        """
-        Fetch new state data for this entity.
-        This is the only method that should fetch new data for Home Assistant.
-        """
-        self._sunpower.updateData()
 
 class SunpowerCurrentProductionEnergySensor(Entity):
     """Representation of Current Power."""
@@ -217,13 +207,6 @@ class SunpowerCurrentProductionEnergySensor(Entity):
     def icon(self):
          return 'mdi:battery-charging-90'
 
-    def update(self):
-        """
-        Fetch new state data for this entity.
-        This is the only method that should fetch new data for Home Assistant.
-        """
-        self._sunpower.updateData()
-
 class SunpowerCurrentConsumptionEnergySensor(Entity):
     """Representation of Current Power."""
 
@@ -241,7 +224,7 @@ class SunpowerCurrentConsumptionEnergySensor(Entity):
     @property
     def state(self):
         """Return the state of the sensor."""
-        return self._sunpower.getCurrentConsumtionEnergy()
+        return self._sunpower.getCurrentConsumptionEnergy()
 
     @property
     def unit_of_measurement(self):
@@ -251,10 +234,3 @@ class SunpowerCurrentConsumptionEnergySensor(Entity):
     @property
     def icon(self):
          return 'mdi:battery-50'
-
-    def update(self):
-        """
-        Fetch new state data for this entity.
-        This is the only method that should fetch new data for Home Assistant.
-        """
-        self._sunpower.updateData()
