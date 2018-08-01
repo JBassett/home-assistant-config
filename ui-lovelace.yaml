@@ -49,10 +49,10 @@ views:
       - type: entities
         title: Solar
         entities:
-          - sensor.sunpower_current_production
-          - sensor.sunpower_current_consumption
           - sensor.sunpower_energy_production
           - sensor.sunpower_energy_consumption
+          - sensor.sunpower_power_production
+          - sensor.sunpower_power_consumption
 
 
   - title: First Floor

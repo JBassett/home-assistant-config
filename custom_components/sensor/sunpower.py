@@ -1,17 +1,16 @@
 # https://github.com/home-assistant/home-assistant/blob/master/homeassistant/components/sensor/sma.py
 # https://www.home-assistant.io/components/sensor.sma/
-import asyncio
 import re
 import requests
 import logging
 import voluptuous as vol
 from datetime import timedelta
 from datetime import datetime
+from homeassistant.const import (CONF_PASSWORD, CONF_USERNAME, CONF_MONITORED_CONDITIONS)
 from homeassistant.components.sensor import PLATFORM_SCHEMA
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.event import track_time_interval
-from homeassistant.util import Throttle
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -20,26 +19,18 @@ DEPENDENCIES = []
 
 MIN_TIME_BETWEEN_UPDATES = timedelta(minutes=5)
 
-CONF_USERNAME = 'username'
-CONF_PASSWORD = 'password'
-
-# CONFIG_SCHEMA = vol.Schema({
-#     DOMAIN: vol.Schema({
-#       vol.Required(CONF_USERNAME): cv.string,
-#       vol.Required(CONF_PASSWORD): cv.string,
-#     })
-# }, extra=vol.ALLOW_EXTRA)
-PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
-    vol.Required(CONF_PASSWORD): cv.string,
-    vol.Required(CONF_USERNAME): cv.string,
-})
-
 SENSORS = {
-    'energyProduction': ['Sunpower Energy Production', 'energyProduction', 'kW', 'mdi:battery-charging-100'],
-    'energyConsumption': ['Sunpower Energy Consumption', 'energyConsumption', 'kW', 'mdi:battery-100'],
+    'energyProduction': ['Sunpower Energy Production', 'energyProduction', 'kW', 'mdi:battery-charging-90'],
+    'energyConsumption': ['Sunpower Energy Consumption', 'energyConsumption', 'kW', 'mdi:battery-50'],
     'powerProduction': ['Sunpower Power Production', 'powerProduction', 'kWh', 'mdi:battery-charging-90'],
     'powerConsumption': ['Sunpower Power Consumption', 'powerConsumption', 'kWh', 'mdi:battery-50']
 }
+
+PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
+    vol.Required(CONF_PASSWORD): cv.string,
+    vol.Required(CONF_USERNAME): cv.string,
+    vol.Required(CONF_MONITORED_CONDITIONS): vol.All(cv.ensure_list, [vol.In(SENSORS)])
+})
 
 def setup_platform(hass, config, add_devices, discovery_info=None):
     """Setup the Sunpower systems"""
@@ -57,11 +48,7 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
             sunpowerApi.updateData()
         track_time_interval(hass, callUpdate, MIN_TIME_BETWEEN_UPDATES)
         # Add devices
-        add_devices([
-            SunpowerSensor(api=sunpowerApi, config=SENSORS['energyProduction']),
-            SunpowerSensor(api=sunpowerApi, config=SENSORS['energyConsumption']),
-            SunpowerSensor(api=sunpowerApi, config=SENSORS['powerProduction']),
-            SunpowerSensor(api=sunpowerApi, config=SENSORS['powerConsumption'])], True)
+        add_devices([SunpowerSensor(api=sunpowerApi, config=SENSORS[sensor]) for sensor in config.get(CONF_MONITORED_CONDITIONS)], True)
     else:
         _LOGGER.error("Issue authenticating with Sunpower, check credentials and try again.")
 
