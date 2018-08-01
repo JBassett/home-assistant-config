@@ -11,7 +11,7 @@ homeassistant:
   # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
   time_zone: !secret time_zone
   customize: !include customize.yaml
-  
+
   auth_providers:
    - type: homeassistant
    # Uncomment next line if you want to enable legacy API password support
@@ -63,6 +63,8 @@ history:
 
 logger:
   default: warn
+  logs:
+    custom_components.sensor.sunpower: debug
 
 recorder:
   purge_keep_days: 14

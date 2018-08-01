@@ -46,6 +46,14 @@ views:
           - sensor.uberx_price
           - sensor.uberxl_time
           - sensor.uberxl_price
+      - type: entities
+        title: Solar
+        entities:
+          - sensor.sunpower_current_production
+          - sensor.sunpower_current_consumption
+          - sensor.sunpower_energy_production
+          - sensor.sunpower_energy_consumption
+
 
   - title: First Floor
     cards:
