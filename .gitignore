@@ -23,6 +23,8 @@ known_devices.yaml
 # Text to Speach Cache
 tts
 
+deps
+
 /www/avatars
 /www/snapshots
 

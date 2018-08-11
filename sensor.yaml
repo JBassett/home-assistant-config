@@ -4,6 +4,13 @@
       value_template: !secret ha_domain
     api_password:
       value_template: !secret api_password
+    solar_total_power:
+      friendly_name: 'Total Solar Power Production'
+      unit_of_measurement: 'kW'
+      value_template: >-
+        {%- if states.sensor|selectattr('attributes.DEVICE_TYPE','equalto','Inverter')|list|length == 24 %}
+          {{states.sensor|selectattr('attributes.DEVICE_TYPE','equalto','Inverter')|map(attribute='state')|map('float')|sum|round(2)}}
+        {%- endif %}
 
 - platform: speedtest
   minute:
@@ -120,11 +127,11 @@
     - type: processor_use
     - type: since_last_boot
 
-- platform: sunpower
-  username: demo@sunpower.com
-  password: sun
-  monitored_conditions:
-    - energyProduction
-    - energyConsumption
-    - powerProduction
-    - powerConsumption
+# - platform: sunpower
+#   username: !secret sunpower_user
+#   password: !secret sunpower_pass
+#   monitored_conditions:
+#     - energyProduction
+#     - energyConsumption
+#     - powerProduction
+#     - powerConsumption

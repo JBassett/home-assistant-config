@@ -20,10 +20,10 @@ DEPENDENCIES = []
 MIN_TIME_BETWEEN_UPDATES = timedelta(minutes=5)
 
 SENSORS = {
-    'energyProduction': ['Sunpower Energy Production', 'energyProduction', 'kW', 'mdi:battery-charging-90'],
-    'energyConsumption': ['Sunpower Energy Consumption', 'energyConsumption', 'kW', 'mdi:battery-50'],
-    'powerProduction': ['Sunpower Power Production', 'powerProduction', 'kWh', 'mdi:battery-charging-90'],
-    'powerConsumption': ['Sunpower Power Consumption', 'powerConsumption', 'kWh', 'mdi:battery-50']
+    'energyProduction': ['Sunpower Energy Production', 'energyProduction', 'kWh', 'mdi:battery-charging-90'],
+    'energyConsumption': ['Sunpower Energy Consumption', 'energyConsumption', 'kWh', 'mdi:battery-50'],
+    'powerProduction': ['Sunpower Power Production', 'powerProduction', 'kW', 'mdi:battery-charging-90'],
+    'powerConsumption': ['Sunpower Power Consumption', 'powerConsumption', 'kW', 'mdi:battery-50']
 }
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
@@ -96,17 +96,25 @@ class SunpowerApi():
             else:
                 _LOGGER.debug("Token refreshed!")
 
-        response = requests.get('https://monitor.us.sunpower.com/CustomerPortal/SystemInfo/SystemInfo.svc/getRealTimeNetDisplay?id='+self.token).json()
-        _LOGGER.debug("getRealTimeNetDisplay:\n%s", response)
-        self.energyProduction = response['Payload']['CurrentProduction']['value']
-        self.energyConsumption = response['Payload']['CurrentConsumption']['value']
+        # response = requests.get('https://monitor.us.sunpower.com/CustomerPortal/SystemInfo/SystemInfo.svc/getRealTimeNetDisplay?id='+self.token).json()
+        # _LOGGER.debug("getRealTimeNetDisplay:\n%s", response)
+        # self.powerProduction = response['Payload']['CurrentProduction']['value']
+        # self.powerConsumption = response['Payload']['CurrentConsumption']['value']
 
         day = datetime.now().strftime('%Y-%m-%dT00:00:00')
         response = requests.get('https://monitor.us.sunpower.com/CustomerPortal/SystemInfo/SystemInfo.svc/getHourlyEnergyData?timestamp='+day+'&tokenId='+self.token).json()
         _LOGGER.debug("getHourlyEnergyData:\n%s", response)
         match = re.search('\,(?P<produced>[0-9\.]*)\,(?P<used>[0-9\.]*)\,(?P<unknown>[0-9\.]*)$', response['Payload'])
-        self.powerProduction = float(match.group('produced') or 0)
-        self.powerConsumption = float(match.group('used') or 0)
+        if(match is not None):
+            self.energyProduction = float(match.group('produced') or 0)
+            self.energyConsumption = float(match.group('used') or 0)
+
+        tomorrow = (datetime.now() + timedelta(days=1)).strftime('%Y-%m-%dT00:00:00')
+        response = requests.get('https://monitor.us.sunpower.com/CustomerPortal/SystemInfo/SystemInfo.svc/getEnergyData?&startDateTime='+day+'&endDateTime='+tomorrow+'&interval=minute&guid='+self.token).json()
+        _LOGGER.debug("getEnergyData:\n%s", response)
+        if(response['Payload'] is not None):
+            self.powerProduction = 12 * response['Payload']['series']['data'][-1]['ep']
+            self.powerConsumption = 12 * response['Payload']['series']['data'][-1]['eu']
 
 class SunpowerSensor(Entity):
 

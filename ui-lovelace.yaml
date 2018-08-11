@@ -46,14 +46,24 @@ views:
           - sensor.uberx_price
           - sensor.uberxl_time
           - sensor.uberxl_price
-      - type: entities
-        title: Solar
-        entities:
-          - sensor.sunpower_energy_production
-          - sensor.sunpower_energy_consumption
-          - sensor.sunpower_power_production
-          - sensor.sunpower_power_consumption
 
+  - title: Solar
+    cards:
+      - type: history-graph
+        title: Total Solar Output
+        hours_to_show: 18
+        refresh_interval: 60
+        entities:
+          - sensor.solar_total_power
+      - type: custom:monster-card
+        card:
+          type: history-graph
+          title: Individual Panels
+          hours_to_show: 18
+          refresh_interval: 60
+        filter:
+          include:
+            - entity_id: "sensor.solar_inverter*"
 
   - title: First Floor
     cards:
