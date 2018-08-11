@@ -159,7 +159,7 @@ automation: !include automations.yaml
 automation old: !include_dir_merge_list automations
 cover: !include cover.yaml
 binary_sensor: !include binary_sensor.yaml
-sensor: !include sensor.yaml
+sensor: !include_dir_merge_list sensors
 switch: !include switch.yaml
 media_player: !include media_player.yaml
 device_tracker: !include device_tracker.yaml
