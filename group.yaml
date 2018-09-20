@@ -53,7 +53,7 @@ hardware_view:
     - binary_sensor.family_room_thermostat_online
     - group.pfsense
     - group.unraid
-    - group.deluge
+    # - group.deluge
     - group.sabnzbd
 
 #########################################
@@ -126,12 +126,12 @@ sonarr:
     - sensor.sonarr_upcoming
     - sensor.sonarr_wanted
 
-deluge:
-  name: Deluge
-  entities:
-    - sensor.deluge_status
-    - sensor.deluge_down_speed
-    - sensor.deluge_up_speed
+# deluge:
+#   name: Deluge
+#   entities:
+#     - sensor.deluge_status
+#     - sensor.deluge_down_speed
+#     - sensor.deluge_up_speed
 
 sabnzbd:
   name: Sabnzbd

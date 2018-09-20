@@ -27,21 +27,9 @@ frontend:
 
 http: !include http.yaml
 
-map:
+custom_updater:
 
-panel_iframe:
-  sonarr:
-    title: 'Sonarr - TV'
-    icon: 'mdi:television-classic'
-    url: !secret sonarr_url
-  radarr:
-    title: 'Radarr - Movies'
-    icon: 'mdi:movie'
-    url: !secret radarr_url
-  ide:
-    title: 'IDE'
-    icon: 'mdi:keyboard'
-    url: !secret ide_url
+map:
 
 # Enables the config panels
 config:
@@ -119,24 +107,14 @@ zwave:
   config_path: /config/openzwave/
   device_config: !include zwave_device_config.yaml
 
-# cast:
-#   media_player:
-#     - host: !secret google_home_host
-#     - host: !secret master_bedroom_tv_host
-
-nest:
-  client_id: !secret nest_client_id
-  client_secret: !secret nest_client_secret
+cast:
+  media_player:
+    - host: !secret google_home_host
+    - host: !secret master_bedroom_tv_host
 
 skybell:
   username: !secret skybell_user
   password: !secret skybell_pass
-
-# Broken because of phantomjs not sure if going to be fixed.
-#usps:
-#  username: !secret usps_user
-#  password: !secret usps_pass
-#  driver: phantomjs
 
 weather:
   - platform: darksky
@@ -168,7 +146,7 @@ light: !include light.yaml
 group: !include group.yaml
 shell_command: !include shell_command.yaml
 script: !include script.yaml
-#
+
 # sunpower:
 #   username: demo@sunpower.com
 #   password: sun

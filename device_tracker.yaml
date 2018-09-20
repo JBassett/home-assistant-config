@@ -4,8 +4,8 @@
 #  community: public
 #  baseoid: 1.3.6.1.2.1.4.22.1.2
 
-- platform: owntracks_http
+#- platform: owntracks_http
 
-#- platform: google_maps
-#  username: !secret maps_user
-#  password: !secret maps_pass
+- platform: google_maps
+  username: !secret maps_user
+  password: !secret maps_pass
