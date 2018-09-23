@@ -1,9 +1,5 @@
 sensor.ha_url:
   hidden: true
-sensor.ha_domain:
-  hidden: true
-sensor.api_password:
-  hidden: true
 
 # Weather
 sensor.dark_sky_temperature:

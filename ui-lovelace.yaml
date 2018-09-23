@@ -69,6 +69,7 @@ views:
           - sensor.solar_raw_total_power
           - sensor.solar_raw_lifetime_net_energy
           - sensor.solar_raw_house_usage
+          - sensor.solar_raw_export
       - type: history-graph
         title: Overall Usage
         hours_to_show: 24
@@ -76,15 +77,15 @@ views:
         entities:
           - sensor.solar_raw_total_power
           - sensor.solar_raw_house_usage
-          - sensor.solar_consumptionmeter_pvs5m644235c
-      # - type: history-graph
-      #   title: Overall Usage Smoothed
-      #   hours_to_show: 24
-      #   refresh_interval: 60
-      #   entities:
-      #     - sensor.incoming_solar_power
-      #     - sensor.solar_house_usage
-      #     - sensor.current_consumption_meter
+          - sensor.solar_raw_export
+      - type: history-graph
+        title: Overall Usage Smoothed
+        hours_to_show: 24
+        refresh_interval: 60
+        entities:
+          - sensor.current_solar_power
+          - sensor.current_house_usage
+          - sensor.current_power_export
       - type: custom:monster-card
         card:
           type: history-graph
