@@ -64,12 +64,17 @@ views:
   - title: Solar
     cards:
       - type: glance
-        title: Current Stats
+        title: Current Power Stats
         entities:
           - sensor.solar_raw_total_power
           - sensor.solar_raw_lifetime_net_energy
           - sensor.solar_raw_house_usage
           - sensor.solar_raw_export
+      - type: entities
+        title: Current Energy Stats
+        entities:
+          - sensor.yesterdays_net_energy_consumption
+          - sensor.todays_net_energy_consumption
       - type: history-graph
         title: Overall Usage
         hours_to_show: 24
@@ -223,6 +228,22 @@ views:
         trackers:
           - sensor.custom_card_tracker
           - sensor.custom_component_tracker
+
+  - title: Financial
+    tab_icon: mdi:currency-usd
+    cards:
+      - type: entities
+        title: Speedtest
+        entities:
+          - sensor.personal_capital_assets
+          - sensor.personal_capital_cash
+          - sensor.personal_capital_credit
+          - sensor.personal_capital_investments
+          - sensor.personal_capital_liabilities
+          - sensor.personal_capital_loans
+          - sensor.personal_capital_mortgages
+          - sensor.personal_capital_networth
+          - sensor.personal_capital_other_assets
 
   - tab_icon: mdi:android-debug-bridge
     title: Debugging

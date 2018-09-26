@@ -87,6 +87,10 @@
     - type: processor_use
     - type: since_last_boot
 
+- platform: personalcapital
+  email: !secret personalCap_user
+  password: !secret personalCap_pass
+
 # - platform: sunpower
 #   username: !secret sunpower_user
 #   password: !secret sunpower_pass

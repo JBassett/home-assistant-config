@@ -6,6 +6,8 @@
       value_template: >-
         {% if states.sensor|selectattr('attributes.DEVICE_TYPE','equalto','Inverter')|list|length == 24 %}
           {{states.sensor|selectattr('attributes.DEVICE_TYPE','equalto','Inverter')|map(attribute='state')|map('float')|sum|round(2)}}
+        {% else %}
+          0
         {% endif %}
     solar_raw_lifetime_net_energy:
       friendly_name: 'Lifetime Raw Net Energy'
@@ -16,7 +18,7 @@
       friendly_name: 'Raw Current House Power Usage'
       unit_of_measurement: 'kW'
       value_template: >-
-        {% if states.sensor|selectattr('attributes.DEVICE_TYPE','equalto','Inverter')|list|length == 24 and states('sensor.solar_consumptionmeter_pvs5m644235c') is defined %}
+        {% if states('sensor.solar_consumptionmeter_pvs5m644235c') is defined %}
           {{([states('sensor.solar_raw_total_power')|float + states('sensor.solar_consumptionmeter_pvs5m644235c')|float,0]|max)|round(2)}}
         {% endif %}
     solar_raw_export:
@@ -45,3 +47,39 @@
   filters:
     - filter: lowpass
       precision: 2
+
+- platform: sql
+  db_url: !secret mariadb_url
+  queries:
+    - name: 'Todays Net Energy Consumption'
+      query: >-
+        SELECT ROUND(current.state - midnight.state, 2) as value 
+        FROM 
+          (SELECT state FROM states WHERE entity_id='sensor.solar_raw_lifetime_net_energy' 
+            AND last_changed BETWEEN date(now())
+            AND addtime(date(now()), 3000)
+            ORDER BY last_changed
+            LIMIT 1) as midnight,
+          (SELECT state FROM states WHERE entity_id='sensor.solar_raw_lifetime_net_energy' 
+            AND last_changed BETWEEN addtime(now(), -3000)  
+            AND now()
+            ORDER BY last_changed DESC
+            LIMIT 1) as current;
+      column: 'value'
+      unit_of_measurement: 'kWh'
+    - name: 'Yesterdays Net Energy Consumption'
+      query: >-
+        SELECT ROUND(today.state - yesterday.state, 2) as value 
+        FROM 
+          (SELECT state FROM states WHERE entity_id='sensor.solar_raw_lifetime_net_energy' 
+            AND last_changed BETWEEN adddate(date(now()), -2)  
+            AND addtime(adddate(date(now()), -2), 3000)
+            ORDER BY last_changed
+            LIMIT 1) as yesterday,
+          (SELECT state FROM states WHERE entity_id='sensor.solar_raw_lifetime_net_energy' 
+            AND last_changed BETWEEN addtime(adddate(date(now()), -1), -3000)  
+            AND adddate(date(now()), -1)
+            ORDER BY last_changed DESC
+            LIMIT 1) as today;
+      column: 'value'
+      unit_of_measurement: 'kWh'

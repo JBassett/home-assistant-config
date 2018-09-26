@@ -16,6 +16,7 @@ known_devices.yaml
 .HA_VERSION
 .config_entries.json
 .storage
+.pc-session # Personal Capital Session
 
 #IDE Files
 .c9
