@@ -1,4 +1,10 @@
 - platform: skybell
   monitored_conditions:
-#    - do_not_disturb
+    - do_not_disturb
     - motion_sensor
+
+- platform: wake_on_lan
+  name: Gaming PC
+  mac_address: !secret gaming_pc_mac
+  broadcast_address: !secret gaming_pc_brodcast
+  host: !secret gaming_pc_host

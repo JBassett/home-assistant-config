@@ -16,7 +16,13 @@ known_devices.yaml
 .HA_VERSION
 .config_entries.json
 .storage
-.pc-session # Personal Capital Session
+.pc-session
+.august.conf
+nest.conf
+html5_push_registrations.conf
+plex.conf
+sabnzbd.conf
+.google_maps_location_sharing.cookies.*
 
 #IDE Files
 .c9
@@ -35,9 +41,5 @@ zwcfg_0xe2a2aae7.xml
 zwscene.xml
 OZW_Log.txt
 options.xml
-
-nest.conf
-html5_push_registrations.conf
-plex.conf
 
 __pycache__/

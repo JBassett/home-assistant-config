@@ -1,0 +1,9 @@
+- alias: 'Theater - Starting Media'
+  trigger:
+    - platform: state
+      entity_id: media_player.plex_xboxone
+      to: 'playing'
+  action:
+    - service: switch.turn_off
+      entity_id:
+        - switch.living_room_outlet

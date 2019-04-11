@@ -3,83 +3,74 @@
     solar_raw_total_power:
       friendly_name: 'Raw Total Solar Power Production'
       unit_of_measurement: 'kW'
+      entity_id:
+        - sensor.solar_consumptionmeter_pvs5m644235c
       value_template: >-
-        {% if states.sensor|selectattr('attributes.DEVICE_TYPE','equalto','Inverter')|list|length == 24 %}
+        {% if states.sun.sun.state == 'above_horizon' and states.sensor|selectattr('attributes.DEVICE_TYPE','equalto','Inverter')|list|length == 24 %}
           {{states.sensor|selectattr('attributes.DEVICE_TYPE','equalto','Inverter')|map(attribute='state')|map('float')|sum|round(2)}}
         {% else %}
-          0
+          0.0001
+        {% endif %}
+    solar_raw_lifetime_panel_energy:
+      friendly_name: 'Raw Panel Output Energy'
+      unit_of_measurement: 'kWh'
+      entity_id:
+        - sensor.solar_consumptionmeter_pvs5m644235c
+      value_template: >-
+        {% if states.sensor|selectattr('attributes.DEVICE_TYPE','equalto','Inverter')|list|length == 24 %}
+          {{states.sensor|selectattr('attributes.DEVICE_TYPE','equalto','Inverter')|map(attribute='attributes.ltea_3phsum_kwh')|map('float')|sum|round(2)}}
         {% endif %}
     solar_raw_lifetime_net_energy:
       friendly_name: 'Lifetime Raw Net Energy'
       unit_of_measurement: 'kWh'
+      entity_id:
+        - sensor.solar_consumptionmeter_pvs5m644235c
       value_template: >-
         {{state_attr('sensor.solar_consumptionmeter_pvs5m644235c', 'net_ltea_3phsum_kwh')}}
     solar_raw_house_usage:
       friendly_name: 'Raw Current House Power Usage'
       unit_of_measurement: 'kW'
+      entity_id:
+        - sensor.solar_raw_total_power
+        - sensor.solar_consumptionmeter_pvs5m644235c
       value_template: >-
         {% if states('sensor.solar_consumptionmeter_pvs5m644235c') is defined %}
           {{([states('sensor.solar_raw_total_power')|float + states('sensor.solar_consumptionmeter_pvs5m644235c')|float,0]|max)|round(2)}}
         {% endif %}
-    solar_raw_export:
-      friendly_name: 'Raw Exported Power'
-      unit_of_measurement: 'kW'
+    solar_daily_house_usage_energy:
+      friendly_name: 'Daily useage of energy from the house'
+      unit_of_measurement: 'kWh'
+      entity_id:
+        - sensor.house_daily_net_energy
+        - sensor.solar_daily_energy
       value_template: >-
-        {% if states('sensor.solar_consumptionmeter_pvs5m644235c') is defined %}
-          {{ [states('sensor.solar_consumptionmeter_pvs5m644235c')|float * -1, 0]|max|round(2) }} 
-        {% endif %}
+        {{states('sensor.solar_daily_energy')|float + states('sensor.house_daily_net_energy')|float}}
 
 - platform: filter
   name: 'Current Solar Power'
   entity_id: sensor.solar_raw_total_power
   filters:
     - filter: lowpass
+      time_constant: 15
       precision: 2
 - platform: filter
   name: 'Current House Usage'
   entity_id: sensor.solar_raw_house_usage
   filters:
     - filter: lowpass
+      time_constant: 15
       precision: 2
 - platform: filter
   name: 'Current Power Export'
-  entity_id: sensor.solar_raw_export
+  entity_id: sensor.solar_raw_grid_export
   filters:
     - filter: lowpass
+      time_constant: 15
       precision: 2
-
-- platform: sql
-  db_url: !secret mariadb_url
-  queries:
-    - name: 'Todays Net Energy Consumption'
-      query: >-
-        SELECT ROUND(current.state - midnight.state, 2) as value 
-        FROM 
-          (SELECT state FROM states WHERE entity_id='sensor.solar_raw_lifetime_net_energy' 
-            AND last_changed BETWEEN date(now())
-            AND addtime(date(now()), 3000)
-            ORDER BY last_changed
-            LIMIT 1) as midnight,
-          (SELECT state FROM states WHERE entity_id='sensor.solar_raw_lifetime_net_energy' 
-            AND last_changed BETWEEN addtime(now(), -3000)  
-            AND now()
-            ORDER BY last_changed DESC
-            LIMIT 1) as current;
-      column: 'value'
-      unit_of_measurement: 'kWh'
-    - name: 'Yesterdays Net Energy Consumption'
-      query: >-
-        SELECT ROUND(today.state - yesterday.state, 2) as value 
-        FROM 
-          (SELECT state FROM states WHERE entity_id='sensor.solar_raw_lifetime_net_energy' 
-            AND last_changed BETWEEN adddate(date(now()), -2)  
-            AND addtime(adddate(date(now()), -2), 3000)
-            ORDER BY last_changed
-            LIMIT 1) as yesterday,
-          (SELECT state FROM states WHERE entity_id='sensor.solar_raw_lifetime_net_energy' 
-            AND last_changed BETWEEN addtime(adddate(date(now()), -1), -3000)  
-            AND adddate(date(now()), -1)
-            ORDER BY last_changed DESC
-            LIMIT 1) as today;
-      column: 'value'
-      unit_of_measurement: 'kWh'
+- platform: filter
+  name: 'Current House Consumption'
+  entity_id: sensor.solar_consumptionmeter_pvs5m644235c
+  filters:
+    - filter: lowpass
+      time_constant: 15
+      precision: 2

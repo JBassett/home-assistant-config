@@ -8,18 +8,21 @@ https://github.com/custom-components/sensor.personalcapital
 import logging
 import voluptuous as vol
 import json
+import time
 from datetime import timedelta
 from homeassistant.helpers.entity import Entity
 import homeassistant.helpers.config_validation as cv
 from homeassistant.components.sensor import (PLATFORM_SCHEMA)
+from homeassistant.util import Throttle
 
-__version__ = '0.0.1'
+__version__ = '0.1.0'
 
 REQUIREMENTS = ['personalcapital==1.0.1']
 
 CONF_EMAIL = 'email'
 CONF_PASSWORD = 'password'
 CONF_UNIT_OF_MEASUREMENT = 'unit_of_measurement'
+CONF_CATEGORIES = 'monitored_categories'
 
 SESSION_FILE = '.pc-session'
 DATA_PERSONAL_CAPITAL = 'personalcapital_cache'
@@ -27,24 +30,37 @@ DATA_PERSONAL_CAPITAL = 'personalcapital_cache'
 ATTR_NETWORTH = 'networth'
 ATTR_ASSETS = 'assets'
 ATTR_LIABILITIES = 'liabilities'
-ATTR_INVESTMENTS = 'investments'
-ATTR_MORTGAGES = 'mortgages'
+ATTR_INVESTMENT = 'investment'
+ATTR_MORTGAGE = 'mortgage'
 ATTR_CASH = 'cash'
-ATTR_OTHER_ASSETS = 'other_assets'
-ATTR_OTHER_LIABILITIES = 'other_liabilities'
-ATTR_CREDIT = 'credit_cards'
-ATTR_LOANS = 'loans'
+ATTR_OTHER_ASSET = 'other_asset'
+ATTR_OTHER_LIABILITY = 'other_liability'
+ATTR_CREDIT = 'credit'
+ATTR_LOAN = 'loan'
 
-SCAN_INTERVAL = timedelta(minutes=30)
+SCAN_INTERVAL = timedelta(minutes=5)
+MIN_TIME_BETWEEN_UPDATES = timedelta(minutes=30)
+
+SENSOR_TYPES = {
+    ATTR_INVESTMENT: ['INVESTMENT', '', 'investmentAccountsTotal', 'Investment', False],
+    ATTR_MORTGAGE: ['MORTGAGE', '', 'mortgageAccountsTotal', 'Mortgage', True],
+    ATTR_CASH: ['BANK', 'Cash', 'cashAccountsTotal', 'Cash', False],
+    ATTR_OTHER_ASSET: ['OTHER_ASSETS', '', 'otherAssetAccountsTotal', 'Other Asset', False],
+    ATTR_OTHER_LIABILITY: ['OTHER_LIABILITIES', '', 'otherLiabilitiesAccountsTotal', 'Other Liability', True],
+    ATTR_CREDIT: ['CREDIT_CARD', '', 'creditCardAccountsTotal', 'Credit', True],
+    ATTR_LOAN: ['LOAN', '', 'loanAccountsTotal', 'Loan', True],
+}
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Required(CONF_EMAIL): cv.string,
     vol.Required(CONF_PASSWORD): cv.string,
     vol.Optional(CONF_UNIT_OF_MEASUREMENT, default='USD'): cv.string,
+    vol.Optional(CONF_CATEGORIES, default=[]): vol.All(cv.ensure_list, [vol.In(SENSOR_TYPES)]),
 })
 
 _CONFIGURING = {}
 _LOGGER = logging.getLogger(__name__)
+
 
 def request_app_setup(hass, config, pc, add_devices, discovery_info=None):
     """Request configuration steps from the user."""
@@ -80,9 +96,10 @@ def request_app_setup(hass, config, pc, add_devices, discovery_info=None):
             'type': 'string'}]
     )
 
+
 def load_session(hass):
     try:
-        with open(hass.config.path(SESSION_FILE)) as data_file:    
+        with open(hass.config.path(SESSION_FILE)) as data_file:
             cookies = {}
             try:
                 cookies = json.load(data_file)
@@ -92,9 +109,11 @@ def load_session(hass):
     except IOError as err:
         return {}
 
+
 def save_session(hass, session):
     with open(hass.config.path(SESSION_FILE), 'w') as data_file:
         data_file.write(json.dumps(session))
+
 
 def setup_platform(hass, config, add_devices, discovery_info=None):
     """Set up the Personal Capital component."""
@@ -113,67 +132,46 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
     else:
         request_app_setup(hass, config, pc, add_devices, discovery_info)
 
+
 def continue_setup_platform(hass, config, pc, add_devices, discovery_info=None):
     """Set up the Personal Capital component."""
     if "personalcapital" in _CONFIGURING:
         hass.components.configurator.request_done(_CONFIGURING.pop("personalcapital"))
 
-    uom = config.get(CONF_UNIT_OF_MEASUREMENT)
-    add_devices([PersonalCapitalNetWorthSensor(pc, uom)], True)
-    add_devices([PersonalCapitalCategorySensor(hass, pc, uom, 'BANK', '', 'assets', 'Assets')], True)
-    add_devices([PersonalCapitalCategorySensor(hass, pc, uom, 'LIABILITIES', '', 'liabilities', 'Liabilities')], True)
-    add_devices([PersonalCapitalCategorySensor(hass, pc, uom, 'INVESTMENT', '', 'investmentAccountsTotal', 'Investments')], True)
-    add_devices([PersonalCapitalCategorySensor(hass, pc, uom, 'MORTGAGE', '', 'mortgageAccountsTotal', 'Mortgages')], True)
-    add_devices([PersonalCapitalCategorySensor(hass, pc, uom, 'BANK', 'Cash', 'cashAccountsTotal', 'Cash')], True)
-    add_devices([PersonalCapitalCategorySensor(hass, pc, uom, 'OTHER_ASSETS', '', 'otherAssetAccountsTotal', 'Other Assets')], True)
-    add_devices([PersonalCapitalCategorySensor(hass, pc, uom, 'OTHER_LIABILITIES', '', 'otherLiabilitiesAccountsTotal', 'Other Liabilities')], True)
-    add_devices([PersonalCapitalCategorySensor(hass, pc, uom, 'CREDIT_CARD', '', 'creditCardAccountsTotal', 'Credit')], True)
-    add_devices([PersonalCapitalCategorySensor(hass, pc, uom, 'LOAN', '', 'loanAccountsTotal', 'Loans')], True)
+    rest_pc = PersonalCapitalAccountData(pc, config)
+    uom = config[CONF_UNIT_OF_MEASUREMENT]
+    sensors = []
+    categories = config[CONF_CATEGORIES] if len(config[CONF_CATEGORIES]) > 0 else SENSOR_TYPES.keys()
+    sensors.append(PersonalCapitalNetWorthSensor(rest_pc, config[CONF_UNIT_OF_MEASUREMENT]))
+    for category in categories:
+        sensors.append(PersonalCapitalCategorySensor(hass, rest_pc, uom, category))
+    add_devices(sensors, True)
+
 
 class PersonalCapitalNetWorthSensor(Entity):
     """Representation of a personalcapital.com net worth sensor."""
 
-    def __init__(self, pc, unit_of_measurement):
+    def __init__(self, rest, unit_of_measurement):
         """Initialize the sensor."""
-        self._pc = pc
+        self._rest = rest
         self._unit_of_measurement = unit_of_measurement
         self._state = None
-        self._networth = None
         self._assets = None
         self._liabilities = None
-        self._investments = None
-        self._mortgages = None
-        self._cash = None
-        self._other_assets = None
-        self._other_liabilities = None
-        self._credit = None
-        self._loans = None
         self.update()
 
     def update(self):
         """Get the latest state of the sensor."""
-        result = self._pc.fetch('/newaccount/getAccounts')
-
-        if not result:
-            return False
-
-        spData = result.json()['spData']
-        self._state = spData.get('networth', 0.0)
-        self._networth = spData.get('networth', 0.0)
-        self._assets = spData.get('assets', 0.0)
-        self._liabilities = spData.get('liabilities', 0.0)
-        self._investments = spData.get('investmentAccountsTotal', 0.0)
-        self._mortgages = spData.get('mortgageAccountsTotal', 0.0)
-        self._cash = spData.get('cashAccountsTotal', 0.0)
-        self._other_ssets = spData.get('otherAssetAccountsTotal', 0.0)
-        self._other_iabilities = spData.get('otherLiabilitiesAccountsTotal', 0.0)
-        self._credit = spData.get('creditCardAccountsTotal', 0.0)
-        self._loans = spData.get('loanAccountsTotal', 0.0)
+        self._rest.update()
+        data = self._rest.data.json()['spData']
+        self._state = data.get('networth', 0.0)
+        self._assets = data.get('assets', 0.0)
+        self._liabilities = format_balance(True, data.get('liabilities', 0.0))
 
     @property
     def name(self):
         """Return the name of the sensor."""
-        return 'Personal Capital Networth'
+        return 'PC Networth'
 
     @property
     def state(self):
@@ -193,58 +191,48 @@ class PersonalCapitalNetWorthSensor(Entity):
     @property
     def device_state_attributes(self):
         """Return the state attributes of the sensor."""
-        return {
-            ATTR_NETWORTH: self._networth,
+        attributes = {
             ATTR_ASSETS: self._assets,
-            ATTR_LIABILITIES: self._liabilities,
-            ATTR_INVESTMENTS: self._investments,
-            ATTR_MORTGAGES: self._mortgages,
-            ATTR_CASH: self._cash,
-            ATTR_OTHER_ASSETS: self._other_assets,
-            ATTR_OTHER_LIABILITIES: self._other_liabilities,
-            ATTR_CREDIT: self._credit,
-            ATTR_LOANS: self._loans,
+            ATTR_LIABILITIES: self._liabilities
         }
+        return attributes
+
 
 class PersonalCapitalCategorySensor(Entity):
     """Representation of a personalcapital.com sensor."""
 
-    def __init__(self, hass, pc, unit_of_measurement, productType, accountType, balanceName, friendlyName):
+    def __init__(self, hass, rest, unit_of_measurement, sensor_type):
         """Initialize the sensor."""
         self.hass = hass
-        self._pc = pc
-        self._name = f'Personal Capital {friendlyName}'
-        self._productType = productType
-        self._accountType = accountType
-        self._balanceName = balanceName
+        self._rest = rest
+        self._productType = SENSOR_TYPES[sensor_type][0]
+        self._accountType = SENSOR_TYPES[sensor_type][1]
+        self._balanceName = SENSOR_TYPES[sensor_type][2]
+        self._name = f'PC {SENSOR_TYPES[sensor_type][3]}'
+        self._inverse_sign = SENSOR_TYPES[sensor_type][4]
         self._state = None
         self._unit_of_measurement = unit_of_measurement
-        self.hass.data[self._productType] = {}
 
     def update(self):
         """Get the latest state of the sensor."""
-        result = self._pc.fetch('/newaccount/getAccounts')
-
-        if not result:
-            return False
-
-        spData = result.json()['spData']
-        self._state = spData.get(self._balanceName, 0.0)
-        accounts = spData.get('accounts')
+        self._rest.update()
+        data = self._rest.data.json()['spData']
+        self._state = format_balance(self._inverse_sign, data.get(self._balanceName, 0.0))
+        accounts = data.get('accounts')
+        self.hass.data[self._productType] = {'accounts': []}
 
         for account in accounts:
-            if self._productType == account.get('productType') and \
-               (self._accountType == '' or self._accountType == account.get('accountType', '')) and \
-               account.get('closeDate', '') == '':
-                self.hass.data[self._productType][account.get('name', '')] = {
+            if ((self._productType == account.get('productType')) or (self._accountType == account.get('accountType', ''))) and account.get('closeDate', '') == '':
+                self.hass.data[self._productType].get('accounts').append({
                     "name": account.get('name', ''),
                     "firm_name": account.get('firmName', ''),
                     "logo": account.get('logoPath', ''),
-                    "balance": account.get('balance', 0.0),
+                    "balance": format_balance(self._inverse_sign, account.get('balance', 0.0)),
                     "account_type": account.get('accountType', ''),
                     "url": account.get('homeUrl', ''),
                     "currency": account.get('currency', ''),
-                }
+                    "refreshed": how_long_ago(account.get('lastRefreshed', 0)) + ' ago',
+                })
 
     @property
     def name(self):
@@ -270,3 +258,40 @@ class PersonalCapitalCategorySensor(Entity):
     def device_state_attributes(self):
         """Return the state attributes of the sensor."""
         return self.hass.data[self._productType]
+
+
+class PersonalCapitalAccountData(object):
+    """Get data from personalcapital.com"""
+
+    def __init__(self, pc, config):
+        self._pc = pc
+        self.data = None
+        self._config = config
+
+    @Throttle(MIN_TIME_BETWEEN_UPDATES)
+    def update(self):
+        """Get latest data from personal capital"""
+        self.data = self._pc.fetch('/newaccount/getAccounts')
+
+        if not self.data or not self.data.json()['spHeader']['success']:
+            self._pc.login(self._config[CONF_EMAIL], self._config[CONF_PASSWORD])
+            self.data = self._pc.fetch('/newaccount/getAccounts')
+
+
+def how_long_ago(last_epoch):
+    a = last_epoch
+    b = time.time()
+    c = b - a
+    days = c // 86400
+    hours = c // 3600 % 24
+    minutes = c // 60 % 60
+
+    if days > 0:
+        return str(round(days)) + ' days'
+    if hours > 0:
+        return str(round(hours)) + ' hours'
+    return str(round(minutes)) + ' minutes'
+
+
+def format_balance(inverse_sign, balance):
+    return -1.0 * balance if inverse_sign is True else balance

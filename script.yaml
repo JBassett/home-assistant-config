@@ -1,3 +1,108 @@
 turn_on_xbox:
   sequence:
     - service: shell_command.turn_on_xbox
+
+goodnight:
+  alias: goodnight
+  sequence:
+######################## Garge Door #####################
+    - service: cover.close_cover
+      data:
+        entity_id: cover.garage_door_opener
+######################## TV #############################
+    - service: media_player.turn_off
+      data:
+        entity_id: media_player.lg_tv_remote
+######################## Cache Cleanup ##################
+    - service: tts.clear_cache
+    - service: script.kitchen_off
+    - service: script.livingroom_off
+    - service: script.outside_off
+
+outside_off:
+  alias: Outside - Off
+  sequence:
+    - service: light.turn_off
+      data:
+        entity_id:
+          - light.front_door
+    - service: switch.turn_off
+      data:
+        entity_id:
+          - switch.driveway_light
+          - switch.porch_light
+
+outside_on:
+  alias: Outside - On
+  sequence:
+    - service: switch.turn_on
+      data:
+        entity_id:
+          - switch.porch_light
+          - switch.driveway_light
+
+kitchen_off:
+  alias: Kitchen - Off
+  sequence:
+    - service: light.turn_off
+      data:
+        entity_id:
+          - light.kitchen_down
+          - light.kitchen_up
+
+kitchen_on:
+  alias: Kitchen - On
+  sequence:
+    - service: light.turn_on
+      entity_id:
+        - light.kitchen_up
+        - light.kitchen_down
+      data:
+        rgb_color: [217, 255, 108]
+        brightness_pct: 25
+    - delay: '00:00:01'
+    # For some reason the lights don't like to change color or brighness when first turned on..
+    - service: light.turn_on
+      entity_id:
+        - light.kitchen_up
+        - light.kitchen_down
+      data:
+        rgb_color: [217, 255, 108]
+        brightness_pct: 25
+
+livingroom_off:
+  alias: Livingroom - Off
+  sequence:
+    - service: switch.turn_off
+      data:
+        entity_id:
+          - switch.living_room_outlet
+
+livingroom_on:
+  alias: Livingroom - On
+  sequence:
+    - service: switch.turn_on
+      data:
+        entity_id:
+          - switch.living_room_outlet
+
+weston_nap:
+  alias: Weston Nap
+  sequence:
+    - service: media_player.play_media
+      data:
+        entity_id: media_player.living_room_speaker
+        media_content_id: !secret babbling_brook_mp3
+        media_content_type: 'music'
+
+# TODO: logic for nap duration?
+# TODO: This is only going to play for 60 minutes
+
+fire_call:
+  sequence:
+    - service: light.turn_on
+      data:
+        entity_id:
+          - light.kitchen_down
+          - light.kitchen_up
+        rgb_color: [255, 0, 0]

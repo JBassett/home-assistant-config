@@ -1,5 +1,3 @@
-api_password: !secret api_password
-
 use_x_forwarded_for: true
 trusted_proxies:
   - !secret pfsense_host

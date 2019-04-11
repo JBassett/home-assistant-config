@@ -1,0 +1,319 @@
+resources:
+  - type: js
+    url: /local/lovelace/monster-card/monster-card.js?v=0.2.3
+  - type: js
+    url: /local/lovelace/tracker-card/tracker-card.js?v=1.2.3
+  - type: js
+    url: /local/lovelace/upcoming-media-card/upcoming-media-card.js?v=0.3.4
+  - type: module
+    url: /local/lovelace/power-wheel-card/power-wheel-card.js?v=0.0.10
+title: Misty Way
+views:
+  - cards:
+      - entities:
+          - device_tracker.google_maps_114722593006578537688
+          - device_tracker.google_maps_112779943779309085408
+        show_header_toggle: false
+        title: Locations
+        type: entities
+      - entity: climate.family_room
+        type: thermostat
+      - entities:
+          - cover.garage_door_opener
+        show_header_toggle: false
+        title: Garage
+        type: entities
+      - entity: camera.garage
+        title: Garage
+        type: picture-entity
+      - entities:
+          - entity: switch.porch_light
+          - entity: switch.driveway_light
+        title: Outdoor Lights
+        type: entities
+      - entity: camera.front_door
+        type: picture-entity
+      - entities:
+          - sensor.lyft_time
+          - sensor.lyft_price
+          - sensor.lyft_xl_time
+          - sensor.lyft_xl_price
+          - sensor.uberx_time
+          - sensor.uberx_price
+          - sensor.uberxl_time
+          - sensor.uberxl_price
+        show_header_toggle: false
+        title: Ride Sharing to ROC
+        type: entities
+      - color_power_icons: true
+        decimals: 2
+        grid_power_entity: sensor.solar_consumptionmeter_pvs5m644235c
+        solar_power_entity: sensor.solar_raw_total_power
+        title: Current Power
+        type: 'custom:power-wheel-card'
+    tab_icon: 'mdi:home'
+    title: Home
+  - cards:
+      - entities:
+          - sensor.solar_raw_total_power
+          - sensor.solar_raw_lifetime_net_energy
+          - sensor.solar_raw_house_usage
+          - sensor.solar_raw_export
+        title: Current Power Stats
+        type: glance
+      - color_power_icons: true
+        decimals: 2
+        grid_power_entity: sensor.solar_consumptionmeter_pvs5m644235c
+        solar_power_entity: sensor.solar_raw_total_power
+        title: Current Power
+        type: 'custom:power-wheel-card'
+      - entities:
+          - entity: sensor.solar_yesterdays_net_energy_consumption
+          - entity: sensor.solar_todays_net_energy_consumption
+        show_header_toggle: false
+        title: Current Energy Stats
+        type: entities
+      - entities:
+          - sensor.solar_raw_total_power
+          - sensor.solar_raw_house_usage
+          - sensor.solar_raw_export
+        hours_to_show: 24
+        refresh_interval: 60
+        title: Overall Usage
+        type: history-graph
+      - entities:
+          - sensor.current_solar_power
+          - sensor.current_house_usage
+          - sensor.current_power_export
+        hours_to_show: 24
+        refresh_interval: 60
+        title: Overall Usage Smoothed
+        type: history-graph
+      - card:
+          entities: []
+          hours_to_show: 24
+          refresh_interval: 60
+          title: Individual Panels
+          type: history-graph
+        filter:
+          include:
+            - entity_id: sensor.solar_inverter*
+        type: 'custom:monster-card'
+    title: Solar
+  - cards:
+      - entities:
+          - switch.living_room_outlet
+        title: Living Room
+        type: entities
+      - entity: light.kitchen_up
+        type: light
+      - entity: light.kitchen_down
+        type: light
+      - entities:
+          - switch.office_outlet
+        title: Office
+        type: entities
+      - entity: media_player.lg_tv_remote
+        type: media-control
+      - entity: media_player.living_room_speaker
+        type: media-control
+      - entity: media_player.plex_xboxone
+        type: media-control
+    title: First Floor
+  - cards:
+      - entity: camera.weston_s_room
+        title: Westons's Room
+        type: picture-entity
+      - entity: media_player.westons_room_speaker
+        type: media-control
+      - card:
+          entity: media_player.master_bedroom_tv
+          type: media-control
+        conditions:
+          - entity: media_player.master_bedroom_tv
+            state_not: unknown
+        type: conditional
+    title: Second Floor
+  - cards:
+      - entities:
+          - script.turn_on_xbox
+        show_header_toggle: false
+        title: Xbox
+        type: entities
+      - entity: media_player.lg_tv_remote
+        type: media-control
+      - entity: media_player.plex_xboxone
+        type: media-control
+      - entities:
+          - sensor.plex
+        show_header_toggle: false
+        title: Plex
+        type: entities
+      - entities:
+          - sensor.radarr_upcoming
+          - sensor.radarr_movies
+          - sensor.radarr_status
+        show_header_toggle: false
+        title: Movies
+        type: entities
+      - entities:
+          - sensor.sonarr_upcoming
+          - sensor.sonarr_wanted
+        show_header_toggle: false
+        title: TV Shows
+        type: entities
+      - clock: 24
+        image_style: banner
+        service: sonarr
+        title: Upcoming TV Shows
+        type: 'custom:upcoming-media-card'
+      - clock: 24
+        service: radarr
+        title: Upcoming Movies
+        type: 'custom:upcoming-media-card'
+    title: Media
+  - cards:
+      - entity: weather.dark_sky
+        type: weather-forecast
+      - entity: camera.radar
+        show_info: false
+        title: Radar
+        type: picture-entity
+    tab_icon: 'mdi:weather-cloudy'
+    title: Weather
+  - cards:
+      - entities:
+          - sensor.personal_capital_assets
+          - sensor.personal_capital_cash
+          - sensor.personal_capital_credit
+          - sensor.personal_capital_investments
+          - sensor.personal_capital_liabilities
+          - sensor.personal_capital_loans
+          - sensor.personal_capital_mortgages
+          - sensor.personal_capital_networth
+          - sensor.personal_capital_other_assets
+        show_header_toggle: false
+        title: Personal Capital
+        type: entities
+      - entities:
+          - sensor.personal_capital_networth
+        hours_to_show: 8760
+        refresh_interval: 3600
+        title: Net Worth
+        type: history-graph
+      - entities:
+          - sensor.personal_capital_investments
+        hours_to_show: 8760
+        refresh_interval: 3600
+        title: Retirement Accounts
+        type: history-graph
+    tab_icon: 'mdi:currency-usd'
+    title: Financial
+  - cards:
+      - entity: camera.weston_s_room
+        title: Westons's Room
+        type: picture-entity
+      - entity: camera.front_door
+        type: picture-entity
+      - entity: camera.garage
+        type: picture-entity
+    title: Cameras
+  - cards:
+      - entities:
+          - sensor.speedtest_download
+          - sensor.speedtest_upload
+          - sensor.speedtest_ping
+        show_header_toggle: false
+        title: Speedtest
+        type: entities
+      - entities:
+          - sensor.ssl_certificate_expiry
+        show_header_toggle: false
+        title: PfSense
+        type: entities
+      - entities:
+          - entity: sensor.processor_use
+          - entity: sensor.memory_use_percent
+          - entity: sensor.disk_free_unraid_mnt_cache
+          - entity: sensor.disk_free_unraid_mnt_user
+          - entity: sensor.disk_free_unraid_mnt_disk1
+          - entity: sensor.disk_free_unraid_mnt_disk2
+          - entity: sensor.disk_free_unraid_mnt_disk3
+          - entity: sensor.disk_free_unraid_mnt_disk4
+          - entity: sensor.last_boot
+        show_header_toggle: false
+        title: Unraid
+        type: entities
+      - entities:
+          - sensor.sabnzbd_status
+          - sensor.sabnzbd_speed
+          - sensor.sabnzbd_queue_count
+          - sensor.sabnzbd_queue
+          - sensor.sabnzbd_left
+          - sensor.sabnzbd_disk
+          - sensor.sabnzbd_disk_free
+        show_header_toggle: false
+        title: Sabnzbd
+        type: entities
+      - entities:
+          - entity: binary_sensor.family_room_thermostat_online
+          - entity: switch.gaming_pc
+        show_header_toggle: false
+        title: Devices
+        type: entities
+      - card:
+          entities:
+            - entity: zwave.driveway_light
+            - entity: zwave.living_room_outlet
+            - entity: zwave.office_outlet
+            - entity: zwave.porch_light
+            - entity: zwave.z_stick
+          title: Z-Wave
+          type: glance
+        filter:
+          include:
+            - domain: zwave
+        type: 'custom:monster-card'
+      - card:
+          entities:
+            - entity: automation.christmas_tree_lights_off_at_0130
+            - entity: automation.christmas_tree_lights_on_at_0700
+            - entity: automation.christmas_tree_lights_on_at_sunset
+            - entity: automation.kitchen_lights_off_at_0130
+            - entity: automation.kitchen_lights_off_in_morning
+            - entity: automation.kitchen_lights_off_when_nobody_home
+            - entity: automation.kitchen_lights_on_at_sunset
+            - entity: automation.kitchen_lights_on_in_morning
+            - entity: automation.living_room_outlet_off_at_0130
+            - entity: automation.living_room_outlet_off_in_morning
+            - entity: automation.living_room_outlet_off_when_nobody_home
+            - entity: automation.living_room_outlet_off_when_playing_on_tv
+            - entity: automation.living_room_outlet_on_at_sunset
+            - entity: automation.living_room_outlet_on_in_morning
+            - entity: automation.notification_action_close_garage
+            - entity: automation.notification_action_open_garage
+            - entity: automation.notification_garage_left_open
+            - entity: automation.notification_garage_opened_closed
+            - entity: automation.notification_open_garage
+            - entity: automation.outdoor_turn_off_lights_in_morning
+            - entity: automation.outdoor_turn_on_lights_in_evening
+            - entity: automation.solar_usage_update
+            - entity: automation.tts_door_motion
+            - entity: automation.tts_justin_almost_home
+            - entity: automation.tts_movie_downloaded
+            - entity: automation.tts_new_tv_episode
+            - entity: automation.tts_notification_ac_frozen
+            - entity: automation.tts_shannon_almost_home
+          title: Automations
+          type: entities
+        filter:
+          include:
+            - domain: automation
+        type: 'custom:monster-card'
+      - title: Custom Components
+        trackers:
+          - sensor.custom_card_tracker
+          - sensor.custom_component_tracker
+        type: 'custom:tracker-card'
+    tab_icon: 'mdi:harddisk'
+    title: Settings

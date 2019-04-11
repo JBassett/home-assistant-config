@@ -1,1 +1,11 @@
 - platform: skybell
+
+- platform: flux_led
+  devices:
+    192.168.1.60:
+      name: Kitchen - Down
+      mode: "rgb"
+
+    192.168.1.61:
+      name: Kitchen - Up
+      mode: "rgb"

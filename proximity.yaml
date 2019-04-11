@@ -4,7 +4,7 @@ home_justin:
     - zone.rgh
   tolerance: 50 # meters
   devices:
-    - device_tracker.justin_pixel
+    - device_tracker.google_maps_114722593006578537688
   unit_of_measurement: mi
 
 home_shannon:
@@ -13,5 +13,5 @@ home_shannon:
     - zone.rgh
   tolerance: 50 # meters
   devices:
-    - device_tracker.shannon_motox4
+    - device_tracker.google_maps_112779943779309085408
   unit_of_measurement: mi

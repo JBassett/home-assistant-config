@@ -14,25 +14,51 @@ homeassistant:
 
   auth_providers:
    - type: homeassistant
-   # Uncomment next line if you want to enable legacy API password support
-   - type: legacy_api_password
+   - type: trusted_networks
+     trusted_networks:
+        - 192.168.1.0/24
 
 # Enable the auth component
 auth:
 
 # Enables the frontend
 frontend:
-  javascript_version: latest
+  javascript_version: auto
   themes: !include themes.yaml
+
+person:
+  - id: jbassett
+    name: Justin
+    user_id: 5a10d3ad221d4dc384ea626243287ba5
+    device_trackers:
+      - device_tracker.google_maps_114722593006578537688
+      - device_tracker.justin_pixel
+  - id: sbassett
+    name: Shannon
+    user_id: 7b2802e34eba4b19b628c0cf6874e4e6
+    device_trackers:
+      - device_tracker.google_maps_112779943779309085408
+      - device_tracker.shannon_motox4
+
+lovelace:
 
 http: !include http.yaml
 
 custom_updater:
+  show_installable: true
+  track:
+    - cards
+    - components
+    - python_scripts
+  card_urls:
+    - https://raw.githubusercontent.com/gurbyz/custom-cards-lovelace/master/custom_updater.json
 
 map:
 
 # Enables the config panels
 config:
+
+system_health:
 
 # Checks for available updates
 updater:
@@ -43,16 +69,12 @@ updater:
 # Allows you to issue voice commands from the frontend in enabled browsers
 conversation:
 
-# Enables support for tracking state changes over time.
-history:
-  exclude:
-    entities:
-      - sensor.since_last_boot
-
-logger:
-  default: warn
-  logs:
-    custom_components.sensor.sunpower: debug
+# mqtt:
+#   broker: !secret mqtt_broker
+#   username: !secret mqtt_user
+#   password: !secret mqtt_pass
+#   discovery: true
+#   discovery_prefix: homeassistant
 
 recorder:
   purge_keep_days: 14
@@ -61,12 +83,18 @@ recorder:
 
 # View all events in a logbook
 logbook:
-  exclude:
-    entities:
-      - sensor.since_last_boot
+
+# Enables support for tracking state changes over time.
+history:
+logger:
+  default: warn
+  logs:
+    custom_components.sensor.sunpower: debug
 
 # Track the sun
 sun:
+
+#stream:
 
 # Text to speech
 tts:
@@ -75,46 +103,30 @@ tts:
 zone: !include zone.yaml
 proximity: !include proximity.yaml
 
-google_assistant:
-  project_id: !secret google_assistant_project_id
-  client_id: !secret google_assistant_client_id
-  access_token: !secret google_assistant_access_token
-  exposed_domains:
-    - switch
-    - light
-    - conver
-    - media_player
-    - group
-    - fan
-    - scene
-    - script
-    - climate
+wake_on_lan:
 
-#This is for Google Calendar not all Google....
-google:
-  client_id: !secret google_calendar_key
-  client_secret: !secret google_calendar_secret
-  track_new_calendar: false
+google_assistant: !include google_assistant.yaml
 
 notify:
   - name: web
     platform: html5
-    gcm_api_key: !secret gcm_api_key
-    gcm_sender_id: !secret gcm_sender_id
+    vapid_pub_key: !secret vapid_pub_key
+    vapid_prv_key: !secret vapid_prv_key
+    vapid_email: !secret vapid_email
 
 zwave:
   usb_path: /zwaveusbstick
   config_path: /config/openzwave/
   device_config: !include zwave_device_config.yaml
 
-cast:
-  media_player:
-    - host: !secret google_home_host
-    - host: !secret master_bedroom_tv_host
-
 skybell:
   username: !secret skybell_user
   password: !secret skybell_pass
+
+august:
+  login_method: email
+  username: !secret august_user
+  password: !secret august_pass
 
 weather:
   - platform: darksky
@@ -133,6 +145,38 @@ sabnzbd:
     - 'disk_free'
     - 'queue_count'
 
+utility_meter:
+  house_daily_net_energy:
+    source: sensor.solar_raw_lifetime_net_energy
+    cycle: daily
+    net_consumption: True
+  house_monthly_net_energy:
+    source: sensor.solar_raw_lifetime_net_energy
+    cycle: monthly
+    net_consumption: True
+  solar_daily_energy:
+    source: sensor.solar_raw_lifetime_panel_energy
+    cycle: daily
+  solar_monthly_energy:
+    source: sensor.solar_raw_lifetime_panel_energy
+    cycle: monthly
+
+speedtestdotnet:
+  scan_interval:
+    hours: 1
+
+# Component Broken for now
+# ecovacs:
+#   username: !secret ecovacs_user
+#   password: !secret ecovacs_pass
+#   country: US
+#   continent: NA
+
+input_boolean:
+  guest_mode:
+    name: Guest mode
+    icon: mdi:human-handsup
+
 automation: !include automations.yaml
 automation old: !include_dir_merge_list automations
 cover: !include cover.yaml
@@ -147,6 +191,7 @@ group: !include group.yaml
 shell_command: !include shell_command.yaml
 script: !include script.yaml
 
+# Custom Component
 # sunpower:
 #   username: demo@sunpower.com
 #   password: sun

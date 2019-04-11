@@ -8,8 +8,8 @@
       hours: 4
   action:
     - service: tts.google_say
+      entity_id: media_player.living_room_speaker
       data:
-        entity_id: media_player.living_room_speaker
         message: 'Just a heads up, I think the AC might be frozen.'
     - service: notify.web
       data:

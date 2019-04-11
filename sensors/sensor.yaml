@@ -1,11 +1,3 @@
-- platform: speedtest
-  minute:
-    - 21
-  monitored_conditions:
-    - ping
-    - download
-    - upload
-
 - platform: plex
   host: !secret plex_host
   username: !secret plex_user
@@ -26,6 +18,10 @@
   start_longitude: !secret home_lon
   end_latitude: 43.12771            # ROC Airport
   end_longitude: -77.6690977
+
+- platform: personalcapital
+  email: !secret personalCap_user
+  password: !secret personalCap_pass
 
 - platform: radarr
   api_key: !secret radarr_api
@@ -85,11 +81,10 @@
       arg: /unraid/mnt/disk4
     - type: memory_use_percent
     - type: processor_use
-    - type: since_last_boot
+    - type: last_boot
 
-- platform: personalcapital
-  email: !secret personalCap_user
-  password: !secret personalCap_pass
+# - platform: zoneminder
+#   include_archived: false
 
 # - platform: sunpower
 #   username: !secret sunpower_user
@@ -99,3 +94,11 @@
 #     - energyConsumption
 #     - powerProduction
 #     - powerConsumption
+
+- platform: template
+  sensors:
+    home_status:
+      friendly_name: Home status
+      value_template: >
+        {% if is_state('group.all_devices' , 'home') or is_state('input_boolean.guest_mode' , 'on') %}Occupied
+        {% else %} Unoccupied {% endif %}

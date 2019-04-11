@@ -1,0 +1,96 @@
+- id: '1523975149744'
+  alias: '[Notification] Garage Left Open'
+  trigger:
+    - platform: state
+      entity_id: sensor.home_status
+      to: 'Unoccupied'
+  condition:
+    - condition: state
+      entity_id: cover.garage_door_opener
+      state: open
+  action:
+    - service: notify.web
+      data:
+        message: Looks like the garage was left open!! {{ now().strftime("%H:%M") }}
+        title: Garage left open!
+        data:
+          actions:
+          - action: close_garage
+            title: Close Door
+
+- id: '1523975760898'
+  alias: '[Notification - Action] Close Garage'
+  trigger:
+    - platform: event
+      event_type: html5_notification.clicked
+      event_data:
+        action: close_garage
+  condition: []
+  action:
+    - service: cover.close_cover
+      data:
+        entity_id: cover.garage_door_opener
+
+- id: '1524146043949'
+  alias: '[Notification] Open Garage'
+  trigger:
+  - platform: numeric_state
+    entity_id: proximity.home_justin
+    above: '0'
+    below: '2'
+  condition:
+    - condition: state
+      entity_id: cover.garage_door_opener
+      state: closed
+    - condition: template
+      value_template: '{{ states.proximity.home_justin.attributes.dir_of_travel == "towards" }}'
+  action:
+    - service: notify.web
+      data:
+        title: Almost Home!
+        message: Would you like to open the garage door?
+        data:
+          actions:
+            - title: Open Door
+              action: open_garage
+
+- id: '1524146180812'
+  alias: '[Notification - Action] Open Garage'
+  trigger:
+    - platform: event
+      event_type: html5_notification.clicked
+      event_data:
+        action: open_garage
+  condition: []
+  action:
+    - service: cover.open_cover
+      data:
+        entity_id: cover.garage_door_opener
+
+
+- id: '1524579938313'
+  alias: '[Notification] Garage Opened/Closed'
+  trigger:
+    - entity_id: cover.garage_door_opener
+      from: open
+      platform: state
+      to: closed
+    - entity_id: cover.garage_door_opener
+      from: closed
+      platform: state
+      to: open
+  condition:
+    - condition: state
+      entity_id: group.home_status
+      state: Unoccupied
+  action:
+    - service: notify.web
+      data:
+        title: 'Garage Door: {{ states(''cover.garage_door_opener'') }}'
+        message: Garage is now {{ states('cover.garage_door_opener') }} at {{ now().strftime("%H:%M") }}
+        data:
+          actions:
+            - action: close_garage
+              title: Close Door
+            - action: open_garage
+              title: Open Door

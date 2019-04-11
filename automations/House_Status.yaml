@@ -1,0 +1,32 @@
+- alias: House Became Unoccupied
+  trigger:
+    - platform: state
+      entity_id: sensor.home_status
+      to: 'Unoccupied'
+  action:
+    - service: script.livingroom_off
+    - service: script.kitchen_off
+    - service: climate.set_away_mode
+      data:
+        away_mode: true
+
+- alias: House Became Occupied
+  trigger:
+    - platform: state
+      entity_id: sensor.home_status
+      to: 'Occupied'
+  action:
+    - service: climate.set_away_mode
+      data:
+        away_mode: false
+
+    # It's dark, we want lights?
+    - condition: or
+      conditions:
+        - condition: sun
+          after: sunset
+          after_offset: '-1:15:00'
+        - condition: sun
+          before: sunrise
+    - service: script.kitchen_on
+    - service: script.livingroom_on
