@@ -26,6 +26,7 @@ sabnzbd.conf
 
 #IDE Files
 .c9
+.Trash*
 
 # Text to Speach Cache
 tts
