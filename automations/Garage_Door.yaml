@@ -1,5 +1,6 @@
 - id: '1523975149744'
   alias: '[Notification] Garage Left Open'
+  initial_state: 'on'
   trigger:
     - platform: state
       entity_id: sensor.home_status
@@ -20,6 +21,7 @@
 
 - id: '1523975760898'
   alias: '[Notification - Action] Close Garage'
+  initial_state: 'on'
   trigger:
     - platform: event
       event_type: html5_notification.clicked
@@ -33,6 +35,7 @@
 
 - id: '1524146043949'
   alias: '[Notification] Open Garage'
+  initial_state: 'on'
   trigger:
   - platform: numeric_state
     entity_id: proximity.home_justin
@@ -56,6 +59,7 @@
 
 - id: '1524146180812'
   alias: '[Notification - Action] Open Garage'
+  initial_state: 'on'
   trigger:
     - platform: event
       event_type: html5_notification.clicked
@@ -70,15 +74,16 @@
 
 - id: '1524579938313'
   alias: '[Notification] Garage Opened/Closed'
+  initial_state: 'on'
   trigger:
     - entity_id: cover.garage_door_opener
-      from: open
       platform: state
-      to: closed
+      from: Open
+      to: Closed
     - entity_id: cover.garage_door_opener
-      from: closed
       platform: state
-      to: open
+      from: Closed
+      to: Open
   condition:
     - condition: state
       entity_id: group.home_status

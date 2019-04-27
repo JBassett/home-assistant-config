@@ -1,5 +1,6 @@
 - id: '1529578174545'
   alias: '[TTS] Shannon Almost Home'
+  initial_state: 'on'
   trigger:
     - platform: numeric_state
       entity_id: proximity.home_shannon
@@ -16,6 +17,7 @@
 
 - id: '1529578278693'
   alias: '[TTS] Justin Almost Home'
+  initial_state: 'on'
   trigger:
     - platform: numeric_state
       entity_id: proximity.home_justin

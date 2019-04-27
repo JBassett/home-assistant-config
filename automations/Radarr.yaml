@@ -1,4 +1,5 @@
 - alias: '[TTS] Movie Downloaded'
+  initial_state: 'on'
   trigger:
   - platform: event
     event_type: MOVIE_DOWNLOADED

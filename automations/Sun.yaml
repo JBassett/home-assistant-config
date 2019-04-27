@@ -1,4 +1,5 @@
 - alias: 'Sun - Morning Routine'
+  initial_state: 'on'
   trigger:
     - platform: time
       at: '06:15:00'
@@ -11,6 +12,7 @@
     - service: script.livingroom_on
 
 - alias: 'Sun - Sunrise Routine'
+  initial_state: 'on'
   trigger:
     - platform: sun
       event: sunrise
@@ -21,6 +23,7 @@
     - service: script.outside_off
 
 - alias: 'Sun - Sunset Routine'
+  initial_state: 'on'
   trigger:
     - platform: sun
       event: sunset
@@ -36,6 +39,7 @@
     - service: script.livingroom_on
 
 - alias: 'Sun - Bedtime Routine'
+  initial_state: 'on'
   trigger:
     - platform: time
       at: '01:30:00'

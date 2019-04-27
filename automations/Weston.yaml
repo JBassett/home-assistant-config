@@ -1,4 +1,5 @@
 - alias: 'Weston Sleep'
+  initial_state: 'on'
   trigger:
     - platform: time
       at: '12:00:00'

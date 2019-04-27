@@ -1,4 +1,5 @@
 - alias: '[TTS] New TV Episode'
+  initial_state: 'on'
   trigger:
   - platform: event
     event_type: TV_EPISODE_DOWNLOADED
