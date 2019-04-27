@@ -86,19 +86,21 @@ logbook:
 
 # Enables support for tracking state changes over time.
 history:
+
 logger:
   default: warn
   logs:
+    # homeassistant.components.stream: debug
     custom_components.sensor.sunpower: debug
 
 # Track the sun
 sun:
 
-#stream:
+# stream:
 
 # Text to speech
 tts:
-  platform: google
+  platform: google_translate
 
 zone: !include zone.yaml
 proximity: !include proximity.yaml
@@ -165,12 +167,11 @@ speedtestdotnet:
   scan_interval:
     hours: 1
 
-# Component Broken for now
-# ecovacs:
-#   username: !secret ecovacs_user
-#   password: !secret ecovacs_pass
-#   country: US
-#   continent: NA
+ecovacs:
+  username: !secret ecovacs_user
+  password: !secret ecovacs_pass
+  country: US
+  continent: NA
 
 input_boolean:
   guest_mode:
