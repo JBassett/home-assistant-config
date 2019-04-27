@@ -1,0 +1,7 @@
+[submodule "card-tools"]
+	path = www/lovelace/card-tools
+	url = https://github.com/thomasloven/lovelace-card-tools.git
+
+[submodule "more-info-card"]
+	path = www/lovelace/more-info-card
+	url = https://github.com/thomasloven/lovelace-more-info-card.git
