@@ -1,5 +1,6 @@
 project_id: !secret google_assistant_project_id
 api_key: !secret google_assistant_api_key
+secure_devices_pin: !secret google_assistant_pin
 exposed_domains:
   - switch
   - light
@@ -42,6 +43,9 @@ entity_config:
   light.front_door:
     room: Outside
     name: Doorbell Light
+  cover.garage_door_opener:
+    room: Outside
+    name: Garage Door
 ################## Disabled ##############################
   switch.skybell_front_door_motion_sensor:
     expose: false
