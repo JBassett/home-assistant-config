@@ -100,5 +100,11 @@
     home_status:
       friendly_name: Home status
       value_template: >
-        {% if is_state('group.all_devices' , 'home') or is_state('input_boolean.guest_mode' , 'on') %}Occupied
+        {% if 
+          is_state('device_tracker.google_maps_112779943779309085408' , 'home')
+          or 
+          is_state('device_tracker.google_maps_114722593006578537688' , 'home') 
+          or 
+          is_state('input_boolean.guest_mode' , 'on')
+        %}Occupied
         {% else %} Unoccupied {% endif %}
