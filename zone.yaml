@@ -14,13 +14,13 @@
   latitude: 43.192544
   longitude: -77.587294
   radius: 200
-  icon: mdi:hospital
+  icon: mdi:hospital-building
 
-- name: PVEA
-  latitude: 43.166937
-  longitude: -77.448135
+- name: Urgent Care Now
+  latitude: 43.212717
+  longitude: -77.439028
   radius: 50
-  icon: mdi:ambulance
+  icon: mdi:hospital
 
 - name: WWFD Station 1
   latitude: 43.203682
