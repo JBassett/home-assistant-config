@@ -5,3 +5,6 @@
 [submodule "more-info-card"]
 	path = www/lovelace/more-info-card
 	url = https://github.com/thomasloven/lovelace-more-info-card.git
+[submodule "www/lovelace/slider-entity-row"]
+	path = www/lovelace/slider-entity-row
+	url = https://github.com/thomasloven/lovelace-slider-entity-row.git

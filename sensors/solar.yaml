@@ -9,7 +9,7 @@
         {% if states.sun.sun.state == 'above_horizon' and states.sensor|selectattr('attributes.DEVICE_TYPE','equalto','Inverter')|list|length == 24 %}
           {{states.sensor|selectattr('attributes.DEVICE_TYPE','equalto','Inverter')|map(attribute='state')|map('float')|sum|round(2)}}
         {% else %}
-          0.0001
+          {{[0,0.0001,0.0002]|random}}
         {% endif %}
     solar_raw_lifetime_panel_energy:
       friendly_name: 'Raw Panel Output Energy'
