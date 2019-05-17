@@ -12,3 +12,6 @@
 [submodule "www/lovelace/weather-card-chart"]
 	path = www/lovelace/weather-card-chart
 	url = https://github.com/sgttrs/lovelace-weather-card-chart.git
+[submodule "www/lovelace/card-templater"]
+	path = www/lovelace/card-templater
+	url = https://github.com/gadgetchnnel/lovelace-card-templater.git

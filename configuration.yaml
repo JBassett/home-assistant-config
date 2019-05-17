@@ -52,6 +52,7 @@ custom_updater:
     - python_scripts
   card_urls:
     - https://raw.githubusercontent.com/gurbyz/custom-cards-lovelace/master/custom_updater.json
+    - https://raw.githubusercontent.com/kalkih/mini-graph-card/master/tracker.json
 
 map:
 
