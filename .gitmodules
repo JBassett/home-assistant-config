@@ -9,3 +9,6 @@
 [submodule "www/lovelace/slider-entity-row"]
 	path = www/lovelace/slider-entity-row
 	url = https://github.com/thomasloven/lovelace-slider-entity-row.git
+[submodule "www/lovelace/weather-card-chart"]
+	path = www/lovelace/weather-card-chart
+	url = https://github.com/sgttrs/lovelace-weather-card-chart.git
