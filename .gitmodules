@@ -15,3 +15,6 @@
 [submodule "www/lovelace/card-templater"]
 	path = www/lovelace/card-templater
 	url = https://github.com/gadgetchnnel/lovelace-card-templater.git
+[submodule "www/lovelace/button-entity-row"]
+	path = www/lovelace/button-entity-row
+	url = https://github.com/custom-cards/button-entity-row.git
