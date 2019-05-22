@@ -7,6 +7,8 @@
     - condition: state
       entity_id: sensor.home_status
       state: 'Occupied'
+    - condition: sun
+      before: sunrise
   action:
     - service: script.kitchen_on
     - service: script.livingroom_on
