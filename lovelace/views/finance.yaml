@@ -1,0 +1,33 @@
+badges: []
+cards:
+  - entities:
+      - entity: sensor.pc_cash
+      - entity: sensor.pc_credit
+      - entity: sensor.pc_investment
+      - entity: sensor.pc_other_liability
+      - entity: sensor.pc_loan
+      - entity: sensor.pc_mortgage
+      - entity: sensor.pc_networth
+      - entity: sensor.pc_other_asset
+    show_header_toggle: false
+    title: Personal Capital
+    type: entities
+  - cards:
+      - entities:
+          - sensor.pc_networth
+        hours_to_show: 168
+        points_per_hour: 0.1
+        title: Net Worth
+        type: 'custom:mini-graph-card'
+        update_interval: 43200
+      - entities:
+          - sensor.pc_investment
+        hours_to_show: 168
+        points_per_hour: 0.1
+        title: Retirement Accounts
+        type: 'custom:mini-graph-card'
+        update_interval: 43200
+    type: horizontal-stack
+icon: 'mdi:cash-usd'
+tab_icon: 'mdi:currency-usd'
+title: Financial

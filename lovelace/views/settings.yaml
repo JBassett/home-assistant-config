@@ -1,0 +1,86 @@
+badges: []
+cards:
+  - cards:
+      - entities:
+          - entity: sensor.speedtest_download
+            name: Download
+        extrema: true
+        hours_to_show: 48
+        points_per_hour: 0.25
+        title: Download
+        type: 'custom:mini-graph-card'
+      - entities:
+          - entity: sensor.speedtest_upload
+            name: Upload
+        extrema: true
+        hours_to_show: 48
+        points_per_hour: 0.25
+        title: Upload
+        type: 'custom:mini-graph-card'
+      - entities:
+          - entity: sensor.speedtest_ping
+            name: Upload
+        extrema: true
+        hours_to_show: 48
+        points_per_hour: 0.25
+        title: Ping
+        type: 'custom:mini-graph-card'
+    type: horizontal-stack
+  - entities:
+      - sensor.ssl_certificate_expiry
+    show_header_toggle: false
+    title: PfSense
+    type: entities
+  - entities:
+      - entity: sensor.processor_use
+      - entity: sensor.memory_use_percent
+      - entity: sensor.disk_free_unraid_mnt_cache
+      - entity: sensor.disk_free_unraid_mnt_user
+      - entity: sensor.disk_free_unraid_mnt_disk1
+      - entity: sensor.disk_free_unraid_mnt_disk2
+      - entity: sensor.disk_free_unraid_mnt_disk3
+      - entity: sensor.disk_free_unraid_mnt_disk4
+      - entity: sensor.last_boot
+    show_header_toggle: false
+    title: Unraid
+    type: entities
+  - entities:
+      - sensor.sabnzbd_status
+      - sensor.sabnzbd_speed
+      - sensor.sabnzbd_queue_count
+      - sensor.sabnzbd_queue
+      - sensor.sabnzbd_left
+      - sensor.sabnzbd_disk
+      - sensor.sabnzbd_disk_free
+    show_header_toggle: false
+    title: Sabnzbd
+    type: entities
+  - entities:
+      - entity: binary_sensor.family_room_thermostat_online
+      - entity: switch.gaming_pc
+    show_header_toggle: false
+    title: Devices
+    type: entities
+  - card:
+      title: Z-Wave
+      type: glance
+    filter:
+      include:
+        - domain: zwave
+    type: 'custom:monster-card'
+  - card:
+      title: Automations
+      type: entities
+    filter:
+      include:
+        - domain: automation
+    type: 'custom:monster-card'
+  - title: Custom Components
+    trackers:
+      - sensor.custom_card_tracker
+      - sensor.custom_component_tracker
+      - sensor.power_wheel_tracker
+    type: 'custom:tracker-card'
+icon: 'mdi:settings'
+tab_icon: 'mdi:harddisk'
+title: Settings

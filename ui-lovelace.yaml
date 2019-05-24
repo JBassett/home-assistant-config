@@ -1,0 +1,34 @@
+resources:
+  - type: js
+    url: /local/lovelace/card-tools/card-tools.js?v=0.4
+  - type: js
+    url: /local/lovelace/more-info-card/more-info-card.js?v=1
+  - type: js
+    url: /local/lovelace/monster-card/monster-card.js?v=0.2.3
+  - type: js
+    url: /local/lovelace/tracker-card/tracker-card.js?v=1.2.6
+  - type: js
+    url: /local/lovelace/slider-entity-row/slider-entity-row.js?v=1
+  - type: js
+    url: /local/lovelace/upcoming-media-card/upcoming-media-card.js?v=0.3.4
+  - type: module
+    url: /local/lovelace/power-wheel-card/power-wheel-card.js?v=0.0.12
+  - type: module
+    url: /local/lovelace/weather-card-chart/custom-weather-card-chart.js?v=1
+  - type: module
+    url: /local/lovelace/mini-graph-card/mini-graph-card-bundle.js?v=0.4.2
+  - type: module
+    url: /local/lovelace/card-templater/lovelace-card-templater.js?v=1
+  - type: module
+    url: /local/lovelace/button-entity-row/button-entity-row.js?v=1
+title: Misty Way
+views:
+  - !include lovelace/views/main.yaml
+  - !include lovelace/views/solar.yaml
+  - !include lovelace/views/floor-one.yaml
+  - !include lovelace/views/floor-two.yaml
+  - !include lovelace/views/media.yaml
+  - !include lovelace/views/weather.yaml
+  - !include lovelace/views/finance.yaml
+  - !include lovelace/views/cameras.yaml
+  - !include lovelace/views/settings.yaml

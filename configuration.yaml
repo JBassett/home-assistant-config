@@ -41,6 +41,7 @@ person:
       - device_tracker.shannon_motox4
 
 lovelace:
+  mode: yaml
 
 http: !include http.yaml
 

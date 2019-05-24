@@ -1,0 +1,37 @@
+badges: []
+cards:
+  - entities:
+      - script.turn_on_xbox
+    show_header_toggle: false
+    title: Xbox
+    type: entities
+  - entity: media_player.lg_tv_remote
+    type: media-control
+  - entity: media_player.plex_xboxone
+    type: media-control
+  - entities:
+      - sensor.plex
+    show_header_toggle: false
+    title: Plex
+    type: entities
+  - entities:
+      - sensor.radarr_upcoming
+      - sensor.radarr_movies
+      - sensor.radarr_status
+    show_header_toggle: false
+    title: Movies
+    type: entities
+  - entities:
+      - sensor.sonarr_upcoming
+      - sensor.sonarr_wanted
+    show_header_toggle: false
+    title: TV Shows
+    type: entities
+  - entity: sensor.sonarr_upcoming_media
+    title: Upcoming TV
+    type: 'custom:upcoming-media-card'
+  - entity: sensor.radarr_upcoming_media
+    title: Upcoming Movies
+    type: 'custom:upcoming-media-card'
+icon: 'mdi:television-box'
+title: Media

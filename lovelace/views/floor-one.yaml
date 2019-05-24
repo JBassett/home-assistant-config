@@ -1,0 +1,28 @@
+badges: []
+cards:
+  - entity: camera.living_room
+    type: picture-entity
+  - entities:
+      - entity: light.kitchen_up
+        toggle: true
+        type: 'custom:slider-entity-row'
+      - entity: light.kitchen_down
+        toggle: true
+        type: 'custom:slider-entity-row'
+      - switch.living_room_outlet
+      - switch.office_outlet
+    show_header_toggle: false
+    title: Lights
+    type: entities
+  - entity: media_player.living_room_speaker
+    type: media-control
+  - entity: media_player.lg_tv_remote
+    title: Living Room TV
+    type: 'custom:more-info-card'
+  - entity: media_player.plex_xboxone
+    type: media-control
+  - entity: vacuum.deebot
+    title: Deebot
+    type: 'custom:more-info-card'
+icon: 'mdi:home-floor-1'
+title: First Floor
