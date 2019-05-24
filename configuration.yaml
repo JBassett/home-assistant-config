@@ -123,6 +123,10 @@ zwave:
   config_path: /config/openzwave/
   device_config: !include zwave_device_config.yaml
 
+nest:
+  client_id: !secret nest_client_id
+  client_secret: !secret nest_client_secret
+
 skybell:
   username: !secret skybell_user
   password: !secret skybell_pass
@@ -174,6 +178,12 @@ ecovacs:
   password: !secret ecovacs_pass
   country: US
   continent: NA
+
+cast:
+  media_player:
+    - host: !secret google_home_host
+    - host: !secret master_bedroom_tv_host
+    - host: !secret westons_room_host
 
 input_boolean:
   guest_mode:
