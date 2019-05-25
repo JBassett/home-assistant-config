@@ -108,3 +108,9 @@
           is_state('input_boolean.guest_mode' , 'on')
         %}Occupied
         {% else %} Unoccupied {% endif %}
+    outdoor_temperature:
+      friendly_name: Outdoor Temperature
+      value_template: >
+        {{state_attr('weather.dark_sky', 'temperature') | float}}
+      unit_of_measurement: °F
+      device_class: temperature
