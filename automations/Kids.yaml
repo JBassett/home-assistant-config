@@ -3,9 +3,9 @@
   trigger:
     # Start times
     - platform: time
-      at: '12:00:00'
+      at: '11:45:00'
     - platform: time
-      at: '19:00:00'
+      at: '19:45:00'
   condition:
     - condition: state
       entity_id: sensor.home_status
@@ -64,7 +64,3 @@
     - service: media_player.turn_off
       data:
         entity_id: media_player.westons_room_speaker
-
-
-
-# 'paused' is the state when you ask the google home to stop playing
