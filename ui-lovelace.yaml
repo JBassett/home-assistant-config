@@ -6,8 +6,6 @@ resources:
   - type: js
     url: /local/lovelace/monster-card/monster-card.js?v=0.2.3
   - type: js
-    url: /local/lovelace/tracker-card/tracker-card.js?v=1.2.6
-  - type: js
     url: /local/lovelace/slider-entity-row/slider-entity-row.js?v=1
   - type: js
     url: /local/lovelace/upcoming-media-card/upcoming-media-card.js?v=0.3.4
@@ -16,7 +14,7 @@ resources:
   - type: module
     url: /local/lovelace/weather-card-chart/custom-weather-card-chart.js?v=1
   - type: module
-    url: /local/lovelace/mini-graph-card/mini-graph-card-bundle.js?v=0.4.2
+    url: /local/lovelace/mini-graph-card/mini-graph-card-bundle.js?v=0.4.3-beta2
   - type: module
     url: /local/lovelace/card-templater/lovelace-card-templater.js?v=1
   - type: module

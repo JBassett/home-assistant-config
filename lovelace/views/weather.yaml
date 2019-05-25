@@ -1,13 +1,13 @@
-badges: []
-cards:
-  - mode: hourly
-    title: Weather
-    type: 'custom:weather-card-chart'
-    weather: weather.dark_sky
-  - entity: camera.radar
-    show_info: false
-    title: Radar
-    type: picture-entity
+title: Weather
 icon: 'mdi:weather-partlycloudy'
 tab_icon: 'mdi:weather-cloudy'
-title: Weather
+badges: []
+cards:
+  - title: Weather
+    type: 'custom:weather-card-chart'
+    weather: weather.dark_sky
+    mode: hourly
+  - title: Radar
+    type: picture-entity
+    show_info: false
+    entity: camera.radar

@@ -2,31 +2,33 @@ title: Solar
 icon: 'mdi:solar-power'
 badges: []
 cards:
-  - color_power_icons: true
-    energy_price: 0.11
-    grid_energy_entity: sensor.house_daily_net_energy
-    grid_power_entity: sensor.solar_consumptionmeter_pvs5m644235c
-    home_energy_entity: sensor.solar_daily_house_usage_energy
-    money_unit: $
-    power_decimals: 2
-    production_is_positive: false
-    solar_energy_entity: sensor.solar_daily_energy
-    solar_icon: 'mdi:solar-power'
-    solar_power_entity: sensor.solar_raw_total_power
-    title: Current Power
+  - title: Current Power
     type: 'custom:power-wheel-card'
-  - entities:
+    color_power_icons: true
+    solar_icon: 'mdi:solar-power'
+    grid_power_entity: sensor.solar_consumptionmeter_pvs5m644235c
+    solar_power_entity: sensor.solar_raw_total_power
+    power_decimals: 2
+    grid_energy_entity: sensor.house_daily_net_energy
+    home_energy_entity: sensor.solar_daily_house_usage_energy
+    solar_energy_entity: sensor.solar_daily_energy
+    energy_price: 0.11
+    money_unit: $
+    production_is_positive: false
+    
+  - title: Current Energy Stats
+    type: entities
+    show_header_toggle: false
+    entities:
       - entity: sensor.house_daily_net_energy
       - entity: sensor.house_monthly_net_energy
       - entity: sensor.solar_daily_energy
       - entity: sensor.solar_monthly_energy
-    show_header_toggle: false
-    title: Current Energy Stats
-    type: entities
-  - entities:
+    
+  - type: 'custom:mini-graph-card'
+    extrema: true
+    hours_to_show: 72
+    points_per_hour: 1
+    entities:
       - sensor.current_solar_power
       - sensor.solar_raw_house_usage
-    extrema: true
-    hours_to_show: 24
-    points_per_hour: 1
-    type: 'custom:mini-graph-card'

@@ -1,29 +1,28 @@
+title: Second Floor
+icon: 'mdi:home-floor-2'
 badges: []
 cards:
-  - entity: camera.weston_s_room
-    title: Westons's Room
+  - title: Westons's Room
     type: picture-entity
-  - entities:
-      - entity: fan.weston_fan
-        type: 'custom:slider-entity-row'
+    entity: camera.weston_s_room
+
+  - title: Weston's Room
+    type: entities
+    show_header_toggle: false
+    entities:
+      - type: 'custom:slider-entity-row'
+        entity: fan.weston_fan
       - entity: script.weston_nap
-    show_header_toggle: false
-    title: Weston's Room
+
+  - type: media-control
+    entity: media_player.westons_room_speaker
+
+  - type: media-control
+    entity: media_player.master_bedroom_tv
+    
+  - title: Master Bedroom
     type: entities
-  - entity: media_player.westons_room_speaker
-    type: media-control
-  - card:
-      entity: media_player.master_bedroom_tv
-      type: media-control
-    conditions:
-      - entity: media_player.master_bedroom_tv
-        state_not: unknown
-    type: conditional
-  - entities:
-      - entity: fan.master_fan
-        type: 'custom:slider-entity-row'
     show_header_toggle: false
-    title: Master Bedroom
-    type: entities
-icon: 'mdi:home-floor-2'
-title: Second Floor
+    entities:
+      - type: 'custom:slider-entity-row'
+        entity: fan.master_fan

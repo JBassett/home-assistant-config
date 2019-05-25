@@ -3,38 +3,49 @@ icon: 'mdi:home-assistant'
 tab_icon: 'mdi:home'
 badges: []
 cards:
-  - entities:
+  - title: Locations
+    type: entities
+    show_header_toggle: false
+    entities:
       - entity: sensor.home_status
       - entity: device_tracker.google_maps_114722593006578537688
       - entity: device_tracker.google_maps_112779943779309085408
       - entity: input_boolean.guest_mode
-    show_header_toggle: false
-    title: Locations
-    type: entities
-  - entities:
-      - sensor.family_room_thermostat_temperature
+
+  - title: Family Room Temperature
+    type: 'custom:mini-graph-card'
     extrema: true
     hours_to_show: 24
     points_per_hour: 2
-    type: 'custom:mini-graph-card'
+    entities:
+      - sensor.family_room_thermostat_temperature
+
   - entity: climate.family_room
     type: thermostat
-  - entities:
-      - cover.garage_door_opener
-    show_header_toggle: false
-    title: Garage
+
+  - title: Garage
     type: entities
-  - entity: camera.garage
-    title: Garage
+    show_header_toggle: false
+    entities:
+      - cover.garage_door_opener
+
+  - title: Garage
     type: picture-entity
-  - entities:
+    entity: camera.garage
+
+  - title: Outdoor Lights
+    type: entities
+    entities:
       - entity: switch.porch_light
       - entity: switch.driveway_light
-    title: Outdoor Lights
+
+  - type: picture-entity
+    entity: camera.front_door_2
+
+  - title: Ride Sharing to ROC
     type: entities
-  - entity: camera.front_door_2
-    type: picture-entity
-  - entities:
+    show_header_toggle: false
+    entities:
       - sensor.lyft_time
       - sensor.lyft_price
       - sensor.lyft_xl_time
@@ -43,6 +54,3 @@ cards:
       - sensor.uberx_price
       - sensor.uberxl_time
       - sensor.uberxl_price
-    show_header_toggle: false
-    title: Ride Sharing to ROC
-    type: entities
