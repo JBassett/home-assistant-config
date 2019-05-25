@@ -1,0 +1,70 @@
+- alias: 'Weston Sleep'
+  initial_state: 'on'
+  trigger:
+    # Start times
+    - platform: time
+      at: '12:00:00'
+    - platform: time
+      at: '19:00:00'
+  condition:
+    - condition: state
+      entity_id: sensor.home_status
+      state: 'Occupied'
+  action:
+    - service: input_boolean.turn_on
+      data:
+        entity_id: input_boolean.weston_nap
+
+- alias: 'Weston Keep Sleeping'
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: input_boolean.weston_nap
+      to: 'on'
+    # Stopped playing for random reason
+    - platform: state
+      entity_id: media_player.westons_room_speaker
+      to: 'off'
+    - platform: state
+      entity_id: media_player.westons_room_speaker
+      to: 'idle'
+  condition:
+    - condition: state
+      entity_id: sensor.home_status
+      state: 'Occupied'
+    - condition: state
+      entity_id: input_boolean.weston_nap
+      state: 'on'
+  action:
+    - service: media_player.play_media
+      data:
+        entity_id: media_player.westons_room_speaker
+        media_content_id: !secret babbling_brook_mp3
+        media_content_type: 'music'
+
+- alias: 'Weston Wakup'
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: input_boolean.weston_nap
+      to: 'off'
+    - platform: time
+      at: '16:00:00'
+    - platform: time
+      at: '08:00:00'
+    # We asked google to stop playing
+    - platform: state
+      entity_id: media_player.westons_room_speaker
+      from: 'playing'
+      to: 'paused'
+  action:
+    - service: input_boolean.turn_off
+      data:
+        entity_id: input_boolean.weston_nap
+    - service: media_player.turn_off
+      data:
+        entity_id: media_player.westons_room_speaker
+
+
+
+# 'paused' is the state when you ask the google home to stop playing
