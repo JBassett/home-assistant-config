@@ -19,6 +19,8 @@ resources:
     url: /local/lovelace/card-templater/lovelace-card-templater.js?v=1
   - type: module
     url: /local/lovelace/button-entity-row/button-entity-row.js?v=1
+  - type: module
+    url: /local/community/pc-card/pc-card.js?v=1
 title: Misty Way
 views:
   - !include lovelace/views/main.yaml

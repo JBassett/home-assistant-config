@@ -3,18 +3,8 @@ tab_icon: 'mdi:currency-usd'
 icon: 'mdi:cash-usd'
 badges: []
 cards:
-  - title: Personal Capital
-    type: entities
-    show_header_toggle: false
-    entities:
-      - entity: sensor.pc_cash
-      - entity: sensor.pc_credit
-      - entity: sensor.pc_investment
-      - entity: sensor.pc_other_liability
-      - entity: sensor.pc_loan
-      - entity: sensor.pc_mortgage
-      - entity: sensor.pc_networth
-      - entity: sensor.pc_other_asset
+  - title: Money
+    type: custom:pc-card
 
   - title: Net Worth
     type: 'custom:mini-graph-card'
