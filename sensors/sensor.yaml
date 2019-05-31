@@ -4,14 +4,6 @@
   password: !secret plex_pass
   token: !secret plex_token
 
-- platform: lyft
-  client_id: !secret lyft_client
-  client_secret: !secret lyft_secret
-  start_latitude: !secret home_lat
-  start_longitude: !secret home_lon
-  end_latitude: 43.12771            # ROC Airport
-  end_longitude: -77.6690977
-
 - platform: uber
   server_token: !secret uber_token
   start_latitude: !secret home_lat

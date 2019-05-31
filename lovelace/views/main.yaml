@@ -47,10 +47,6 @@ cards:
     type: entities
     show_header_toggle: false
     entities:
-      - sensor.lyft_time
-      - sensor.lyft_price
-      - sensor.lyft_xl_time
-      - sensor.lyft_xl_price
       - sensor.uberx_time
       - sensor.uberx_price
       - sensor.uberxl_time
