@@ -16,6 +16,18 @@ cards:
 
   - type: media-control
     entity: media_player.westons_room_speaker
+  
+
+  - title: Harrison's Room
+    type: entities
+    show_header_toggle: false
+    entities:
+      # - type: 'custom:slider-entity-row'
+      #   entity: fan.harrison_fan
+      - entity: input_boolean.harrison_nap
+
+  - type: media-control
+    entity: media_player.harrisons_room_speaker
 
   - type: media-control
     entity: media_player.master_bedroom_tv

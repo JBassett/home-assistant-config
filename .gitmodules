@@ -1,20 +1,3 @@
-[submodule "card-tools"]
-	path = www/lovelace/card-tools
-	url = https://github.com/thomasloven/lovelace-card-tools.git
-
-[submodule "more-info-card"]
-	path = www/lovelace/more-info-card
-	url = https://github.com/thomasloven/lovelace-more-info-card.git
-
-[submodule "www/lovelace/slider-entity-row"]
-	path = www/lovelace/slider-entity-row
-	url = https://github.com/thomasloven/lovelace-slider-entity-row.git
 [submodule "www/lovelace/weather-card-chart"]
 	path = www/lovelace/weather-card-chart
 	url = https://github.com/sgttrs/lovelace-weather-card-chart.git
-[submodule "www/lovelace/card-templater"]
-	path = www/lovelace/card-templater
-	url = https://github.com/gadgetchnnel/lovelace-card-templater.git
-[submodule "www/lovelace/button-entity-row"]
-	path = www/lovelace/button-entity-row
-	url = https://github.com/custom-cards/button-entity-row.git
