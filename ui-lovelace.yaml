@@ -6,21 +6,21 @@ resources:
     url: /local/lovelace/weather-card-chart/custom-weather-card-chart.js?v=1
 # Managed by HACs
   - type: module
-    url: /local/community/button-entity-row/button-entity-row.js?v=1
-  - type: module
     url: /local/community/pc-card/pc-card.js?v=1
   - type: module
     url: /local/community/mini-graph-card/mini-graph-card.js?v=0.4.3
+  - type: js
+    url: /local/community/button-entity-row/button-entity-row.js?v=1
   - type: js
     url: /local/community/monster-card/monster-card.js?v=0.2.4
   - type: js
     url: /local/community/upcoming-media-card/upcoming-media-card.js?v=0.3.9
   - type: js
-    url: /local/community/lovelace-card-tools/lovelace-card-tools.js?v=0.4
+    url: /local/community/lovelace-card-tools/card-tools.js?v=0.4
   - type: js
-    url: /local/community/lovelace-more-info-card/lovelace-more-info-card.js?v=1
+    url: /local/community/lovelace-more-info-card/more-info-card.js?v=1
   - type: js
-    url: /local/community/lovelace-slider-entity-row/lovelace-slider-entity-row.js?v=1
+    url: /local/community/lovelace-slider-entity-row/slider-entity-row.js?v=1
 
 title: Misty Way
 views:
