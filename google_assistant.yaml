@@ -8,6 +8,7 @@ exposed_domains:
   - fan
   - scene
   - script
+  - input_boolean
   # - media_player
   # - group
   # - climate
@@ -46,6 +47,14 @@ entity_config:
   cover.garage_door_opener:
     room: Outside
     name: Garage Door
+################## Weston's Room #########################
+  input_boolean.weston_nap:
+    room: Weston's Room
+  fan.weston_fan:
+    room: Weston's Room
+################## Harrison's Room #######################
+  input_boolean.harrison_nap:
+    room: Harrison's Room
 ################## Disabled ##############################
   switch.skybell_front_door_motion_sensor:
     expose: false
