@@ -2,52 +2,57 @@ title: Home
 icon: 'mdi:home-assistant'
 tab_icon: 'mdi:home'
 badges: []
+# This is so the CSS isn't forcing everything into a single column
+panel: true
 cards:
-  - title: Locations
-    type: entities
-    show_header_toggle: false
-    entities:
-      - entity: sensor.home_status
-      - entity: device_tracker.google_maps_114722593006578537688
-      - entity: device_tracker.google_maps_112779943779309085408
-      - entity: input_boolean.guest_mode
+  - type: custom:layout-card
+    layout: vertical
+    max_columns: 3
+    cards:
+      - title: Locations
+        type: entities
+        show_header_toggle: false
+        entities:
+          - entity: sensor.home_status
+          - entity: device_tracker.google_maps_114722593006578537688
+          - entity: device_tracker.google_maps_112779943779309085408
+          - entity: input_boolean.guest_mode
+      - type: map
+        # aspect_ratio: '16:9'
+        default_zoom: 14
+        entities:
+          - zone.home
+          - device_tracker.google_maps_114722593006578537688
+          - device_tracker.google_maps_112779943779309085408
 
-  - title: Family Room Temperature
-    type: 'custom:mini-graph-card'
-    extrema: true
-    hours_to_show: 24
-    points_per_hour: 2
-    entities:
-      - sensor.family_room_thermostat_temperature
-      - sensor.outdoor_temperature
+      - break
 
-  - entity: climate.family_room
-    type: thermostat
+      - entity: climate.family_room
+        type: thermostat
 
-  - title: Garage
-    type: entities
-    show_header_toggle: false
-    entities:
-      - cover.garage_door_opener
+      - title: Family Room Temperature
+        type: 'custom:mini-graph-card'
+        extrema: true
+        hours_to_show: 24
+        points_per_hour: 2
+        entities:
+          - sensor.family_room_thermostat_temperature
+          - sensor.outdoor_temperature
 
-  - title: Garage
-    type: picture-entity
-    entity: camera.garage
+      - break
 
-  - title: Outdoor Lights
-    type: entities
-    entities:
-      - entity: switch.porch_light
-      - entity: switch.driveway_light
+      - title: Outside
+        type: entities
+        show_header_toggle: false
+        entities:
+          - cover.garage_door_opener
+          - switch.porch_light
+          - switch.driveway_light
 
-  - type: picture-entity
-    entity: camera.front_door_2
+      - title: Garage
+        type: picture-entity
+        entity: camera.garage
 
-  - title: Ride Sharing to ROC
-    type: entities
-    show_header_toggle: false
-    entities:
-      - sensor.uberx_time
-      - sensor.uberx_price
-      - sensor.uberxl_time
-      - sensor.uberxl_price
+      - type: picture-entity
+        entity: camera.front_door
+

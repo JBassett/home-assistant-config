@@ -1,40 +1,51 @@
 title: Second Floor
 icon: 'mdi:home-floor-2'
 badges: []
+# This is so the CSS isn't forcing everything into a single column
+panel: true
 cards:
-  - title: Westons's Room
-    type: picture-entity
-    entity: camera.weston_s_room
+  - type: custom:layout-card
+    layout: vertical
+    cards:
+      - title: Westons's Room
+        type: picture-entity
+        entity: camera.weston_s_room
 
-  - title: Weston's Room
-    type: entities
-    show_header_toggle: false
-    entities:
-      - type: 'custom:slider-entity-row'
-        entity: fan.weston_fan
-      - entity: input_boolean.weston_nap
+      - title: Weston's Room
+        type: entities
+        show_header_toggle: false
+        entities:
+          - type: 'custom:slider-entity-row'
+            entity: fan.weston_fan
+          - entity: input_boolean.weston_nap
 
-  - type: media-control
-    entity: media_player.westons_room_speaker
-  
+      - type: media-control
+        entity: media_player.westons_room_speaker
 
-  - title: Harrison's Room
-    type: entities
-    show_header_toggle: false
-    entities:
-      # - type: 'custom:slider-entity-row'
-      #   entity: fan.harrison_fan
-      - entity: input_boolean.harrison_nap
+      - break
 
-  - type: media-control
-    entity: media_player.harrisons_room_speaker
+      - title: Harrison's Room
+        type: entities
+        show_header_toggle: false
+        entities:
+          # - type: 'custom:slider-entity-row'
+          #   entity: fan.harrison_fan
+          - entity: input_boolean.harrison_nap
 
-  - type: media-control
-    entity: media_player.master_bedroom_tv
-    
-  - title: Master Bedroom
-    type: entities
-    show_header_toggle: false
-    entities:
-      - type: 'custom:slider-entity-row'
-        entity: fan.master_fan
+      - type: media-control
+        entity: media_player.harrisons_room_speaker
+
+      - break
+
+      - type: media-control
+        entity: media_player.master_bedroom_tv
+        
+      - title: Master Bedroom
+        type: entities
+        show_header_toggle: false
+        entities:
+          - type: 'custom:slider-entity-row'
+            entity: fan.master_fan
+
+      - type: media-control
+        entity: media_player.master_bedroom_speaker

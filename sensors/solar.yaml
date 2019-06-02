@@ -80,7 +80,7 @@
           {{([states('sensor.solar_raw_total_power')|float + states('sensor.solar_consumptionmeter_pvs5m644235c')|float,0]|max)|round(2)}}
         {% endif %}
     solar_daily_house_usage_energy:
-      friendly_name: 'Daily useage of energy from the house'
+      friendly_name: 'Daily useage of energy'
       unit_of_measurement: 'kWh'
       entity_id:
         - sensor.house_daily_net_energy

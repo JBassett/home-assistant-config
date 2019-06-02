@@ -176,6 +176,7 @@ cast:
   media_player:
     - host: !secret google_home_host
     - host: !secret master_bedroom_tv_host
+    - host: !secret master_room_host
     - host: !secret westons_room_host
     - host: !secret harrisons_room_host
 

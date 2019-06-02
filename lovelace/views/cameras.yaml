@@ -6,7 +6,7 @@ cards:
     type: picture-entity
     entity: camera.weston_s_room
   - type: picture-entity
-    entity: camera.front_door_2
+    entity: camera.front_door
   - type: picture-entity
     entity: camera.living_room
   - type: picture-entity

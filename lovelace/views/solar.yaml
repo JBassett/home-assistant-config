@@ -2,7 +2,7 @@ title: Solar
 icon: 'mdi:solar-power'
 badges: []
 cards:
-  - title: Current Power
+  - title: Current House Stats
     type: 'custom:power-wheel-card'
     color_power_icons: true
     solar_icon: 'mdi:solar-power'
@@ -15,16 +15,20 @@ cards:
     energy_price: 0.11
     money_unit: $
     production_is_positive: false
-    
-  - title: Current Energy Stats
+
+  - title: Historical Energy Stats
     type: entities
     show_header_toggle: false
     entities:
       - entity: sensor.house_daily_net_energy
+        name: Daily Net Energy
       - entity: sensor.house_monthly_net_energy
+        name: Monthly Net Energy
       - entity: sensor.solar_daily_energy
+        name: Daily Solar Energy
       - entity: sensor.solar_monthly_energy
-    
+        name: Monthly Solar Energy
+
   - type: 'custom:mini-graph-card'
     extrema: true
     hours_to_show: 72

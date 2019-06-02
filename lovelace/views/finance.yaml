@@ -2,20 +2,27 @@ title: Financial
 tab_icon: 'mdi:currency-usd'
 icon: 'mdi:cash-usd'
 badges: []
+# This is so the CSS isn't forcing everything into a single column
+panel: true
 cards:
-  - title: Money
-    type: custom:pc-card
+  - type: custom:layout-card
+    layout: vertical
+    cards:
+      - title: Money
+        type: custom:pc-card
 
-  - title: Net Worth
-    type: 'custom:mini-graph-card'
-    hours_to_show: 720
-    points_per_hour: 0.1
-    entities:
-      - sensor.pc_networth
+      - break
 
-  - title: Retirement Accounts
-    type: 'custom:mini-graph-card'
-    hours_to_show: 720
-    points_per_hour: 0.1
-    entities:
-      - sensor.pc_investment
+      - title: Net Worth
+        type: 'custom:mini-graph-card'
+        hours_to_show: 720
+        points_per_hour: 0.1
+        entities:
+          - sensor.pc_networth
+
+      - title: Retirement Accounts
+        type: 'custom:mini-graph-card'
+        hours_to_show: 720
+        points_per_hour: 0.1
+        entities:
+          - sensor.pc_investment
