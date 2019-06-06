@@ -1,5 +1,4 @@
 - platform: plex
-  use_custom_entity_ids: true
 
 - platform: lg_netcast
   host: !secret living_room_tv_host
