@@ -35,6 +35,7 @@ deps
 
 /www/avatars
 /www/snapshots
+/www/custom-lovelace
 
 #Z-Wave
 openzwave
