@@ -32,15 +32,6 @@ cards:
           - entity: sensor.speedtest_ping
             name: Upload
 
-  - title: Ride Sharing to ROC
-    type: entities
-    show_header_toggle: false
-    entities:
-      - sensor.uberx_time
-      - sensor.uberx_price
-      - sensor.uberxl_time
-      - sensor.uberxl_price
-
   - title: PfSense
     type: entities
     show_header_toggle: false

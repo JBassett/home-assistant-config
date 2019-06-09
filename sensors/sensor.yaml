@@ -4,12 +4,13 @@
   password: !secret plex_pass
   token: !secret plex_token
 
-- platform: uber
-  server_token: !secret uber_token
-  start_latitude: !secret home_lat
-  start_longitude: !secret home_lon
-  end_latitude: 43.12771            # ROC Airport
-  end_longitude: -77.6690977
+- platform: plex_recently_added
+  host: !secret plex_host
+  token: !secret plex_token
+  max: 5
+  section_types:
+    - movie
+    - show
 
 - platform: personalcapital
   email: !secret personalCap_user
