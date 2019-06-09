@@ -91,7 +91,7 @@ logger:
 # Track the sun
 sun:
 
-# stream:
+stream:
 
 # Text to speech
 tts:
