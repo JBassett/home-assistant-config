@@ -6,6 +6,22 @@
       at: '11:45:00'
     - platform: time
       at: '19:45:00'
+    - platform: state
+      entity_id: sensor.home_status
+      from: Unoccupied
+      to: Occupied
+  condition:
+    - condition: state
+      entity_id: sensor.home_status
+      state: Occupied
+    - condition: or
+      conditions:
+        - condition: time
+          after: '11:45:00'
+          before: '16:00:00'
+        - condition: time
+          after: '19:45:00'
+          before: '08:30:00'
   action:
     - service: input_boolean.turn_on
       data:
@@ -31,9 +47,6 @@
       to: 'paused'
       for: '00:00:10'
   condition:
-    - condition: state
-      entity_id: sensor.home_status
-      state: 'Occupied'
     - condition: state
       entity_id: input_boolean.weston_nap
       state: 'on'
