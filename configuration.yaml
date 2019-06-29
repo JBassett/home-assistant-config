@@ -124,11 +124,6 @@ skybell:
   username: !secret skybell_user
   password: !secret skybell_pass
 
-august:
-  login_method: email
-  username: !secret august_user
-  password: !secret august_pass
-
 weather:
   - platform: darksky
     api_key: !secret darksky_key
