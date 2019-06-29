@@ -1,18 +1,21 @@
 """Blueprint for HacsBase."""
-# pylint: disable=too-few-public-methods
+# pylint: disable=too-few-public-methods,unused-argument
 import logging
 import uuid
+import os
 from datetime import timedelta
-from homeassistant.helpers.event import async_track_time_interval
-from .aiogithub import AIOGitHubException
-from .const import DEFAULT_REPOSITORIES
+from homeassistant.helpers.event import async_track_time_interval, async_call_later
+from .aiogithub import AIOGitHubException, AIOGitHubRatelimit
+from .const import DEFAULT_REPOSITORIES, ELEMENT_TYPES
 
-_LOGGER = logging.getLogger('custom_components.hacs.hacs')
+_LOGGER = logging.getLogger("custom_components.hacs.hacs")
 
 
 class HacsBase:
     """The base class of HACS, nested thoughout the project."""
+
     const = None
+    dev = False
     migration = None
     storage = None
     hacs = None
@@ -25,12 +28,23 @@ class HacsBase:
     repositories = {}
 
     url_path = {}
-    for endpoint in ["api", "error", "overview", "static", "store", "settings", "repository"]:
-        url_path[endpoint] = "/community_{}-{}".format(str(uuid.uuid4()), str(uuid.uuid4()))
+    for endpoint in [
+        "api",
+        "error",
+        "overview",
+        "static",
+        "store",
+        "settings",
+        "repository",
+    ]:
+        url_path[endpoint] = "/community_{}-{}".format(
+            str(uuid.uuid4()), str(uuid.uuid4())
+        )
 
-    async def startup_tasks(self):
+    async def startup_tasks(self, notarealargument=None):
         """Run startup_tasks."""
         from .hacsrepositoryintegration import HacsRepositoryIntegration
+
         self.data["task_running"] = True
 
         _LOGGER.info("Runing startup tasks.")
@@ -38,50 +52,89 @@ class HacsBase:
         # Store enpoints
         self.data["hacs"]["endpoints"] = self.url_path
 
-        custom_log_level = {"custom_components.hacs": "debug"}
-        await self.hass.services.async_call("logger", "set_level", custom_log_level)
+        try:
+            # Check for updates to HACS.
+            repository = await self.aiogithub.get_repo("custom-components/hacs")
+
+            repository = HacsRepositoryIntegration("custom-components/hacs", repository)
+            await repository.setup_repository()
+            self.repositories[repository.repository_id] = repository
+
+            # After an upgrade from < 0.7.0 some files are missing.
+            # This will handle that.
+            checkpath = "{}/frontend/elements/all.min.css.gz".format(
+                repository.local_path
+            )
+            if not os.path.exists(checkpath):
+                _LOGGER.critical("HACS is missing files, trying to correct.")
+                await repository.install()
+
+            _LOGGER.info("Trying to load existing data.")
+
+            # Check if migration is needed, or load existing data.
+            await self.migration.validate()
+
+        except AIOGitHubRatelimit as exception:
+            _LOGGER.critical(exception)
+            _LOGGER.info("HACS will try to run setup again in 15 minuttes.")
+            async_call_later(self.hass, 900, self.startup_tasks)
+            return False
 
         # For installed repositories only.
-        async_track_time_interval(self.hass, self.recuring_tasks_installed, timedelta(minutes=30))
+        async_track_time_interval(
+            self.hass, self.recuring_tasks_installed, timedelta(minutes=30)
+        )
 
         # For the rest.
-        async_track_time_interval(self.hass, self.update_repositories, timedelta(minutes=500))
-
-        # Check for updates to HACS.
-        repository = await self.aiogithub.get_repo("custom-components/hacs")
-        repository = HacsRepositoryIntegration("custom-components/hacs", repository)
-        await repository.setup_repository()
-        self.repositories[repository.repository_id] = repository
-
-        _LOGGER.info("Trying to load existing data.")
-
-        # Check if migration is needed, or load existing data.
-        await self.migration.validate()
+        async_track_time_interval(
+            self.hass, self.update_repositories, timedelta(minutes=500)
+        )
 
         self.data["task_running"] = False
+        return True
 
     async def register_new_repository(self, element_type, repo, repositoryobject=None):
         """Register a new repository."""
         from .exceptions import HacsBaseException, HacsRequirement
-        from .blueprints import HacsRepositoryIntegration, HacsRepositoryPlugin
+        from .blueprints import (
+            HacsRepositoryAppDaemon,
+            HacsRepositoryIntegration,
+            HacsRepositoryPlugin,
+            HacsRepositoryPythonScripts,
+            HacsRepositoryThemes,
+        )
 
-        _LOGGER.debug("Starting repository registration for %s", repo)
+        _LOGGER.info("Starting repository registration for %s", repo)
 
-        if element_type == "integration":
+        if element_type not in ELEMENT_TYPES:
+            _LOGGER.info("%s is not enabled, skipping registration", element_type)
+            return None, False
+
+        if element_type == "appdaemon":
+            repository = HacsRepositoryAppDaemon(repo, repositoryobject)
+
+        elif element_type == "integration":
             repository = HacsRepositoryIntegration(repo, repositoryobject)
 
         elif element_type == "plugin":
             repository = HacsRepositoryPlugin(repo, repositoryobject)
 
+        elif element_type == "python_script":
+            repository = HacsRepositoryPythonScripts(repo, repositoryobject)
+
+        elif element_type == "theme":
+            repository = HacsRepositoryThemes(repo, repositoryobject)
+
         else:
-            return False
+            return None, False
 
         setup_result = True
         try:
             await repository.set_repository()
             await repository.setup_repository()
         except (HacsRequirement, HacsBaseException, AIOGitHubException) as exception:
-            _LOGGER.debug("%s - %s", repository.repository_name, exception)
+            if not self.data["task_running"]:
+                _LOGGER.error("%s - %s", repository.repository_name, exception)
             setup_result = False
 
         if setup_result:
@@ -90,7 +143,8 @@ class HacsBase:
         else:
             if repo not in self.blacklist:
                 self.blacklist.append(repo)
-            _LOGGER.debug("%s - Could not register.", repo)
+            if not self.data["task_running"]:
+                _LOGGER.error("%s - Could not register.", repo)
         return repository, setup_result
 
     async def update_repositories(self, now=None):
@@ -104,18 +158,33 @@ class HacsBase:
             for repository in self.repositories:
                 try:
                     repository = self.repositories[repository]
-                    if not repository.track or repository.repository_name in self.blacklist:
+                    if (
+                        not repository.track
+                        or repository.repository_name in self.blacklist
+                    ):
+                        continue
+                    if repository.hide and repository.repository_id != "172733314":
                         continue
                     if now is not None:
-                        _LOGGER.info("Running update for %s", repository.repository_name)
+                        _LOGGER.info(
+                            "Running update for %s", repository.repository_name
+                        )
                         await repository.update()
                 except AIOGitHubException as exception:
-                    _LOGGER.debug("%s - %s", repository.repository_name, exception)
+                    _LOGGER.error("%s - %s", repository.repository_name, exception)
 
         # Register new repositories
-        integrations, plugins = await self.get_repositories()
+        appdaemon, integrations, plugins, python_scripts, themes = (
+            await self.get_repositories()
+        )
 
-        repository_types = {"integration": integrations, "plugin": plugins}
+        repository_types = {
+            "appdaemon": appdaemon,
+            "integration": integrations,
+            "plugin": plugins,
+            "python_script": python_scripts,
+            "theme": themes,
+        }
 
         for repository_type in repository_types:
             for repository in repository_types[repository_type]:
@@ -128,29 +197,49 @@ class HacsBase:
                     await repository.update()
                 else:
                     try:
-                        await self.register_new_repository(repository_type, repository.full_name, repository)
+                        await self.register_new_repository(
+                            repository_type, repository.full_name, repository
+                        )
                     except AIOGitHubException as exception:
-                        _LOGGER.debug("%s - %s", repository.full_name, exception)
-        await self.storage.set()
+                        _LOGGER.error("%s - %s", repository.full_name, exception)
         self.data["task_running"] = False
+        await self.storage.set()
 
     async def get_repositories(self):
         """Get defined repositories."""
-        repositories = {}
+        repositories = {
+            "appdaemon": [],
+            "integration": [],
+            "plugin": [],
+            "python_script": [],
+            "theme": [],
+        }
 
         # Get org repositories
-        repositories["integration"] = await self.aiogithub.get_org_repos("custom-components")
-        repositories["plugin"] = await self.aiogithub.get_org_repos("custom-cards")
+        if not self.dev:
+            repositories["integration"] = await self.aiogithub.get_org_repos(
+                "custom-components"
+            )
+            repositories["plugin"] = await self.aiogithub.get_org_repos("custom-cards")
 
-        # Additional repositories (Not implemented)
+        # Additional repositories
         for repository_type in DEFAULT_REPOSITORIES:
-            for repository in DEFAULT_REPOSITORIES[repository_type]:
-                result = await self.aiogithub.get_repo(repository)
-                repositories[repository_type].append(result)
+            if repository_type in ELEMENT_TYPES:
+                for repository in DEFAULT_REPOSITORIES[repository_type]:
+                    result = await self.aiogithub.get_repo(repository)
+                    repositories[repository_type].append(result)
 
-        return repositories["integration"], repositories["plugin"]
+        return (
+            repositories["appdaemon"],
+            repositories["integration"],
+            repositories["plugin"],
+            repositories["python_script"],
+            repositories["theme"],
+        )
 
-    async def recuring_tasks_installed(self, notarealarg):  # pylint: disable=unused-argument
+    async def recuring_tasks_installed(
+        self, notarealarg
+    ):  # pylint: disable=unused-argument
         """Recuring tasks for installed repositories."""
         self.data["task_running"] = True
         _LOGGER.info("Running scheduled update of installed repositories")
@@ -164,7 +253,7 @@ class HacsBase:
                 _LOGGER.info("Running update for %s", repository.repository_name)
                 await repository.update()
             except AIOGitHubException as exception:
-                _LOGGER.debug("%s - %s", repository.repository_name, exception)
+                _LOGGER.error("%s - %s", repository.repository_name, exception)
         self.data["task_running"] = False
 
     @property
@@ -182,3 +271,11 @@ class HacsBase:
         for repository in self.repositories:
             repositories.append(self.repositories[repository])
         return sorted(repositories, key=lambda x: x.repository_name)
+
+    async def is_known_repository(self, repository_full_name):
+        """Return a bool if the repository is known."""
+        for repository in self.repositories:
+            repository = self.repositories[repository]
+            if repository.repository_name == repository_full_name:
+                return True
+        return False

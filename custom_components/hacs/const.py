@@ -1,8 +1,8 @@
 """Constants for HACS"""
-VERSION = "0.5.1"
+VERSION = "0.9.0"
 NAME_LONG = "HACS (Home Assistant Community Store)"
 NAME_SHORT = "HACS"
-STORAGE_VERSION = "1"
+STORAGE_VERSION = "2"
 STORENAME = "hacs"
 PROJECT_URL = "https://github.com/custom-components/hacs/"
 CUSTOM_UPDATER_LOCATIONS = [
@@ -19,7 +19,7 @@ BLACKLIST = [
     "custom-cards/tracker-card",
     "custom-components/blueprint",
     "custom-components/information",
-    "custom-components/custom-updater",
+    "custom-components/custom_updater",
 ]
 ELEMENT_TYPES = ["integration", "plugin"]
 IFRAME = {
@@ -73,6 +73,41 @@ ERROR = [
 ################################
 
 DEFAULT_REPOSITORIES = {
-    "integration": [],
-    "plugin": []
+    "appdaemon": [
+        "apop880/SmartThings-Button",
+        "apop880/White-Noise",
+        "apop880/Night-Mode",
+    ],
+    "integration": [
+        "StyraHem/ShellyForHASS",
+        "isabellaalstrom/sensor.krisinformation",
+        "JurajNyiri/HomeAssistant-Tavos",
+        "JurajNyiri/HomeAssistant-Atrea",
+        "TimSoethout/goodwe-sems-home-assistant",
+        "bramkragten/lyric",
+        "bramkragten/mind",
+        "bouwew/sems2mqtt",
+    ],
+    "plugin": [
+        "maykar/compact-custom-header",
+        "maykar/lovelace-swipe-navigation",
+        "peternijssen/lovelace-postnl-card",
+        "nervetattoo/simple-thermostat",
+        "nervetattoo/banner-card",
+        "kalkih/mini-media-player",
+        "kalkih/mini-graph-card",
+        "finity69x2/fan-control-entity-row",
+        "thomasloven/lovelace-card-mod",
+        "thomasloven/lovelace-markdown-mod",
+        "thomasloven/lovelace-slider-entity-row",
+        "thomasloven/lovelace-fold-entity-row",
+        "isabellaalstrom/krisinfo-card",
+        "tcarlsen/lovelace-light-with-profiles",
+        "atomic7777/atomic_calendar",
+        "bramkragten/weather-card",
+        "bramkragten/swipe-card",
+        "CyrisXD/love-lock-card",
+    ],
+    "python_script": [],
+    "theme": [],
 }

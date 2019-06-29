@@ -16,6 +16,7 @@ import voluptuous as vol
 from homeassistant.const import EVENT_HOMEASSISTANT_START, __version__ as HAVERSION
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
 import homeassistant.helpers.config_validation as cv
+from homeassistant.helpers import discovery
 
 from .hacsbase import HacsBase as hacs
 from .const import (
@@ -46,12 +47,22 @@ from .frontend.views import (
 DOMAIN = "{}".format(NAME_SHORT.lower())
 
 # TODO: Remove this when minimum HA version is > 0.93
-REQUIREMENTS = ["aiofiles"]
+REQUIREMENTS = ["aiofiles", "backoff"]
 
-_LOGGER = logging.getLogger('custom_components.hacs')
+_LOGGER = logging.getLogger("custom_components.hacs")
 
 CONFIG_SCHEMA = vol.Schema(
-    {DOMAIN: vol.Schema({vol.Required("token"): cv.string})}, extra=vol.ALLOW_EXTRA
+    {
+        DOMAIN: vol.Schema(
+            {
+                vol.Required("token"): cv.string,
+                vol.Optional("appdaemon", default=False): cv.boolean,
+                vol.Optional("python_script", default=False): cv.boolean,
+                vol.Optional("theme", default=False): cv.boolean,
+            }
+        )
+    },
+    extra=vol.ALLOW_EXTRA,
 )
 
 
@@ -61,10 +72,23 @@ async def async_setup(hass, config):  # pylint: disable=unused-argument
     config_dir = hass.config.path()
     github_token = config[DOMAIN]["token"]
 
+    if config[DOMAIN]["appdaemon"]:
+        ELEMENT_TYPES.append("appdaemon")
+    if config[DOMAIN]["python_script"]:
+        ELEMENT_TYPES.append("python_script")
+    if config[DOMAIN]["theme"]:
+        ELEMENT_TYPES.append("theme")
+
+    # Print DEV warning
+    if VERSION == "DEV":
+        _LOGGER.error(
+            "You are running a DEV version of HACS, this is not intended for regular use."
+        )
+
     # Configure HACS
     await configure_hacs(hass, github_token, config_dir)
 
-     # Check if custom_updater exists
+    # Check if custom_updater exists
     for location in CUSTOM_UPDATER_LOCATIONS:
         if os.path.exists(location.format(config_dir)):
             msg = CUSTOM_UPDATER_WARNING.format(location.format(config_dir))
@@ -72,9 +96,14 @@ async def async_setup(hass, config):  # pylint: disable=unused-argument
             return False
 
     # Check if HA is the required version.
-    if parse_version(HAVERSION) < parse_version('0.92.0'):
+    if parse_version(HAVERSION) < parse_version("0.92.0"):
         _LOGGER.critical("You need HA version 92 or newer to use this integration.")
         return False
+
+    # Add sensor
+    hass.async_create_task(
+        discovery.async_load_platform(hass, "sensor", DOMAIN, {}, config[DOMAIN])
+    )
 
     # Setup startup tasks
     hass.bus.async_listen_once(EVENT_HOMEASSISTANT_START, hacs().startup_tasks())
@@ -91,7 +120,7 @@ async def async_setup(hass, config):  # pylint: disable=unused-argument
 
     # Add to sidepanel
     # TODO: Remove this check when minimum HA version is > 0.94
-    if parse_version(HAVERSION) < parse_version('0.93.9'):
+    if parse_version(HAVERSION) < parse_version("0.93.9"):
         await hass.components.frontend.async_register_built_in_panel(
             "iframe",
             IFRAME["title"],
@@ -123,7 +152,9 @@ async def configure_hacs(hass, github_token, hass_config_dir):
     hacs.migration = HacsMigration()
     hacs.storage = HacsStorage()
 
-    hacs.aiogithub = AIOGitHub(github_token, hass.loop, async_create_clientsession(hass))
+    hacs.aiogithub = AIOGitHub(
+        github_token, hass.loop, async_create_clientsession(hass)
+    )
 
     hacs.hass = hass
     hacs.config_dir = hass_config_dir

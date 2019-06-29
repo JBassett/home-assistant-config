@@ -3,9 +3,9 @@ import logging
 from shutil import copy2
 
 from .hacsbase import HacsBase
-from .const import STORAGE_VERSION
+from .const import STORAGE_VERSION, VERSION
 
-_LOGGER = logging.getLogger('custom_components.hacs.migration')
+_LOGGER = logging.getLogger("custom_components.hacs.migration")
 
 
 class HacsMigration(HacsBase):
@@ -35,6 +35,14 @@ class HacsMigration(HacsBase):
             # Run the rest.
             await self.update_repositories()
 
+        elif self.old["hacs"]["schema"] == "1":
+            # Creating backup.
+            source = "{}/.storage/hacs".format(self.config_dir)
+            destination = "{}.1".format(source)
+            _LOGGER.info("Backing up current file to '%s'", destination)
+            copy2(source, destination)
+            await self.from_1_to_2()
+
         elif self.old["hacs"].get("schema") == STORAGE_VERSION:
             pass
 
@@ -51,8 +59,22 @@ class HacsMigration(HacsBase):
             if repodata.get("isinstalled"):
                 # Register new repository
                 _LOGGER.info("Migrating %s", repodata["repo"])
-                repository, setup_result = await self.register_new_repository(repodata["element_type"], repodata["repo"])
+                repository, setup_result = await self.register_new_repository(
+                    repodata["element_type"], repodata["repo"]
+                )
 
                 repository.version_installed = repodata["installed_version"]
                 repository.installed = True
                 self.repositories[repository.repository_id] = repository
+
+    async def from_1_to_2(self):
+        """Migrate from storage version 1 to storage version 2."""
+        _LOGGER.info("Starting migration of HACS data from 1 to 2.")
+
+        for repository in self.repositories:
+            repository = self.repositories[repository]
+            repository.show_beta = False
+            await repository.set_repository_releases()
+            self.repositories[repository.repository_id] = repository
+        self.data["hacs"]["schema"] = "2"
+        _LOGGER.info("Migration of HACS data from 1 to 2 is complete.")
