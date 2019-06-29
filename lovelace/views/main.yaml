@@ -20,6 +20,7 @@ cards:
       - type: map
         # aspect_ratio: '16:9'
         default_zoom: 14
+        dark_mode: true
         entities:
           - zone.home
           - device_tracker.google_maps_114722593006578537688
@@ -27,8 +28,17 @@ cards:
 
       - break
 
-      - entity: climate.family_room
-        type: thermostat
+      - type: 'custom:simple-thermostat'
+        entity: climate.family_room
+        decimals: 0
+        step_size: 1
+        hide:
+          state: true
+        sensors:
+          - entity: sensor.family_room_thermostat_hvac_state
+            name: State
+          - entity: binary_sensor.family_room_thermostat_fan
+            name: Fan
 
       - title: Family Room Temperature
         type: 'custom:mini-graph-card'
