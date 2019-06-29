@@ -51,6 +51,7 @@ My instance of Home Assistant is running as a docker container on my home [Unrai
 [Product URL](https://www.wyze.com/product/wyze-cam-v2/)
 
 ![wyze-cam-v2](https://www.wyze.com/wp-content/uploads/2018/02/wyze-cam.jpg)
+
 These are the cameras on the inside of the house.  They are running [Dafang-Hacks](https://github.com/EliasKotlyar/Xiaomi-Dafang-Hacks) custom firmware.
 #### Skybell Doorbell
 [Product URL](http://www.skybell.com/)
