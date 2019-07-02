@@ -48,8 +48,6 @@ http: !include http.yaml
 hacs:
   token: !secret github_pat
 
-map:
-
 # Enables the config panels
 config:
 
