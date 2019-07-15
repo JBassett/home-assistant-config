@@ -4,6 +4,8 @@
     - platform: state
       entity_id: sensor.home_status
       to: 'Unoccupied'
+      for:  
+        minutes: 5
   action:
     - service: script.livingroom_off
     - service: script.kitchen_off
@@ -11,9 +13,14 @@
       data:
         entity_id: all
         away_mode: true
+    - service: fan.turn_off
+      data:
+        entity_id:
+          - fan.master_fan
+          - fan.weston_fan
 
 - alias: House Became Occupied
-  initial_state: 'on'
+  initial_state: 'off' # Don't want to run every time we reboot and are home.
   trigger:
     - platform: state
       entity_id: sensor.home_status
@@ -34,3 +41,14 @@
           before: sunrise
     - service: script.kitchen_on
     - service: script.livingroom_on
+
+- alias: START - Delay automations on restart
+  hide_entity: True
+  trigger:
+    platform: homeassistant
+    event: start
+  action:
+    - delay:
+        seconds: 20
+    - service: automation.turn_on
+      entity_id: automation.house_became_occupied
