@@ -18,6 +18,9 @@ cards:
           - type: 'custom:slider-entity-row'
             entity: fan.weston_fan
           - entity: input_boolean.weston_nap
+          - entity: sensor.weston_temperature
+          - entity: sensor.weston_humidity
+          - entity: sensor.weston_brightness
 
       - type: media-control
         entity: media_player.westons_room_speaker
