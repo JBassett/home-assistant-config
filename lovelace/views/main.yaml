@@ -29,6 +29,13 @@ cards:
         entities:
           - sensor.family_room_thermostat_temperature
           - sensor.outdoor_temperature
+      
+      # - title: House Feed
+      #   type: 'custom:home-feed-card'
+      #   show_empty: false
+      #   entities:
+      #     - entity: device_tracker.google_maps_114722593006578537688
+      #     - entity: device_tracker.google_maps_112779943779309085408
 
       - break
 
@@ -50,7 +57,7 @@ cards:
           - device_tracker.google_maps_112779943779309085408
 
       - break
-
+      
       - title: Outside
         type: entities
         show_header_toggle: false
