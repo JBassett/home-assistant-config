@@ -45,3 +45,6 @@ OZW_Log.txt
 options.xml
 
 __pycache__/
+
+# VS Code Settings
+.vscode/*
