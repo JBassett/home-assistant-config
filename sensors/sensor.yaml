@@ -93,14 +93,17 @@
     home_status:
       friendly_name: Home status
       value_template: >
-        {% if 
+        {% if not(
           is_state('device_tracker.google_maps_112779943779309085408' , 'home')
           or 
           is_state('device_tracker.google_maps_114722593006578537688' , 'home') 
           or 
           is_state('input_boolean.guest_mode' , 'on')
-        %}Occupied
-        {% else %} Unoccupied {% endif %}
+          ) %}
+          Unoccupied
+        {% else %} 
+          Occupied
+        {% endif %}
     outdoor_temperature:
       friendly_name: Outdoor Temperature
       value_template: >

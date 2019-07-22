@@ -9,10 +9,9 @@
   action:
     - service: script.livingroom_off
     - service: script.kitchen_off
-    - service: climate.set_away_mode
+    - service: nest.set_away_mode
       data:
-        entity_id: all
-        away_mode: true
+        away_mode: away
     - service: fan.turn_off
       data:
         entity_id:
@@ -20,16 +19,16 @@
           - fan.weston_fan
 
 - alias: House Became Occupied
-  initial_state: 'off' # Don't want to run every time we reboot and are home.
+  initial_state: 'on' # Don't want to run every time we reboot and are home.
   trigger:
     - platform: state
       entity_id: sensor.home_status
+      from: 'Unoccupied'
       to: 'Occupied'
   action:
-    - service: climate.set_away_mode
+    - service: nest.set_away_mode
       data:
-        entity_id: all
-        away_mode: false
+        away_mode: home
 
     # It's dark, we want lights?
     - condition: or
@@ -41,14 +40,3 @@
           before: sunrise
     - service: script.kitchen_on
     - service: script.livingroom_on
-
-- alias: START - Delay automations on restart
-  hide_entity: True
-  trigger:
-    platform: homeassistant
-    event: start
-  action:
-    - delay:
-        seconds: 20
-    - service: automation.turn_on
-      entity_id: automation.house_became_occupied
