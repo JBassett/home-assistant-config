@@ -9,25 +9,6 @@ cards:
     layout: vertical
     max_columns: 3
     cards:
-      - title: Locations
-        type: entities
-        show_header_toggle: false
-        entities:
-          - entity: sensor.home_status
-          - entity: device_tracker.google_maps_114722593006578537688
-          - entity: device_tracker.google_maps_112779943779309085408
-          - entity: input_boolean.guest_mode
-      - type: map
-        # aspect_ratio: '16:9'
-        default_zoom: 14
-        dark_mode: true
-        entities:
-          - zone.home
-          - device_tracker.google_maps_114722593006578537688
-          - device_tracker.google_maps_112779943779309085408
-
-      - break
-
       - type: 'custom:simple-thermostat'
         entity: climate.family_room
         decimals: 0
@@ -48,6 +29,25 @@ cards:
         entities:
           - sensor.family_room_thermostat_temperature
           - sensor.outdoor_temperature
+
+      - break
+
+      - title: Locations
+        type: entities
+        show_header_toggle: false
+        entities:
+          - entity: sensor.home_status
+          - entity: device_tracker.google_maps_114722593006578537688
+          - entity: device_tracker.google_maps_112779943779309085408
+          - entity: input_boolean.guest_mode
+      - type: map
+        # aspect_ratio: '16:9'
+        default_zoom: 14
+        dark_mode: true
+        entities:
+          - zone.home
+          - device_tracker.google_maps_114722593006578537688
+          - device_tracker.google_maps_112779943779309085408
 
       - break
 
