@@ -74,3 +74,29 @@
     - service: media_player.turn_off
       data:
         entity_id: media_player.westons_room_speaker
+
+- alias: 'Weston Fan Control'
+  initial_state: 'on'
+  trigger:
+    # This doesn't update too much, should be safe
+    - platform: state
+      entity_id: sensor.weston_temperature
+  condition:
+    - condition: state
+      entity_id: input_boolean.weston_nap
+      state: 'on'
+  action:
+    - service: fan.set_speed
+      data_template:
+        entity_id: fan.weston_fan
+        speed: >
+          {%set diff=states('sensor.weston_temperature')|float - state_attr('climate.family_room', 'temperature')|float%}
+          {% if diff < 2 %}
+            off
+          {% elif diff < 4 %}
+            low
+          {% elif diff < 6 %}
+            medium
+          {% else %}
+            high
+          {% endif%}
