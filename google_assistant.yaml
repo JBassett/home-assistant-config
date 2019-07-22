@@ -21,9 +21,6 @@ entity_config:
     room: Kitchen
     name: Kitchen Up Lights
 ################## Living Room ##########################
-  script.turn_on_xbox:
-    room: Living Room
-    name: Xbox
   switch.living_room_outlet:
     room: Living Room
     name: Living Room Outlet

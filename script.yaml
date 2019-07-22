@@ -1,7 +1,3 @@
-turn_on_xbox:
-  sequence:
-    - service: shell_command.turn_on_xbox
-
 goodnight:
   alias: goodnight
   sequence:

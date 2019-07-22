@@ -2,12 +2,6 @@ title: Media
 icon: 'mdi:television-box'
 badges: []
 cards:
-  - title: Xbox
-    type: entities
-    show_header_toggle: false
-    entities:
-      - script.turn_on_xbox
-    
   - type: media-control
     entity: media_player.lg_tv_remote
 
