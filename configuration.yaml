@@ -47,6 +47,10 @@ http: !include http.yaml
 
 hacs:
   token: !secret github_pat
+  python_script: True
+  theme: True
+
+python_script:
 
 # Enables the config panels
 config:
