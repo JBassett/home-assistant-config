@@ -34,6 +34,9 @@ cards:
           # - type: 'custom:slider-entity-row'
           #   entity: fan.harrison_fan
           - entity: input_boolean.harrison_nap
+          - entity: sensor.harrison_temperature
+          - entity: sensor.harrison_humidity
+          - entity: sensor.harrison_brightness
 
       - type: media-control
         entity: media_player.harrisons_room_speaker
