@@ -9,6 +9,8 @@ resources:
     url: /local/community/pc-card/pc-card.js?v=0.0.3
   - type: module
     url: /local/community/mini-graph-card/mini-graph-card.js?v=0.5.0
+  - type: module
+    url: /local/community/mini-media-player/mini-media-player.js?v=1.2.2
   - type: js
     url: /local/community/button-entity-row/button-entity-row.js?v=1
   - type: js
