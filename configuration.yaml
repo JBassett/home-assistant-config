@@ -89,6 +89,7 @@ logger:
   logs:
     # homeassistant.components.stream: debug
     custom_components.sensor.sunpower: debug
+    sucks: error
 
 # Track the sun
 sun:

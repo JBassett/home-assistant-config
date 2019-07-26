@@ -18,11 +18,22 @@ cards:
           - type: 'custom:slider-entity-row'
             entity: fan.weston_fan
           - entity: input_boolean.weston_nap
-          - entity: sensor.weston_temperature
-          - entity: sensor.weston_humidity
           - entity: sensor.weston_brightness
 
-      - type: media-control
+      - title: Weston's Room Temp
+        type: 'custom:mini-graph-card'
+        extrema: true
+        hours_to_show: 24
+        points_per_hour: 2
+        show:
+          labels: true
+          labels_secondary: false
+        entities:
+          - sensor.weston_temperature
+          - entity: sensor.weston_humidity
+            y_axis: secondary 
+
+      - type: custom:mini-media-player
         entity: media_player.westons_room_speaker
 
       - break
@@ -38,17 +49,44 @@ cards:
           # - type: 'custom:slider-entity-row'
           #   entity: fan.harrison_fan
           - entity: input_boolean.harrison_nap
-          - entity: sensor.harrison_temperature
-          - entity: sensor.harrison_humidity
           - entity: sensor.harrison_brightness
 
-      - type: media-control
+      - title: Harrison's Room Temp
+        type: 'custom:mini-graph-card'
+        extrema: true
+        hours_to_show: 24
+        points_per_hour: 2
+        show:
+          labels: true
+          labels_secondary: false
+        entities:
+          - sensor.harrison_temperature
+          - entity: sensor.harrison_humidity
+            y_axis: secondary 
+
+      - type: custom:mini-media-player
         entity: media_player.harrisons_room_speaker
 
       - break
 
-      - type: media-control
+      - type: custom:mini-media-player
         entity: media_player.master_bedroom_tv
+        shortcuts:
+          buttons:
+            - name: Weston's Room
+              type: service
+              # icon: mdi:baby-buggy
+              id: camera.play_stream
+              data:
+                entity_id: camera.weston_s_room
+                media_player: media_player.master_bedroom_tv
+            - name: Harrison's Room
+              type: service
+              # icon: mdi:baby-buggy
+              id: camera.play_stream
+              data:
+                entity_id: camera.harrison_s_room
+                media_player: media_player.master_bedroom_tv
         
       - title: Master Bedroom
         type: entities
@@ -57,5 +95,5 @@ cards:
           - type: 'custom:slider-entity-row'
             entity: fan.master_fan
 
-      - type: media-control
+      - type: custom:mini-media-player
         entity: media_player.master_bedroom_speaker

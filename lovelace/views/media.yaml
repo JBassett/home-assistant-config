@@ -2,12 +2,6 @@ title: Media
 icon: 'mdi:television-box'
 badges: []
 cards:
-  - type: media-control
-    entity: media_player.lg_tv_remote
-
-  - type: media-control
-    entity: media_player.plex_xboxone
-    
   - title: Plex
     type: entities
     show_header_toggle: false
