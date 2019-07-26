@@ -2,9 +2,10 @@ title: Cameras
 icon: 'mdi:cctv'
 badges: []
 cards:
-  - title: Westons's Room
-    type: picture-entity
+  - type: picture-entity
     entity: camera.weston_s_room
+  - type: picture-entity
+    entity: camera.harrison_s_room
   - type: picture-entity
     entity: camera.front_door
   - type: picture-entity

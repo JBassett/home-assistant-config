@@ -28,6 +28,10 @@ cards:
       - break
 
       - title: Harrison's Room
+        type: picture-entity
+        entity: camera.harrison_s_room
+
+      - title: Harrison's Room
         type: entities
         show_header_toggle: false
         entities:

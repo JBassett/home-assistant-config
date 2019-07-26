@@ -25,6 +25,15 @@
   username: !secret westons_cam_user
   password:  !secret westons_cam_pass
   authentication: basic
+  
+- platform: generic
+  name: Harrison's Room
+  still_image_url: !secret harrisons_cam_still
+  stream_source: !secret harrisons_cam_video
+  verify_ssl: false
+  username: !secret harrisons_cam_user
+  password:  !secret harrisons_cam_pass
+  authentication: basic
 
 - platform: generic
   name: Living Room
