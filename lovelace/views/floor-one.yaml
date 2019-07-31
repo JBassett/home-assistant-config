@@ -27,6 +27,10 @@ cards:
   - type: custom:mini-media-player
     title: Living Room TV
     entity: media_player.lg_tv_remote
+    volume_stateless: true
+    hide:
+      controls: true
+      source: true
     
   - type: custom:mini-media-player
     entity: media_player.plex_xboxone

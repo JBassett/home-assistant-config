@@ -18,6 +18,7 @@ cards:
           - type: 'custom:slider-entity-row'
             entity: fan.weston_fan
           - entity: input_boolean.weston_nap
+          - entity: sensor.weston_humidity
           - entity: sensor.weston_brightness
 
       - title: Weston's Room Temp
@@ -27,11 +28,8 @@ cards:
         points_per_hour: 2
         show:
           labels: true
-          labels_secondary: false
         entities:
           - sensor.weston_temperature
-          - entity: sensor.weston_humidity
-            y_axis: secondary 
 
       - type: custom:mini-media-player
         entity: media_player.westons_room_speaker
@@ -49,6 +47,7 @@ cards:
           # - type: 'custom:slider-entity-row'
           #   entity: fan.harrison_fan
           - entity: input_boolean.harrison_nap
+          - entity: sensor.harrison_humidity
           - entity: sensor.harrison_brightness
 
       - title: Harrison's Room Temp
@@ -58,11 +57,8 @@ cards:
         points_per_hour: 2
         show:
           labels: true
-          labels_secondary: false
         entities:
           - sensor.harrison_temperature
-          - entity: sensor.harrison_humidity
-            y_axis: secondary 
 
       - type: custom:mini-media-player
         entity: media_player.harrisons_room_speaker
