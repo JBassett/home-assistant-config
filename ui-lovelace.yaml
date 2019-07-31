@@ -18,11 +18,11 @@ resources:
   - type: js
     url: /local/community/upcoming-media-card/upcoming-media-card.js?v=0.4.0
   - type: js
-    url: /local/community/lovelace-card-tools/card-tools.js?v=0.4
+    url: /local/community/lovelace-card-tools/card-tools.js?v=0.4.2
   - type: js
     url: /local/community/lovelace-more-info-card/more-info-card.js?v=1
   - type: js
-    url: /local/community/lovelace-slider-entity-row/slider-entity-row.js?v=0.2
+    url: /local/community/lovelace-slider-entity-row/slider-entity-row.js?v=3
   - type: js
     url: /local/community/lovelace-layout-card/layout-card.js?v=1
   - type: js
@@ -30,7 +30,7 @@ resources:
   - type: js
     url: /local/community/simple-thermostat/simple-thermostat.js?v=0.25.0
   - type: js
-    url: /local/community/lovelace-home-feed-card/home-feed-card.js?v=0.2.7
+    url: /local/community/lovelace-home-feed-card/home-feed-card.js?v=0.2.8
 
 title: Misty Way
 views:
