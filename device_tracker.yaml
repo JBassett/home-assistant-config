@@ -6,4 +6,3 @@
 
 - platform: google_maps
   username: !secret maps_user
-  password: !secret maps_pass
