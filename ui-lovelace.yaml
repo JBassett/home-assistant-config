@@ -22,7 +22,7 @@ resources:
   - type: js
     url: /local/community/lovelace-more-info-card/more-info-card.js?v=1
   - type: js
-    url: /local/community/lovelace-slider-entity-row/slider-entity-row.js?v=3
+    url: /local/community/lovelace-slider-entity-row/slider-entity-row.js?v=5
   - type: js
     url: /local/community/lovelace-layout-card/layout-card.js?v=1
   - type: js
