@@ -44,8 +44,8 @@ cards:
         type: entities
         show_header_toggle: false
         entities:
-          # - type: 'custom:slider-entity-row'
-          #   entity: fan.harrison_fan
+          - type: 'custom:slider-entity-row'
+            entity: fan.harrison_fan
           - entity: input_boolean.harrison_nap
           - entity: sensor.harrison_humidity
           - entity: sensor.harrison_brightness
