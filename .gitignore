@@ -13,7 +13,6 @@ known_devices.yaml
 *.cookies
 .DS_Store
 .uuid
-.HA_VERSION
 .config_entries.json
 .storage
 .pc-session
