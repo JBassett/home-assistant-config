@@ -71,7 +71,7 @@ conversation:
 #   discovery_prefix: homeassistant
 
 recorder:
-  purge_keep_days: 14
+  purge_keep_days: 30
   purge_interval: 2
   db_url: !secret mariadb_url
 
@@ -80,6 +80,10 @@ logbook:
 
 # Enables support for tracking state changes over time.
 history:
+
+influxdb:
+  host: 192.168.1.25
+  database: homeassistant
 
 logger:
   default: warn
@@ -113,8 +117,8 @@ notify:
 
 zwave:
   usb_path: /zwaveusbstick
-  config_path: /config/openzwave/
   device_config: !include zwave_device_config.yaml
+  network_key: !secret zwave_network_key
 
 nest:
   client_id: !secret nest_client_id
