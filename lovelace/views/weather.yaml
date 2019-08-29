@@ -1,6 +1,5 @@
 title: Weather
-icon: 'mdi:weather-partlycloudy'
-tab_icon: 'mdi:weather-cloudy'
+icon: 'mdi:weather-partly-cloudy'
 badges: []
 cards:
   - title: Weather

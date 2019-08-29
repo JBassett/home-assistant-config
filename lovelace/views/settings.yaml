@@ -1,6 +1,5 @@
 title: Settings
 icon: 'mdi:settings'
-tab_icon: 'mdi:harddisk'
 badges: []
 cards:
   - type: horizontal-stack

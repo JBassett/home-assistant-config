@@ -1,6 +1,5 @@
 title: Home
 icon: 'mdi:home-assistant'
-tab_icon: 'mdi:home'
 badges: []
 # This is so the CSS isn't forcing everything into a single column
 panel: true
