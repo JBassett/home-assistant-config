@@ -116,7 +116,7 @@ notify:
     vapid_email: !secret vapid_email
 
 zwave:
-  usb_path: /zwaveusbstick
+  usb_path: /dev/ttyACM0
   device_config: !include zwave_device_config.yaml
   network_key: !secret zwave_network_key
 
