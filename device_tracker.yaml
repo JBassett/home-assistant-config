@@ -6,4 +6,3 @@
 
 - platform: google_maps
   username: !secret maps_user
-  scan_interval: 180
