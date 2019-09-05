@@ -1,3 +1,0 @@
-[submodule "www/lovelace/weather-card-chart"]
-	path = www/lovelace/weather-card-chart
-	url = https://github.com/sgttrs/lovelace-weather-card-chart.git
