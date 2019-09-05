@@ -82,8 +82,10 @@ logbook:
 history:
 
 influxdb:
-  host: 192.168.1.25
+  host: a0d7b954-influxdb
   database: homeassistant
+  username: !secret influx_user
+  password: !secret influx_pass
 
 logger:
   default: warn
