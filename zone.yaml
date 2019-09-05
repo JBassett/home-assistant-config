@@ -1,7 +1,7 @@
 - name: Home
   latitude: !secret home_lat
   longitude: !secret home_lon
-  radius: 40
+  radius: 60
   icon: mdi:home
 
 - name: Paychex - Basket
