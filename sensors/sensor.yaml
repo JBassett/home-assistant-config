@@ -61,17 +61,7 @@
 - platform: systemmonitor
   resources:
     - type: disk_free
-      arg: /unraid/mnt/user
-    - type: disk_free
-      arg: /unraid/mnt/cache
-    - type: disk_free
-      arg: /unraid/mnt/disk1
-    - type: disk_free
-      arg: /unraid/mnt/disk2
-    - type: disk_free
-      arg: /unraid/mnt/disk3
-    - type: disk_free
-      arg: /unraid/mnt/disk4
+      arg: /config
     - type: memory_use_percent
     - type: processor_use
     - type: last_boot

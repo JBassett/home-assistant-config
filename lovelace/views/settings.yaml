@@ -43,12 +43,7 @@ cards:
     entities:
       - entity: sensor.processor_use
       - entity: sensor.memory_use_percent
-      - entity: sensor.disk_free_unraid_mnt_cache
-      - entity: sensor.disk_free_unraid_mnt_user
-      - entity: sensor.disk_free_unraid_mnt_disk1
-      - entity: sensor.disk_free_unraid_mnt_disk2
-      - entity: sensor.disk_free_unraid_mnt_disk3
-      - entity: sensor.disk_free_unraid_mnt_disk4
+      - entity: sensor.disk_free_config
       - entity: sensor.last_boot
 
   - title: HACS
