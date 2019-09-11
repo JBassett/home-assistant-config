@@ -86,6 +86,9 @@ influxdb:
   database: homeassistant
   username: !secret influx_user
   password: !secret influx_pass
+  include:
+    domains:
+      - sensor
 
 logger:
   default: warn
