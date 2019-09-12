@@ -1,0 +1,16 @@
+goodnight:
+  alias: goodnight
+  sequence:
+######################## Garge Door #####################
+    - service: cover.close_cover
+      data:
+        entity_id: cover.garage_door_opener
+######################## TV #############################
+    - service: media_player.turn_off
+      data:
+        entity_id: media_player.lg_tv_remote
+######################## Cache Cleanup ##################
+    - service: tts.clear_cache
+    - service: script.kitchen_off
+    - service: script.livingroom_off
+    - service: script.outside_off
