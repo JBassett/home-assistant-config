@@ -12,6 +12,7 @@
   action:
     - service: script.kitchen_on
     - service: script.livingroom_on
+    - service: script.camera_motion_enable
 
 - alias: 'Sun - Sunrise Routine'
   initial_state: 'on'

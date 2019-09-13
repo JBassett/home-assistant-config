@@ -17,6 +17,7 @@
         entity_id:
           - fan.master_fan
           - fan.weston_fan
+    - service: script.camera_motion_enable
 
 - alias: House Became Occupied
   initial_state: 'on' # Don't want to run every time we reboot and are home.
@@ -29,6 +30,7 @@
     - service: nest.set_away_mode
       data:
         away_mode: home
+    - service: script.camera_motion_disable
 
     # It's dark, we want lights?
     - condition: or

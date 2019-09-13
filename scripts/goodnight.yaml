@@ -14,3 +14,4 @@ goodnight:
     - service: script.kitchen_off
     - service: script.livingroom_off
     - service: script.outside_off
+    - service: script.camera_motion_enable

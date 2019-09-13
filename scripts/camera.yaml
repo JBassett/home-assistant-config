@@ -1,0 +1,17 @@
+camera_motion:
+  alias: Camera Motion Detected
+  sequence:
+    - service: notify.web
+      data_template:
+        message: '{{ camera }} detected motion {{ now().strftime("%H:%M") }}'
+        title: 'Motion Detected'
+
+camera_motion_enable:
+  alias: Enable Camera Motion
+  sequence:
+    - service: rest_command.camera_living_motion_enable
+
+camera_motion_disable:
+  alias: Disable Camera Motion
+  sequence:
+    - service: rest_command.camera_living_motion_disable
