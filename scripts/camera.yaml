@@ -10,8 +10,10 @@ camera_motion_enable:
   alias: Enable Camera Motion
   sequence:
     - service: rest_command.camera_living_motion_enable
+    - service: rest_command.camera_garage_motion_enable
 
 camera_motion_disable:
   alias: Disable Camera Motion
   sequence:
     - service: rest_command.camera_living_motion_disable
+    - service: rest_command.camera_garage_motion_disable
