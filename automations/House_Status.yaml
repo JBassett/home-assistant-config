@@ -17,6 +17,8 @@
         entity_id:
           - fan.master_fan
           - fan.weston_fan
+    - delay:
+        minutes: 1
     - service: script.camera_motion_enable
 
 - alias: House Became Occupied
@@ -32,6 +34,9 @@
         away_mode: home
     - service: script.camera_motion_disable
 
+    - delay:
+        minutes: 1
+        
     # It's dark, we want lights?
     - condition: or
       conditions:
