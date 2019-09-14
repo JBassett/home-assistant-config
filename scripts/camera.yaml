@@ -9,11 +9,17 @@ camera_motion:
 camera_motion_enable:
   alias: Enable Camera Motion
   sequence:
-    - service: rest_command.camera_living_motion_enable
-    - service: rest_command.camera_garage_motion_enable
+    - service: switch.turn_on
+      data:
+        entity_id:
+          - switch.camera_garage_motion_detection
+          - switch.camera_living_motion_detection
 
 camera_motion_disable:
   alias: Disable Camera Motion
   sequence:
-    - service: rest_command.camera_living_motion_disable
-    - service: rest_command.camera_garage_motion_disable
+    - service: switch.turn_off
+      data:
+        entity_id:
+          - switch.camera_garage_motion_detection
+          - switch.camera_living_motion_detection

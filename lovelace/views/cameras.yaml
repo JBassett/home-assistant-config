@@ -10,3 +10,8 @@ cards:
     entity: camera.living_room
   - type: picture-entity
     entity: camera.garage
+  - type: entities
+    title: Motion Detection
+    entities:
+      - switch.camera_living_motion_detection
+      - switch.camera_garage_motion_detection
