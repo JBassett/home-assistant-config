@@ -136,6 +136,7 @@ skybell:
 weather:
   - platform: darksky
     api_key: !secret darksky_key
+    mode: daily
 
 sabnzbd:
   host: !secret sabnzbd_host

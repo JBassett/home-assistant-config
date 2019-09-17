@@ -3,9 +3,10 @@ icon: 'mdi:weather-partly-cloudy'
 badges: []
 cards:
   - title: Weather
-    type: 'custom:weather-card-chart'
-    weather: weather.dark_sky
-    mode: hourly
+    type: 'custom:weather-card'
+    entity: weather.dark_sky
+    icons: "/local/community/weather-card/icons/"
+
   - title: Radar
     type: picture-entity
     show_info: false
