@@ -29,7 +29,7 @@ cards:
         points_per_hour: 0.25
         entities:
           - entity: sensor.speedtest_ping
-            name: Upload
+            name: Ping
 
   - title: PfSense
     type: entities

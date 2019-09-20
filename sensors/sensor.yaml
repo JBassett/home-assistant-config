@@ -1,9 +1,3 @@
-- platform: plex
-  host: !secret plex_host
-  username: !secret plex_user
-  password: !secret plex_pass
-  token: !secret plex_token
-
 - platform: plex_recently_added
   host: !secret plex_host
   token: !secret plex_token

@@ -177,6 +177,10 @@ ecovacs:
   country: US
   continent: NA
 
+plex:
+  host: !secret plex_host
+  token: !secret plex_token
+
 cast:
   media_player:
     - host: !secret google_home_host
