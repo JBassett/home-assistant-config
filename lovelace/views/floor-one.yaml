@@ -33,7 +33,9 @@ cards:
       source: true
     
   - type: custom:mini-media-player
-    entity: media_player.plex_xboxone
+    entity: media_player.living_room_xbox_one
+    hide:
+      volume: true
     
   - title: Deebot
     type: 'custom:more-info-card'

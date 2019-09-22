@@ -21,6 +21,7 @@ nest.conf
 html5_push_registrations.conf
 plex.conf
 sabnzbd.conf
+.xbox-token.json
 .google_maps_location_sharing.cookies.*
 
 #IDE Files
