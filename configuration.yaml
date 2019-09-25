@@ -75,7 +75,7 @@ logbook:
 history:
 
 influxdb:
-  host: a0d7b954-influxdb
+  host: !secret influx_host
   database: homeassistant
   username: !secret influx_user
   password: !secret influx_pass

@@ -40,12 +40,22 @@
   days: 2
 
 - platform: cert_expiry
-  host: !secret root_domian
+  host: !secret ha_domain
 
 - platform: systemmonitor
   resources:
     - type: disk_free
-      arg: /config
+      arg: /unraid/mnt/user
+    - type: disk_free
+      arg: /unraid/mnt/cache
+    - type: disk_free
+      arg: /unraid/mnt/disk1
+    - type: disk_free
+      arg: /unraid/mnt/disk2
+    - type: disk_free
+      arg: /unraid/mnt/disk3
+    - type: disk_free
+      arg: /unraid/mnt/disk4
     - type: memory_use_percent
     - type: processor_use
     - type: last_boot

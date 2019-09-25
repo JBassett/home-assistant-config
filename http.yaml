@@ -1,6 +1,6 @@
 use_x_forwarded_for: true
 trusted_proxies:
-  - !secret pfsense_host
+  - !secret unraid_host
 
 ip_ban_enabled: true
 
