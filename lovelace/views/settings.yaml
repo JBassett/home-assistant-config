@@ -31,11 +31,11 @@ cards:
           - entity: sensor.speedtest_ping
             name: Ping
 
-  - title: PfSense
+  - title: Certificates
     type: entities
     show_header_toggle: false
     entities:
-      - sensor.ssl_certificate_expiry
+      - sensor.home_assistant_cert_expiration
     
   - title: Unraid
     type: entities
@@ -43,7 +43,12 @@ cards:
     entities:
       - entity: sensor.processor_use
       - entity: sensor.memory_use_percent
-      - entity: sensor.disk_free_config
+      - entity: sensor.disk_free_unraid_mnt_user
+      - entity: sensor.disk_free_unraid_mnt_cache
+      - entity: sensor.disk_free_unraid_mnt_disk1
+      - entity: sensor.disk_free_unraid_mnt_disk2
+      - entity: sensor.disk_free_unraid_mnt_disk3
+      - entity: sensor.disk_free_unraid_mnt_disk4
       - entity: sensor.last_boot
 
   - title: HACS

@@ -41,6 +41,7 @@
 
 - platform: cert_expiry
   host: !secret ha_domain
+  name: Home Assistant Cert Expiration
 
 - platform: systemmonitor
   resources:
