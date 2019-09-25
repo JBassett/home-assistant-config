@@ -39,16 +39,6 @@
   port: !secret sonarr_port
   days: 2
 
-
-# - platform: deluge
-#   host: !secret deluge_host
-#   username: !secret deluge_user
-#   password: !secret deluge_pass
-#   monitored_variables:
-#     - 'current_status'
-#     - 'download_speed'
-#     - 'upload_speed'
-
 - platform: cert_expiry
   host: !secret root_domian
 
@@ -59,18 +49,6 @@
     - type: memory_use_percent
     - type: processor_use
     - type: last_boot
-
-# - platform: zoneminder
-#   include_archived: false
-
-# - platform: sunpower
-#   username: !secret sunpower_user
-#   password: !secret sunpower_pass
-#   monitored_conditions:
-#     - energyProduction
-#     - energyConsumption
-#     - powerProduction
-#     - powerConsumption
 
 - platform: template
   sensors:

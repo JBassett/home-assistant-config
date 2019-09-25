@@ -63,13 +63,6 @@ updater:
 # Allows you to issue voice commands from the frontend in enabled browsers
 conversation:
 
-# mqtt:
-#   broker: !secret mqtt_broker
-#   username: !secret mqtt_user
-#   password: !secret mqtt_pass
-#   discovery: true
-#   discovery_prefix: homeassistant
-
 recorder:
   purge_keep_days: 30
   purge_interval: 2
@@ -93,8 +86,6 @@ influxdb:
 logger:
   default: warn
   logs:
-    # homeassistant.components.stream: debug
-    custom_components.sensor.sunpower: debug
     sucks: error
 
 # Track the sun
@@ -214,8 +205,3 @@ group: !include group.yaml
 shell_command: !include shell_command.yaml
 script: !include_dir_merge_named scripts
 rest_command: !include_dir_merge_named rest_commands
-
-# Custom Component
-# sunpower:
-#   username: demo@sunpower.com
-#   password: sun
