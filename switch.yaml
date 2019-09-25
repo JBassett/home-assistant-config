@@ -14,15 +14,15 @@
     seconds: 30
   switches:
     camera_living_motion_detection:
-      command_on: "curl -X GET 'http://192.168.1.25:9000/3/detection/start'"
-      command_off: "curl -X GET 'http://192.168.1.25:9000/3/detection/pause'"
-      command_state: "curl -X GET 'http://192.168.1.25:9000/3/detection/status'"
+      command_on: "curl -X GET 'http://192.168.2.1:9000/3/detection/start'"
+      command_off: "curl -X GET 'http://192.168.2.1:9000/3/detection/pause'"
+      command_state: "curl -X GET 'http://192.168.2.1:9000/3/detection/status'"
       value_template: "{{ value | regex_search('ACTIVE') }}"
       friendly_name: 'Living Room Camera Motion Dedection'
     
     camera_garage_motion_detection:
-      command_on: "curl -X GET 'http://192.168.1.25:9000/4/detection/start'"
-      command_off: "curl -X GET 'http://192.168.1.25:9000/4/detection/pause'"
-      command_state: "curl -X GET 'http://192.168.1.25:9000/4/detection/status'"
+      command_on: "curl -X GET 'http://192.168.2.1:9000/4/detection/start'"
+      command_off: "curl -X GET 'http://192.168.2.1:9000/4/detection/pause'"
+      command_state: "curl -X GET 'http://192.168.2.1:9000/4/detection/status'"
       value_template: "{{ value | regex_search('ACTIVE') }}"
       friendly_name: 'Garage Camera Motion Dedection'
