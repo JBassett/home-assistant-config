@@ -1,0 +1,55 @@
+- platform: cert_expiry
+  host: !secret ha_domain
+  name: Home Assistant Cert Expiration
+
+- platform: cert_expiry
+  host: !secret auth_domain
+  name: Auth Cert Expiration
+  
+- platform: cert_expiry
+  host: !secret tv_domain
+  name: TV Cert Expiration
+  
+- platform: cert_expiry
+  host: !secret movies_domain
+  name: Movies Cert Expiration
+  
+- platform: cert_expiry
+  host: !secret plex_domain
+  name: Plex Cert Expiration
+  
+- platform: cert_expiry
+  host: !secret grafana_domain
+  name: Grafana Cert Expiration
+  
+- platform: cert_expiry
+  host: !secret security_domain
+  name: Security Cert Expiration
+  
+- platform: cert_expiry
+  host: !secret unraid_domain
+  name: Unraid Cert Expiration
+  
+- platform: cert_expiry
+  host: !secret pfsense_domain
+  name: Pfsense Cert Expiration
+  
+- platform: cert_expiry
+  host: !secret music_domain
+  name: Music Cert Expiration
+  
+- platform: cert_expiry
+  host: !secret sync_domain
+  name: Sync Cert Expiration
+  
+- platform: cert_expiry
+  host: !secret code_domain
+  name: Code Cert Expiration
+  
+- platform: cert_expiry
+  host: !secret hydra_domain
+  name: Hydra Cert Expiration
+  
+- platform: cert_expiry
+  host: !secret usenet_domain
+  name: Usenet Cert Expiration
