@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v1
       - name: Generate secrets.yaml
         run: |
-          grep -r -h -o "\!secret [a-zA-Z\-\_][a-zA-Z\-\_]*" . | sed -E 's/\!secret ([a-zA-Z\-\_]*)/\1: XXXXXXXXX/g' | sort | uniq > secrets.yaml
+          grep -r -h -o "\!secret [a-zA-Z\-\_][a-zA-Z0-9\-\_]*" . | sed -E 's/\!secret ([a-zA-Z0-9\-\_]*)/\1: XXXXXXXXX/g' | sort | uniq > secrets.yaml
       - name: Home Assistant Version
         uses: "docker://homeassistant/home-assistant:stable"
         with:
