@@ -46,3 +46,12 @@
   username: !secret living_cam_user
   password:  !secret living_cam_pass
   authentication: basic
+
+- platform: generic
+  name: Driveway
+  still_image_url: !secret driveway_cam_still
+  stream_source: !secret driveway_cam_video
+  verify_ssl: false
+  username: !secret driveway_cam_user
+  password:  !secret driveway_cam_pass
+  authentication: basic

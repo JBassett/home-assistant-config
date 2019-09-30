@@ -8,6 +8,8 @@ camera_motion:
             camera.living_room
           {% elif cameraNum == 4 %}
             camera.garage
+          {% elif cameraNum == 5 %}
+            camera.driveway
           {% endif %}
         filename: '/config/www/snapshots/{{cameraNum}}.jpg'
     - service: notify.web
@@ -25,6 +27,7 @@ camera_motion_enable:
         entity_id:
           - switch.camera_garage_motion_detection
           - switch.camera_living_motion_detection
+          - switch.camera_driveway_motion_detection
 
 camera_motion_disable:
   alias: Disable Camera Motion
@@ -34,3 +37,4 @@ camera_motion_disable:
         entity_id:
           - switch.camera_garage_motion_detection
           - switch.camera_living_motion_detection
+          - switch.camera_driveway_motion_detection
