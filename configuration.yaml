@@ -180,6 +180,9 @@ cast:
     - host: !secret westons_room_host
     - host: !secret harrisons_room_host
 
+roku:
+  - host: !secret living_room_tv_host
+
 input_boolean:
   guest_mode:
     name: Guest mode

@@ -66,24 +66,13 @@ cards:
       - break
 
       - type: custom:mini-media-player
-        entity: media_player.master_bedroom_tv
-        shortcuts:
-          buttons:
-            - name: Weston's Room
-              type: service
-              # icon: mdi:baby-buggy
-              id: camera.play_stream
-              data:
-                entity_id: camera.weston_s_room
-                media_player: media_player.master_bedroom_tv
-            - name: Harrison's Room
-              type: service
-              # icon: mdi:baby-buggy
-              id: camera.play_stream
-              data:
-                entity_id: camera.harrison_s_room
-                media_player: media_player.master_bedroom_tv
-        
+        title: Living Room TV
+        entity: media_player.lg_tv_remote
+        volume_stateless: true
+        hide:
+          controls: true
+          source: true
+
       - title: Master Bedroom
         type: entities
         show_header_toggle: false

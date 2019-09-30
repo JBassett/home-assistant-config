@@ -23,20 +23,16 @@ cards:
 
   - type: custom:mini-media-player
     entity: media_player.living_room_speaker
-    
+
   - type: custom:mini-media-player
     title: Living Room TV
-    entity: media_player.lg_tv_remote
+    entity: media_player.living_room_tv
     volume_stateless: true
-    hide:
-      controls: true
-      source: true
-    
-  - type: custom:mini-media-player
-    entity: media_player.living_room_xbox_one
-    hide:
-      volume: true
-    
+
+  - type: 'custom:roku-card'
+    entity: media_player.living_room_tv
+    tv: true
+
   - title: Deebot
     type: 'custom:more-info-card'
     entity: vacuum.deebot
