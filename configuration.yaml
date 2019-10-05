@@ -2,14 +2,14 @@ homeassistant:
   # Name of the location where Home Assistant is running
   name: Home
   # Location required to calculate the time the sun rises and sets
-  latitude: !secret home_lat
-  longitude: !secret home_lon
+  latitude: !secret home_lat_num
+  longitude: !secret home_lon_num
   # Impacts weather/sunrise data (altitude above sea level in meters)
-  elevation: !secret elevation
+  elevation: !secret elevation_num
   # metric for Metric, imperial for Imperial
   unit_system: imperial
   # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-  time_zone: !secret time_zone
+  time_zone: America/New_York
   customize: !include customize.yaml
 
   auth_providers:
@@ -46,6 +46,8 @@ hacs:
   token: !secret github_pat
   python_script: True
   theme: True
+  # options:
+  #   experimental: True
 
 python_script:
 
@@ -75,7 +77,7 @@ logbook:
 history:
 
 influxdb:
-  host: !secret influx_host
+  host: !secret influx_ip
   database: homeassistant
   username: !secret influx_user
   password: !secret influx_pass
@@ -130,7 +132,7 @@ weather:
     mode: daily
 
 sabnzbd:
-  host: !secret sabnzbd_host
+  host: !secret sabnzbd_ip
   port: !secret sabnzbd_port
   api_key: !secret sabnzbd_api
   sensors:
@@ -169,19 +171,18 @@ ecovacs:
   continent: NA
 
 plex:
-  host: !secret plex_host
+  host: !secret plex_ip
   token: !secret plex_token
 
 cast:
   media_player:
-    - host: !secret google_home_host
-    - host: !secret master_bedroom_tv_host
-    - host: !secret master_room_host
-    - host: !secret westons_room_host
-    - host: !secret harrisons_room_host
+    - host: !secret ghome_living_ip
+    - host: !secret gmini_master_ip
+    - host: !secret gmini_weston_ip
+    - host: !secret gmini_harrison_ip
 
 roku:
-  - host: !secret living_room_tv_host
+  - host: !secret tv_living_room_ip
 
 input_boolean:
   guest_mode:

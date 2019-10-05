@@ -17,7 +17,7 @@ camera_motion:
         message: '{{ camera }} detected motion {{ now().strftime("%H:%M") }}'
         title: 'Motion Detected'
         data:
-          image: !secret camera_snapshot
+          image: !secret camera_snapshot_url
 
 camera_motion_enable:
   alias: Enable Camera Motion

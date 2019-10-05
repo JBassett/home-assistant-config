@@ -1,5 +1,5 @@
 - platform: plex_recently_added
-  host: !secret plex_host
+  host: !secret plex_ip
   token: !secret plex_token
   max: 5
   section_types:
@@ -12,7 +12,7 @@
 
 - platform: radarr
   api_key: !secret radarr_api
-  host: !secret radarr_host
+  host: !secret radarr_ip
   port: !secret radarr_port
   monitored_conditions:
     - movies
@@ -21,13 +21,13 @@
     - status
 - platform: radarr_upcoming_media
   api_key: !secret radarr_api
-  host: !secret radarr_host
+  host: !secret radarr_ip
   port: !secret radarr_port
   days: 120
 
 - platform: sonarr
   api_key: !secret sonarr_api
-  host: !secret sonarr_host
+  host: !secret sonarr_ip
   port: !secret sonarr_port
   monitored_conditions:
     - upcoming
@@ -35,7 +35,7 @@
     - commands
 - platform: sonarr_upcoming_media
   api_key: !secret sonarr_api
-  host: !secret sonarr_host
+  host: !secret sonarr_ip
   port: !secret sonarr_port
   days: 2
 

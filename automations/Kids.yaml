@@ -57,7 +57,7 @@
     - service: media_player.play_media
       data:
         entity_id: media_player.westons_room_speaker
-        media_content_id: !secret babbling_brook_mp3
+        media_content_id: !secret babbling_brook_url
         media_content_type: 'music'
 
 - alias: 'Weston Wakup'

@@ -1,7 +1,3 @@
-#- platform: ffmpeg
-#  name: Front Yard
-#  input: !secret camera_front_input
-
 - platform: skybell
   monitored_conditions:
     - avatar
@@ -14,44 +10,41 @@
 
 - platform: mjpeg
   name: Garage
-  mjpeg_url: !secret garage_cam_video
-  still_image_url: !secret garage_cam_still
+  mjpeg_url: !secret cam_garage_url
+  still_image_url: !secret cam_garage_pic_url
 
 - platform: generic
   name: Weston's Room
-  still_image_url: !secret westons_cam_still
-  # mjpeg_url: !secret westons_cam_video
-  stream_source: !secret westons_cam_video
+  still_image_url: !secret cam_westons_pic_url
+  stream_source: !secret cam_westons_url
   verify_ssl: false
-  username: !secret westons_cam_user
-  password:  !secret westons_cam_pass
+  username: !secret cam_user
+  password:  !secret cam_pass
   authentication: basic
   
 - platform: generic
   name: Harrison's Room
-  still_image_url: !secret harrisons_cam_still
-  # mjpeg_url: !secret harrisons_cam_video
-  stream_source: !secret harrisons_cam_video
+  still_image_url: !secret cam_harrisons_pic_url
+  stream_source: !secret cam_harrisons_url
   verify_ssl: false
-  username: !secret harrisons_cam_user
-  password:  !secret harrisons_cam_pass
+  username: !secret cam_user
+  password:  !secret cam_pass
   authentication: basic
 
 - platform: generic
   name: Living Room
-  still_image_url: !secret living_cam_still
-  # mjpeg_url: !secret living_cam_video
-  stream_source: !secret living_cam_video
+  still_image_url: !secret cam_living_pic_url
+  stream_source: !secret cam_living_url
   verify_ssl: false
-  username: !secret living_cam_user
-  password:  !secret living_cam_pass
+  username: !secret cam_user
+  password:  !secret cam_pass
   authentication: basic
 
 - platform: generic
   name: Driveway
-  still_image_url: !secret driveway_cam_still
-  stream_source: !secret driveway_cam_video
+  still_image_url: !secret cam_driveway_pic_url
+  stream_source: !secret cam_driveway_url
   verify_ssl: false
-  username: !secret driveway_cam_user
-  password:  !secret driveway_cam_pass
+  username: !secret cam_user
+  password:  !secret cam_pass
   authentication: basic

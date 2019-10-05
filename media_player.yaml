@@ -1,6 +1,6 @@
 - platform: lg_netcast
-  host: !secret master_bedroom_tv_host
-  access_token: !secret master_bedroom_tv_access_token
+  host: !secret tv_master_ip
+  access_token: !secret tv_master_access_num
 
 - platform: xboxone
   ip_address: !secret xbox_ip
