@@ -19,6 +19,7 @@ jobs:
           sed -E -i 's/(.*)_url: X/\1_url: https\/\/\:home\-assistant\.com/g' secrets.yaml
           sed -E -i 's/(.*)_(num|port): X/\1_\2: 0/g' secrets.yaml
           sed -E -i 's/(.*)_ip: X/\1_ip: 1.1.1.1/g' secrets.yaml
+          cat secrets.yaml
       - name: Home Assistant Version
         uses: "docker://homeassistant/home-assistant:stable"
         with:
