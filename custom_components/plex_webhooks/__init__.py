@@ -34,20 +34,23 @@ async def handle_webhook(hass, webhook_id, request):
     data = {}
     
     try:
-        body = await request.text()
-        # This is bad, but I don't see a better way to extract just the json...
-        raw_json = body[body.index('{'):body.rindex('}')+1]
-        data = json.loads(raw_json) if body else {}
+        reader = await request.multipart()
+        # https://docs.aiohttp.org/en/stable/multipart.html#aiohttp-multipart
+        while True:
+            part = await reader.next()
+            if part is None:
+                break
+            if part.name == 'payload':
+                data = await part.json()
     except ValueError:
-        logging.warn('Issue decoding webhook: ' + raw_json)
+        logging.warn('Issue decoding webhook: ' + part.text())
         return None
-    except:
-        logging.debug('Ignoring webhook, must be a photo?')
-        return None
-
-    data['playerUuid'] = data['Player']['uuid']
 
     event = data['event']
+    # We always want to set the status because if we don't then the event
+    # trigger filtering doesn't work
+    data['status'] = event
+
     playing = ['media.play', 'media.resume']
     stopped = ['media.pause', 'media.stop']
     grabbed = ['library.new']
@@ -55,9 +58,11 @@ async def handle_webhook(hass, webhook_id, request):
     if event in playing:
         logging.debug('Plex started playing')
         data['status'] = 'PLAYING'
+        data['playerUuid'] = data['Player']['uuid']
     elif event in stopped:
         logging.debug('Plex stopped playing')
         data['status'] = 'STOPPED'
+        data['playerUuid'] = data['Player']['uuid']
     elif event in grabbed:
         logging.debug('Plex got new media')
         data['status'] = 'GRABBED'
