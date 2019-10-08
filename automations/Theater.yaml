@@ -1,10 +1,25 @@
 - alias: 'Theater - Starting Media'
   initial_state: 'on'
   trigger:
-    - platform: state
-      entity_id: media_player.plex_xboxone
-      to: 'playing'
+    - platform: event
+      event_type: PLEX_EVENT
+      event_data:
+        status: PLAYING
+        playerUuid: !secret plex_living_room_uuid
   action:
     - service: switch.turn_off
+      entity_id:
+        - switch.living_room_outlet
+
+- alias: 'Theater - Stopping Media'
+  initial_state: 'on'
+  trigger:
+    - platform: event
+      event_type: PLEX_EVENT
+      event_data:
+        status: STOPPED
+        playerUuid: !secret plex_living_room_uuid
+  action:
+    - service: switch.turn_on
       entity_id:
         - switch.living_room_outlet
