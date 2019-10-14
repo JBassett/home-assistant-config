@@ -8,7 +8,7 @@ resources:
   - type: module
     url: /local/community/mini-media-player/mini-media-player-bundle.js?v=1.4.1
   - type: module
-    url: /local/community/weather-card/weather-card.js?v=1.3.2
+    url: /local/community/weather-card/weather-card.js?v=1.4.1
   - type: module
     url: /community_plugin/roku-card/roku-card.js?v=1.0.1
   - type: js
