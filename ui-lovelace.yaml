@@ -24,11 +24,11 @@ resources:
   - type: js
     url: /local/community/lovelace-slider-entity-row/slider-entity-row.js?v=7
   - type: js
-    url: /local/community/lovelace-layout-card/layout-card.js?v=1
+    url: /local/community/lovelace-layout-card/layout-card.js?v=3364e15
   - type: js
     url: /local/community/simple-thermostat/simple-thermostat.js?v=0.25.0
   - type: js
-    url: /local/community/lovelace-home-feed-card/lovelace-home-feed-card.js?v=0.2.11
+    url: /local/community/lovelace-home-feed-card/lovelace-home-feed-card.js?v=0.2.12
 
 title: Misty Way
 views:
