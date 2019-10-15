@@ -197,6 +197,9 @@ input_boolean:
   harrison_nap:
     name: Harrison Nap
     icon: mdi:alpha-h
+  dark_outside:
+    name: Dark Outside
+    icon: mdi:weather-night
 
 automation: !include automations.yaml
 automation old: !include_dir_merge_list automations

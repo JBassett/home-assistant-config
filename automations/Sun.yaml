@@ -23,6 +23,9 @@
       event: sunrise
       offset: '+1:30:00'
   action:
+    - service: input_boolean.turn_off
+      data:
+        entity_id: input_boolean.dark_outside
     - service: script.kitchen_off
     - service: script.livingroom_off
     - service: script.outside_off
@@ -34,6 +37,9 @@
       event: sunset
       offset: '-1:15:00'
   action:
+    - service: input_boolean.turn_on
+      data:
+        entity_id: input_boolean.dark_outside
     - service: script.outside_on
     ## Only continue if occupied
     - condition: state
