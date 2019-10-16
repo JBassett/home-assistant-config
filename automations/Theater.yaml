@@ -6,11 +6,21 @@
       event_data:
         status: PLAYING
         playerUuid: !secret plex_living_room_uuid
+  condition:
+    - condition: state
+      entity_id: input_boolean.dark_outside
+      state:  'on'
   action:
     - service: switch.turn_off
       entity_id:
         - switch.living_room_outlet
-    - service: script.kitchen_off
+    - service: light.turn_on
+      entity_id:
+        - light.kitchen_up
+        - light.kitchen_down
+      data:
+        rgb_color: [217, 255, 108]
+        brightness_pct: 2
 
 - alias: 'Theater - Stopping Media'
   initial_state: 'on'

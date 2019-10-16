@@ -16,7 +16,7 @@ kitchen_on:
         - light.kitchen_down
       data:
         rgb_color: [217, 255, 108]
-        brightness_pct: 25
+        brightness_pct: 50
     - delay: '00:00:01'
     # For some reason the lights don't like to change color or brighness when first turned on..
     - service: light.turn_on
@@ -25,4 +25,4 @@ kitchen_on:
         - light.kitchen_down
       data:
         rgb_color: [217, 255, 108]
-        brightness_pct: 25
+        brightness_pct: 50
