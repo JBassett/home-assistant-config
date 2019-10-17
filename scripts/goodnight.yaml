@@ -8,7 +8,7 @@ goodnight:
 ######################## TV #############################
     - service: media_player.turn_off
       data:
-        entity_id: media_player.lg_tv_remote
+        entity_id: media_player.living_room_tv
 ######################## Cache Cleanup ##################
     - service: tts.clear_cache
     - service: shell_command.clean_snapshots
