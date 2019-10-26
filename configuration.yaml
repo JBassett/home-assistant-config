@@ -118,6 +118,10 @@ zwave:
   device_config: !include zwave_device_config.yaml
   network_key: !secret zwave_network_key
 
+mychevy:
+  username: !secret mychevy_user
+  password: !secret mychevy_pass
+
 nest:
   client_id: !secret nest_client_id
   client_secret: !secret nest_client_secret
