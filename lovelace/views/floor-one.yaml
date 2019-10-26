@@ -1,10 +1,15 @@
 title: First Floor
 icon: 'mdi:home-floor-1'
 badges: []
+popup_cards:
+  media_player.living_room_tv:
+    title: Remote
+    large: false
+    card:
+      type: 'custom:roku-card'
+      entity: media_player.living_room_tv
+      tv: true
 cards:
-  - type: picture-entity
-    entity: camera.living_room
-
   - title: Lights
     type: entities
     show_header_toggle: false
@@ -29,10 +34,9 @@ cards:
     entity: media_player.living_room_tv
     volume_stateless: true
 
-  - type: 'custom:roku-card'
-    entity: media_player.living_room_tv
-    tv: true
-
   - title: Deebot
     type: 'custom:more-info-card'
     entity: vacuum.deebot
+
+  - type: picture-entity
+    entity: camera.living_room
