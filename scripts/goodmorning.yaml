@@ -1,0 +1,6 @@
+goodmorning:
+  alias: goodmorning
+  sequence:
+    - service: script.camera_motion_disable
+    - service: script.kitchen_on
+    - service: script.livingroom_on
