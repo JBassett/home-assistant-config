@@ -17,6 +17,8 @@ cards:
         entities:
           - type: 'custom:slider-entity-row'
             entity: fan.weston_fan
+            hide_when_off: true
+            toggle: true
           - entity: input_boolean.weston_nap
           - entity: sensor.weston_humidity
           - entity: sensor.weston_brightness
@@ -46,6 +48,8 @@ cards:
         entities:
           - type: 'custom:slider-entity-row'
             entity: fan.harrison_fan
+            hide_when_off: true
+            toggle: true
           - entity: input_boolean.harrison_nap
           - entity: sensor.harrison_humidity
           - entity: sensor.harrison_brightness
@@ -79,6 +83,8 @@ cards:
         entities:
           - type: 'custom:slider-entity-row'
             entity: fan.master_fan
+            hide_when_off: true
+            toggle: true
 
       - type: custom:mini-media-player
         entity: media_player.master_bedroom_speaker
