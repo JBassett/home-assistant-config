@@ -20,7 +20,7 @@ resources:
   - type: js
     url: /local/community/upcoming-media-card/upcoming-media-card.js?v=0.4.0
   - type: js
-    url: /local/community/lovelace-card-tools/card-tools.js?v=0.4.2
+    url: /local/community/lovelace-card-tools/card-tools.js?v=2
   - type: js
     url: /local/community/lovelace-more-info-card/more-info-card.js?v=1
   - type: js
