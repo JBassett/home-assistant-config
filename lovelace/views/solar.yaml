@@ -31,8 +31,10 @@ cards:
 
   - type: 'custom:mini-graph-card'
     extrema: true
+    hour24: true
     hours_to_show: 72
     points_per_hour: 4
+    upper_bound: 8
     entities:
       - sensor.solar_raw_total_power
       - sensor.solar_raw_house_usage
