@@ -1,0 +1,66 @@
+esphome:
+  name: esp_attic
+  platform: ESP8266
+  board: nodemcuv2
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_pass
+  manual_ip:
+    static_ip: !secret attic_ip
+    gateway: !secret gateway
+    subnet: !secret subnet
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Attic Fallback Hotspot"
+    password: !secret wifi_pass
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  password: !secret api_pass
+
+ota:
+  password: !secret ota_pass
+
+light:
+  - platform: fastled_clockless
+    chipset: WS2812B
+    pin: D1
+    num_leds: 163
+    rgb_order: GRB
+    name: "Porch LEDs"
+    effects:
+      - random
+      - strobe
+      - flicker
+      - addressable_rainbow
+      - addressable_color_wipe
+      - addressable_scan
+      - addressable_twinkle
+      - addressable_random_twinkle
+      - addressable_fireworks
+      - addressable_flicker
+
+  - platform: fastled_clockless
+    chipset: WS2812B
+    pin: D2
+    num_leds: 240 # Need to get actual value
+    rgb_order: GRB
+    name: "Garage LEDs"
+    effects:
+      - random
+      - strobe
+      - flicker
+      - addressable_rainbow
+      - addressable_color_wipe
+      - addressable_scan
+      - addressable_twinkle
+      - addressable_random_twinkle
+      - addressable_fireworks
+      - addressable_flicker
