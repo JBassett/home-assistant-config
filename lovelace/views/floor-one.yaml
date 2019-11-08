@@ -2,7 +2,7 @@ title: First Floor
 icon: 'mdi:home-floor-1'
 badges: []
 popup_cards:
-  media_player.living_room_tv:
+  media_player.living_room_tv: &roku_remote
     title: Remote
     large: false
     card:
@@ -33,6 +33,13 @@ cards:
     title: Living Room TV
     entity: media_player.living_room_tv
     volume_stateless: true
+    shortcuts:
+      buttons:
+        - icon: mdi:remote-tv
+          type: service
+          id: browser_mod.popup
+          data: 
+            <<: *roku_remote
 
   - title: Deebot
     type: 'custom:more-info-card'

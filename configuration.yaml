@@ -42,6 +42,9 @@ lovelace:
 
 http: !include http.yaml
 
+browser_mod:
+  prefix: "browser_"
+
 hacs:
   token: !secret github_pat
   python_script: True
