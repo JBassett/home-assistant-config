@@ -1,6 +1,4 @@
 resources:
-  - type: js
-    url: /local/community/lovelace-popup/popup.js?v=0
   - type: module
     url: /local/community/power-wheel-card/power-wheel-card.js?v=0.0.15
   - type: module
