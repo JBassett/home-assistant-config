@@ -35,32 +35,81 @@ light:
     num_leds: 163
     rgb_order: GRB
     name: "Porch LEDs"
-    effects:
-      - random
-      - strobe
-      - flicker
-      - addressable_rainbow
-      - addressable_color_wipe
-      - addressable_scan
-      - addressable_twinkle
-      - addressable_random_twinkle
-      - addressable_fireworks
-      - addressable_flicker
+    effects: &effects
+      - addressable_color_wipe:
+          name: Color Wipe - Bills
+          colors:
+            - red: 100%
+              green: 0%
+              blue: 0%
+              num_leds: 3
+            - red: 100%
+              green: 100%
+              blue: 100%
+              num_leds: 3
+            - red: 0%
+              green: 0%
+              blue: 100%
+              num_leds: 3
+            - red: 100%
+              green: 100%
+              blue: 100%
+              num_leds: 3
+          add_led_interval: 100ms
+          reverse: False
+      - addressable_color_wipe:
+          name: Color Wipe - Christmas
+          colors:
+            - red: 100%
+              green: 0%
+              blue: 0%
+              num_leds: 3
+            - red: 0%
+              green: 0%
+              blue: 0%
+              num_leds: 3
+            - red: 0%
+              green: 100%
+              blue: 0%
+              num_leds: 3
+            - red: 0%
+              green: 0%
+              blue: 0%
+              num_leds: 3
+          add_led_interval: 100ms
+          reverse: False
+      - addressable_scan:
+          move_interval: 100ms
+          scan_width: 3
+      - addressable_twinkle:
+          twinkle_probability: 75%
+          progress_interval: 5ms
+      - addressable_random_twinkle:
+          twinkle_probability: 65%
+          progress_interval: 16ms
+      - addressable_fireworks # 4th, red and blue
+      - addressable_flicker:
+          update_interval: 16ms
+          intensity: 25%
+      - addressable_lambda:
+          name: "Can Lights"
+          update_interval: 1000ms
+          lambda: |- # Red=100%, Green=89%, Blue=57%
+            // it.size() - Number of LEDs
+            // it[num] - Access the LED at index num.
+            // Set the LED at num to the given r, g, b values
+            // it[num] = ESPColor(r, g, b);
+            // Get the color at index num (ESPColor instance)
+            // it[num].get();
+            it.all() = ESPColor::BLACK;
+            for(int i = 0; i < it.size(); i += 20){
+              it.range(i, i+5) = current_color;
+            }
 
   - platform: fastled_clockless
     chipset: WS2812B
     pin: D2
-    num_leds: 240 # Need to get actual value
+    num_leds: 235
     rgb_order: GRB
     name: "Garage LEDs"
-    effects:
-      - random
-      - strobe
-      - flicker
-      - addressable_rainbow
-      - addressable_color_wipe
-      - addressable_scan
-      - addressable_twinkle
-      - addressable_random_twinkle
-      - addressable_fireworks
-      - addressable_flicker
+    effects: *effects

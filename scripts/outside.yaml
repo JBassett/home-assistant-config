@@ -5,6 +5,8 @@ outside_off:
       data:
         entity_id:
           - light.front_door
+          - light.garage_leds
+          - light.porch_leds
     - service: switch.turn_off
       data:
         entity_id:
@@ -14,6 +16,16 @@ outside_off:
 outside_on:
   alias: Outside - On
   sequence:
+    - service: light.turn_on
+      data:
+        entity_id:
+          - light.garage_leds
+          - light.porch_leds
+        effect: Can Lights
+        rgb_color:
+          - 255 # Red=100% 
+          - 227 # Green=89%
+          - 145 # Blue=57%
     - service: switch.turn_on
       data:
         entity_id:
