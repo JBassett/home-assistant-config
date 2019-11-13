@@ -28,7 +28,8 @@ cards:
         points_per_hour: 2
         entities:
           - sensor.family_room_thermostat_temperature
-          - sensor.outdoor_temperature
+          - sensor.weston_temperature
+          - sensor.harrison_temperature
       
       # - title: House Feed
       #   type: 'custom:home-feed-card'
