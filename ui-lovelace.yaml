@@ -18,9 +18,9 @@ resources:
   - type: js
     url: /local/community/upcoming-media-card/upcoming-media-card.js?v=0.4.0
   - type: js
-    url: /local/community/lovelace-card-tools/card-tools.js?v=2.2
+    url: /local/community/lovelace-card-tools/card-tools.js?v=2.3
   - type: js
-    url: /local/community/lovelace-more-info-card/more-info-card.js?v=1
+    url: /local/community/lovelace-more-info-card/more-info-card.js?v=c64907d
   - type: js
     url: /local/community/lovelace-slider-entity-row/slider-entity-row.js?v=9
   - type: js
