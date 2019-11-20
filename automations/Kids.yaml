@@ -91,6 +91,9 @@
     - condition: state
       entity_id: input_boolean.weston_nap
       state: 'on'
+    - condition: state
+      entity_id: sensor.family_room_thermostat_operation_mode
+      state: 'cool'
   action:
     - service: fan.set_speed
       data_template:
