@@ -1,0 +1,4 @@
+hacs:
+  token: !secret github_pat
+  python_script: True
+  theme: True

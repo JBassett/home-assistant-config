@@ -1,0 +1,3 @@
+device_tracker:
+  - platform: google_maps
+    username: !secret maps_user

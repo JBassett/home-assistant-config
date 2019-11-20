@@ -1,0 +1,4 @@
+recorder:
+  purge_keep_days: 30
+  purge_interval: 2
+  db_url: !secret mariadb_url

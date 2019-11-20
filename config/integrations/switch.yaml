@@ -1,0 +1,36 @@
+switch:
+  - platform: skybell
+    monitored_conditions:
+      - do_not_disturb
+      - motion_sensor
+
+  - platform: wake_on_lan
+    name: Gaming PC
+    mac_address: !secret gaming_pc_mac
+    broadcast_address: !secret gaming_pc_brodcast_ip
+    host: !secret gaming_pc_ip
+
+  - platform: command_line
+    scan_interval:
+      seconds: 30
+    switches:
+      camera_living_motion_detection:
+        command_on: "curl -X GET 'http://192.168.2.1:9000/3/detection/start'"
+        command_off: "curl -X GET 'http://192.168.2.1:9000/3/detection/pause'"
+        command_state: "curl -X GET 'http://192.168.2.1:9000/3/detection/status'"
+        value_template: "{{ value | regex_search('ACTIVE') }}"
+        friendly_name: 'Living Room Camera Motion Dedection'
+      
+      camera_garage_motion_detection:
+        command_on: "curl -X GET 'http://192.168.2.1:9000/4/detection/start'"
+        command_off: "curl -X GET 'http://192.168.2.1:9000/4/detection/pause'"
+        command_state: "curl -X GET 'http://192.168.2.1:9000/4/detection/status'"
+        value_template: "{{ value | regex_search('ACTIVE') }}"
+        friendly_name: 'Garage Camera Motion Dedection'
+      
+      camera_driveway_motion_detection:
+        command_on: "curl -X GET 'http://192.168.2.1:9000/5/detection/start'"
+        command_off: "curl -X GET 'http://192.168.2.1:9000/5/detection/pause'"
+        command_state: "curl -X GET 'http://192.168.2.1:9000/5/detection/status'"
+        value_template: "{{ value | regex_search('ACTIVE') }}"
+        friendly_name: 'Driveway Camera Motion Dedection'

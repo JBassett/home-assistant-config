@@ -1,0 +1,6 @@
+cast:
+  media_player:
+    - host: !secret ghome_living_ip
+    - host: !secret gmini_master_ip
+    - host: !secret gmini_weston_ip
+    - host: !secret gmini_harrison_ip

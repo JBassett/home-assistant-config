@@ -1,0 +1,8 @@
+influxdb:
+  host: !secret influx_ip
+  database: homeassistant
+  username: !secret influx_user
+  password: !secret influx_pass
+  include:
+    domains:
+      - sensor

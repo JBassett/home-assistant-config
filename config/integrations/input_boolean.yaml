@@ -1,0 +1,13 @@
+input_boolean:
+  guest_mode:
+    name: Guest mode
+    icon: mdi:human-handsup
+  weston_nap:
+    name: Weston Nap
+    icon: mdi:alpha-w
+  harrison_nap:
+    name: Harrison Nap
+    icon: mdi:alpha-h
+  dark_outside:
+    name: Dark Outside
+    icon: mdi:weather-night

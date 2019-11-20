@@ -1,0 +1,13 @@
+person:
+  - id: jbassett
+    name: Justin
+    user_id: 5a10d3ad221d4dc384ea626243287ba5
+    device_trackers:
+      - device_tracker.google_maps_114722593006578537688
+      - device_tracker.justin_pixel
+  - id: sbassett
+    name: Shannon
+    user_id: 7b2802e34eba4b19b628c0cf6874e4e6
+    device_trackers:
+      - device_tracker.google_maps_112779943779309085408
+      - device_tracker.shannon_motox4

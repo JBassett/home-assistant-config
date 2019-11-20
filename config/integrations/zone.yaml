@@ -1,0 +1,54 @@
+zone:
+  - name: Home
+    latitude: !secret home_lat_num
+    longitude: !secret home_lon_num
+    radius: 60
+    icon: mdi:home
+
+  - name: Paychex - Basket
+    latitude: 43.225726
+    longitude: -77.388740
+    radius: 90
+    icon: mdi:worker
+
+  - name: RGH
+    latitude: 43.192544
+    longitude: -77.587294
+    radius: 200
+    icon: mdi:hospital-building
+
+  - name: Urgent Care Now
+    latitude: 43.212717
+    longitude: -77.439028
+    radius: 50
+    icon: mdi:hospital
+
+  - name: WWFD Station 1
+    latitude: 43.203682
+    longitude: -77.497451
+    radius: 50
+    icon: mdi:fire
+
+  - name: WWFD Station 2
+    latitude: 43.233833
+    longitude: -77.511894
+    radius: 50
+    icon: mdi:fire
+
+  - name: WWFD Station 3
+    latitude: 43.182704
+    longitude: -77.468922
+    radius: 50
+    icon: mdi:fire
+
+  - name: OFD Station 1
+    latitude: 43.222727
+    longitude: -77.292163
+    radius: 50
+    icon: mdi:fire
+
+  - name: OFD Station 2
+    latitude: 43.258697
+    longitude: -77.291816
+    radius: 50
+    icon: mdi:fire

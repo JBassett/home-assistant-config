@@ -1,9 +1,0 @@
-use_x_forwarded_for: true
-trusted_proxies:
-  - !secret unraid_ip
-
-ip_ban_enabled: true
-
-login_attempts_threshold: 5
-
-base_url: !secret ha_url

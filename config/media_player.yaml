@@ -1,8 +1,0 @@
-- platform: lg_netcast
-  host: !secret tv_master_ip
-  access_token: !secret tv_master_access_num
-
-- platform: xboxone
-  ip_address: !secret xbox_ip
-  device: !secret xbox_device_id
-  name: Living Room Xbox One

@@ -1,0 +1,3 @@
+plex:
+  host: !secret plex_ip
+  token: !secret plex_token

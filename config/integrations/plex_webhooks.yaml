@@ -1,0 +1,2 @@
+plex_webhooks:
+  webhook_id: !secret plex_webhook_id
