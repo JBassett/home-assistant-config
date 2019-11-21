@@ -33,9 +33,9 @@ tts
 
 deps
 
-/www/avatars
-/www/snapshots
-/www/custom-lovelace
+/config/www/avatars
+/config/www/snapshots
+/config/www/custom-lovelace
 
 #Z-Wave
 openzwave
