@@ -7,6 +7,8 @@ home-assistant.log
 # Known Devices
 known_devices.yaml
 
+ip_bans.yaml
+
 *.token
 *.pickle
 *.sqlite
