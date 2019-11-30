@@ -21,7 +21,8 @@ outside_on:
         entity_id:
           - light.garage_leds
           - light.porch_leds
-        effect: Can Lights
+        effect: Twinkle #Can Lights
+        brightness_pct: 100
         rgb_color:
           - 255 # Red=100% 
           - 227 # Green=89%
