@@ -4,7 +4,7 @@
     - platform: event
       event_type: PLEX_EVENT
       event_data:
-        status: NEW
+        status: GRABBED
   condition:
     - condition: time
       after: '07:00:00'
@@ -29,7 +29,7 @@
   - platform: event
     event_type: PLEX_EVENT
     event_data:
-      status: NEW
+      status: GRABBED
   condition:
     - condition: time
       after: '07:00:00'
@@ -54,7 +54,7 @@
   - platform: event
     event_type: PLEX_EVENT
     event_data:
-      status: NEW
+      status: GRABBED
   condition:
     - condition: time
       after: '07:00:00'
