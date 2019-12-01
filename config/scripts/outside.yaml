@@ -24,9 +24,9 @@ outside_on:
         effect: Twinkle #Can Lights
         brightness_pct: 100
         rgb_color:
-          - 255 # Red=100% 
-          - 227 # Green=89%
-          - 145 # Blue=57%
+          - 255 
+          - 218
+          - 108
     - service: switch.turn_on
       data:
         entity_id:
