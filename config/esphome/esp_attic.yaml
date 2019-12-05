@@ -90,7 +90,7 @@ light:
       - addressable_fireworks # 4th, red and blue
       - addressable_flicker:
           update_interval: 16ms
-          intensity: 25%
+          intensity: 50%
       - addressable_lambda:
           name: "Can Lights"
           update_interval: 1000ms

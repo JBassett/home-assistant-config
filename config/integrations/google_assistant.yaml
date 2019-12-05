@@ -22,12 +22,15 @@ google_assistant:
       room: Kitchen
       name: Kitchen Up Lights
 ################## Living Room ##########################
-    switch.living_room_outlet:
+    switch.living_room_outlet_corner:
       room: Living Room
       name: Living Room Outlet
       aliases:
         - Living Room Outlet
         - Christmas Tree
+    switch.living_room_outlet_stairs:
+      room: Living Room
+      name: Living Room Outlet Stairs
 ################## Office ################################
     switch.office_outlet:
       room: Office
