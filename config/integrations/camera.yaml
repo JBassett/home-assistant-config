@@ -14,38 +14,22 @@ camera:
     mjpeg_url: !secret cam_garage_url
     still_image_url: !secret cam_garage_pic_url
 
-  - platform: generic
+  - platform: mjpeg
     name: Weston's Room
     still_image_url: !secret cam_westons_pic_url
-    stream_source: !secret cam_westons_url
-    verify_ssl: false
-    username: !secret cam_user
-    password:  !secret cam_pass
-    authentication: basic
+    mjpeg_url: !secret cam_westons_url
     
-  - platform: generic
+  - platform: mjpeg
     name: Harrison's Room
     still_image_url: !secret cam_harrisons_pic_url
-    stream_source: !secret cam_harrisons_url
-    verify_ssl: false
-    username: !secret cam_user
-    password:  !secret cam_pass
-    authentication: basic
+    mjpeg_url: !secret cam_harrisons_url
 
-  - platform: generic
+  - platform: mjpeg
     name: Living Room
     still_image_url: !secret cam_living_pic_url
-    stream_source: !secret cam_living_url
-    verify_ssl: false
-    username: !secret cam_user
-    password:  !secret cam_pass
-    authentication: basic
+    mjpeg_url: !secret cam_living_url
 
-  - platform: generic
+  - platform: mjpeg
     name: Driveway
     still_image_url: !secret cam_driveway_pic_url
-    stream_source: !secret cam_driveway_url
-    verify_ssl: false
-    username: !secret cam_user
-    password:  !secret cam_pass
-    authentication: basic
+    mjpeg_url: !secret cam_driveway_url
