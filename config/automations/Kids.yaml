@@ -1,4 +1,4 @@
-- alias: 'Weston Sleep'
+- alias: 'Kids - Weston Sleep'
   initial_state: 'on'
   trigger:
     # Start times
@@ -30,7 +30,7 @@
       data:
         entity_id: automation.weston_fan_control
 
-- alias: 'Weston Keep Sleeping'
+- alias: 'Kids - Weston Keep Sleeping'
   initial_state: 'on'
   trigger:
     - platform: state
@@ -60,7 +60,7 @@
         media_content_id: !secret babbling_brook_url
         media_content_type: 'music'
 
-- alias: 'Weston Wakup'
+- alias: 'Kids - Weston Wakup'
   initial_state: 'on'
   trigger:
     - platform: state
@@ -81,7 +81,7 @@
       data:
         entity_id: fan.weston_fan
 
-- alias: 'Weston Fan Control'
+- alias: 'Kids - Weston Fan Control'
   initial_state: 'on'
   trigger:
     # This doesn't update too much, should be safe
@@ -109,3 +109,51 @@
           {% else %}
             high
           {% endif%}
+
+#################### Harrison ####################
+- alias: 'Kids - Harrison Keep Sleeping'
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: input_boolean.harrison_nap
+      to: 'on'
+    # Stopped playing for random reason
+    - platform: state
+      entity_id: media_player.harrisons_room_speaker
+      to: 'off'
+      for: '00:00:10'
+    - platform: state
+      entity_id: media_player.harrisons_room_speaker
+      to: 'idle'
+      for: '00:00:10'
+    - platform: state
+      entity_id: media_player.harrisons_room_speaker
+      to: 'paused'
+      for: '00:00:10'
+  condition:
+    - condition: state
+      entity_id: input_boolean.harrison_nap
+      state: 'on'
+  action:
+    - service: media_player.play_media
+      data:
+        entity_id: media_player.harrisons_room_speaker
+        media_content_id: !secret babbling_brook_url
+        media_content_type: 'music'
+
+- alias: 'Kids - Harrison Wakup'
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: input_boolean.harrison_nap
+      to: 'off'
+  action:
+    - service: input_boolean.turn_off
+      data:
+        entity_id: input_boolean.harrison_nap
+    - service: media_player.turn_off
+      data:
+        entity_id: media_player.harrisons_room_speaker
+    - service: fan.turn_off
+      data:
+        entity_id: fan.harrison_fan
