@@ -3,16 +3,20 @@ google_assistant:
   api_key: !secret google_assistant_api_key
   secure_devices_pin: !secret google_assistant_pin
   exposed_domains:
-    - switch
-    - light
-    - cover
-    - fan
+    - camera
+    # - group
+    - input_boolean
     - scene
     - script
-    - input_boolean
+    - switch
+    - fan
+    - light
+    - lock
+    - cover
     # - media_player
-    # - group
     # - climate
+    - vacuum
+    - sensor
   entity_config:
 ################### Kitchen #############################
     light.kitchen_up:
@@ -26,7 +30,7 @@ google_assistant:
       room: Living Room
       name: Living Room Outlet
       aliases:
-        - Living Room Outlet
+        - Living Room Outlet Corner
         - Christmas Tree
     switch.living_room_outlet_stairs:
       room: Living Room
@@ -35,6 +39,8 @@ google_assistant:
     switch.office_outlet:
       room: Office
       name: Office Outlet
+    switch.gaming_pc:
+      room: Office
 ################## Outside ###############################
     switch.driveway_light:
       room: Outside
@@ -42,6 +48,12 @@ google_assistant:
     switch.porch_light:
       room: Outside
       name: Porch Light
+    light.garage_leds:
+      room: Outside
+      name: Garage LEDs
+    light.porch_leds:
+      room: Outside
+      name: Porch LEDs
     light.front_door:
       room: Outside
       name: Doorbell Light
@@ -56,8 +68,13 @@ google_assistant:
 ################## Harrison's Room #######################
     input_boolean.harrison_nap:
       room: Harrison's Room
-################## Disabled ##############################
-    switch.skybell_front_door_motion_sensor:
-      expose: false
-    sensor.custom_python_script_tracker:
-      expose: false
+    fan.harrison_fan:
+      room: Harrison's Room
+################## Masters's Room ########################
+    fan.master_fan:
+      room: Master Bedroom
+################## Whole House ###########################
+    # script.goodmorning:
+    #   name: Goodmorning
+    # script.goodnight:
+    #   name: Goodnight
