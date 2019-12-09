@@ -27,7 +27,7 @@ cards:
       - switch.office_outlet
 
   - type: custom:mini-media-player
-    entity: media_player.living_room_speaker
+    entity: media_player.office_speaker
 
   - type: custom:mini-media-player
     title: Living Room TV
