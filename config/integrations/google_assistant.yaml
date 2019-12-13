@@ -74,7 +74,19 @@ google_assistant:
     fan.master_fan:
       room: Master Bedroom
 ################## Whole House ###########################
-    # script.goodmorning:
-    #   name: Goodmorning
-    # script.goodnight:
-    #   name: Goodnight
+    script.goodmorning:
+      name: Goodmorning
+    script.goodnight:
+      name: Goodnight
+
+################## Excluded ##############################
+    media_player.westons_room_speaker:
+      expose: false
+    media_player.harrisons_room_speaker:
+      expose: false
+    media_player.master_bedroom_speaker:
+      expose: false
+    media_player.kitchen_display:
+      expose: false
+    media_player.office_speaker:
+      expose: false
