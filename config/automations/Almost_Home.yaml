@@ -11,7 +11,7 @@
       value_template: '{{ states.proximity.home_shannon.attributes.dir_of_travel == "towards" }}'
   action:
     - service: tts.google_translate_say
-      entity_id: media_player.office_speaker
+      entity_id: media_player.kitchen_display
       data:
         message: Shannon is almost home!
 
@@ -28,6 +28,6 @@
       value_template: '{{ states.proximity.home_justin.attributes.dir_of_travel == "towards" }}'
   action:
     - service: tts.google_translate_say
-      entity_id: media_player.office_speaker
+      entity_id: media_player.kitchen_display
       data:
         message: Justin is almost home!

@@ -5,7 +5,8 @@ proximity:
       - zone.rgh
     tolerance: 50 # meters
     devices:
-      - device_tracker.google_maps_114722593006578537688
+      # - device_tracker.google_maps_114722593006578537688
+      - device_tracker.pixel_2
     unit_of_measurement: mi
 
   home_shannon:

@@ -30,13 +30,6 @@ cards:
           - sensor.family_room_thermostat_temperature
           - sensor.weston_temperature
           - sensor.harrison_temperature
-      
-      # - title: House Feed
-      #   type: 'custom:home-feed-card'
-      #   show_empty: false
-      #   entities:
-      #     - entity: device_tracker.google_maps_114722593006578537688
-      #     - entity: device_tracker.google_maps_112779943779309085408
 
       - break
 
@@ -45,7 +38,8 @@ cards:
         show_header_toggle: false
         entities:
           - entity: sensor.home_status
-          - entity: device_tracker.google_maps_114722593006578537688
+          # - entity: device_tracker.google_maps_114722593006578537688
+          - entity: device_tracker.pixel_2
           - entity: device_tracker.google_maps_112779943779309085408
           - entity: input_boolean.guest_mode
       - type: map
@@ -54,9 +48,10 @@ cards:
         dark_mode: true
         entities:
           - zone.home
-          - device_tracker.google_maps_114722593006578537688
-          - device_tracker.google_maps_112779943779309085408
           - device_tracker.pixel_2
+          # - device_tracker.google_maps_114722593006578537688
+          - device_tracker.google_maps_112779943779309085408
+          
 
       - break
       
