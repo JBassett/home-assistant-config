@@ -15,3 +15,5 @@ homeassistant:
    - type: homeassistant
 
   packages: !include_dir_named integrations
+  
+  customize: !include customize.yaml

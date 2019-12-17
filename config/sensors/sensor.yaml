@@ -64,9 +64,9 @@
       friendly_name: Home status
       value_template: >
         {% if not(
-          is_state('device_tracker.google_maps_112779943779309085408' , 'home')
+          is_state('person.justin' , 'home')
           or 
-          is_state('device_tracker.pixel_2' , 'home') 
+          is_state('person.shannon' , 'home') 
           or 
           is_state('input_boolean.guest_mode' , 'on')
           ) %}
