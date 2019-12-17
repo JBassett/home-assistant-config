@@ -6,7 +6,7 @@ resources:
   - type: module
     url: /local/community/mini-graph-card/mini-graph-card-bundle.js?v=0.8.2
   - type: module
-    url: /local/community/mini-media-player/mini-media-player-bundle.js?v=1.5.0
+    url: /local/community/mini-media-player/mini-media-player-bundle.js?v=1.5.1
   - type: module
     url: /local/community/weather-card/weather-card.js?v=1.4.1
   - type: module
