@@ -3,13 +3,13 @@ This is the configuration for my home instantance of [Home Assistant](https://ww
 
 # Screenshots
 ## Main Screen
-![Main](screenshots/Main.PNG)
+![Main](.github/screenshots/Main.PNG)
 ## Solar
-![Solar](screenshots/Solar.PNG)
+![Solar](.github/screenshots/Solar.PNG)
 ## First Floor
-![Floor One](screenshots/Floor-1.PNG)
+![Floor One](.github/screenshots/Floor-1.PNG)
 ## Second Floor
-![Floor Two](screenshots/Floor-2.PNG)
+![Floor Two](.github/screenshots/Floor-2.PNG)
 
 # Noteable Custom Cards/Components
 Here are a few of the notable custom integrations in use for my setup. 
