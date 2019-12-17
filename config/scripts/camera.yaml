@@ -12,12 +12,14 @@ camera_motion:
             camera.driveway
           {% endif %}
         filename: '/config/www/snapshots/{{cameraNum}}.jpg'
-    - service: notify.web
+    - service: notify.mobile_app_pixel_2
       data_template:
         message: '{{ camera }} detected motion {{ now().strftime("%H:%M") }}'
         title: 'Motion Detected'
         data:
-          image: !secret camera_snapshot_url
+          android:
+            notification:
+              image: !secret camera_snapshot_url
 
 camera_motion_enable:
   alias: Enable Camera Motion

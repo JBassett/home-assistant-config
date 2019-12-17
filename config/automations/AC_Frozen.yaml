@@ -12,7 +12,7 @@
       entity_id: media_player.office_speaker
       data:
         message: 'Just a heads up, I think the AC might be frozen.'
-    - service: notify.web
+    - service: notify.mobile_app_pixel_2
       data:
         title: 'Possible AC Issue'
         message: 'The AC has been running for 2 hours non stop.'
