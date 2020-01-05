@@ -5,6 +5,13 @@
       event_type: PLEX_EVENT
       event_data:
         status: PLAYING
+        type: episode
+        playerUuid: !secret plex_living_room_uuid
+    - platform: event
+      event_type: PLEX_EVENT
+      event_data:
+        status: PLAYING
+        type: movie
         playerUuid: !secret plex_living_room_uuid
   condition:
     - condition: state
@@ -30,6 +37,13 @@
       event_type: PLEX_EVENT
       event_data:
         status: STOPPED
+        type: episode
+        playerUuid: !secret plex_living_room_uuid
+    - platform: event
+      event_type: PLEX_EVENT
+      event_data:
+        status: STOPPED
+        type: movie
         playerUuid: !secret plex_living_room_uuid
   condition:
     - condition: state
