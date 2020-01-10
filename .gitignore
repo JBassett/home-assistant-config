@@ -26,6 +26,8 @@ sabnzbd.conf
 .xbox-token.json
 .google_maps_location_sharing.cookies.*
 
+.cloud/
+
 #IDE Files
 .c9
 .Trash*
