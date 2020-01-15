@@ -62,6 +62,7 @@ cards:
           - switch.driveway_light
           - light.garage_leds
           - light.porch_leds
+          - switch.skybell_front_door_motion_sensor
       
       - title: Chevy Bolt
         type: entities
