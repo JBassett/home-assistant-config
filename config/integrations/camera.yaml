@@ -9,6 +9,7 @@ camera:
     name: Radar
     still_image_url: http://radblast.wunderground.com/cgi-bin/radar/WUNIDS_map?station=BUF&brand=wui&num=6&delay=15&type=N0R&frame=0&scale=1.000&noclutter=0&showstorms=0&mapx=400&mapy=240&centerx=400&centery=240&transx=0&transy=0&showlabels=1&severe=0&rainsnow=0&lightning=0&smooth=0&rand=25396520
 
+# Motion Eye Cameras
   - platform: mjpeg
     name: Garage
     mjpeg_url: !secret cam_garage_url
@@ -33,3 +34,16 @@ camera:
     name: Driveway
     still_image_url: !secret cam_driveway_pic_url
     mjpeg_url: !secret cam_driveway_url
+
+# Direct Cameras, for casting
+  - platform: generic
+    name: Weston's Room Stream
+    verify_ssl: false
+    still_image_url: !secret cam_westons_pic_url
+    stream_source: !secret cam_westons_stream_url
+  
+  - platform: generic
+    name: Harrison's Room Stream
+    verify_ssl: false
+    still_image_url: !secret cam_harrisons_pic_url
+    stream_source: !secret cam_harrisons_stream_url
