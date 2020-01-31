@@ -1,5 +1,5 @@
 light:
-  - platform: skybell
+  # - platform: skybell
 
   - platform: flux_led
     devices:

@@ -1,8 +1,8 @@
 switch:
-  - platform: skybell
-    monitored_conditions:
-      - do_not_disturb
-      - motion_sensor
+  # - platform: skybell
+  #   monitored_conditions:
+  #     - do_not_disturb
+  #     - motion_sensor
 
   - platform: wake_on_lan
     name: Gaming PC

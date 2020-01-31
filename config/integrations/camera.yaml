@@ -1,9 +1,9 @@
 camera:
-  - platform: skybell
-    monitored_conditions:
-      - avatar
-      - activity
-    activity_name: "Last Activity"
+  # - platform: skybell
+  #   monitored_conditions:
+  #     - avatar
+  #     - activity
+  #   activity_name: "Last Activity"
 
   - platform: generic
     name: Radar
