@@ -1,3 +1,0 @@
-# skybell:
-#   username: !secret skybell_user
-#   password: !secret skybell_pass
