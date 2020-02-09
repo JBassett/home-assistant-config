@@ -10,7 +10,7 @@
       entity_id: cover.garage_door_opener
       state: open
   action:
-    - service: notify.web
+    - service: notify.mobile_app_pixel_2
       data:
         message: Looks like the garage was left open!! {{ now().strftime("%H:%M") }}
         title: Garage left open!
@@ -24,7 +24,7 @@
   initial_state: 'on'
   trigger:
     - platform: event
-      event_type: html5_notification.clicked
+      event_type: mobile_app_notification_action
       event_data:
         action: close_garage
   condition: []
@@ -48,7 +48,7 @@
     - condition: template
       value_template: '{{ states.proximity.home_justin.attributes.dir_of_travel == "towards" }}'
   action:
-    - service: notify.web
+    - service: notify.mobile_app_pixel_2
       data:
         title: Almost Home!
         message: Would you like to open the garage door?
@@ -62,7 +62,7 @@
   initial_state: 'on'
   trigger:
     - platform: event
-      event_type: html5_notification.clicked
+      event_type: mobile_app_notification_action
       event_data:
         action: open_garage
   condition: []
@@ -89,7 +89,7 @@
       entity_id: group.home_status
       state: Unoccupied
   action:
-    - service: notify.web
+    - service: notify.mobile_app_pixel_2
       data:
         title: 'Garage Door: {{ states(''cover.garage_door_opener'') }}'
         message: Garage is now {{ states('cover.garage_door_opener') }} at {{ now().strftime("%H:%M") }}
