@@ -105,9 +105,8 @@ cards:
         - domain: automation
   
   - type: entities
-    title: Casting
+    title: Pixel 2
     show_header_toggle: false
     entities:
-      - type: cast
-        name: Main
-        view: '0'
+      - entity: sensor.pixel_2_battery_level
+      - entity: sensor.pixel_2_wifi_connection
