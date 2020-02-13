@@ -17,6 +17,12 @@ zone:
     radius: 200
     icon: mdi:hospital-building
 
+  - name: Strong Hospital
+    latitude: 43.123162
+    longitude: -77.623930
+    radius: 225
+    icon: mdi:hospital-building
+
   - name: Urgent Care Now
     latitude: 43.212717
     longitude: -77.439028
@@ -52,3 +58,9 @@ zone:
     longitude: -77.291816
     radius: 50
     icon: mdi:fire
+
+  - name: YMCA - East Side
+    latitude: 43.149583
+    longitude: -77.437200
+    radius: 75
+    icon: mdi:weight-lifter
