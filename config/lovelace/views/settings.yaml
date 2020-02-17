@@ -105,8 +105,10 @@ cards:
         - domain: automation
   
   - type: entities
-    title: Pixel 2
+    title: Phones
     show_header_toggle: false
     entities:
       - entity: sensor.pixel_2_battery_level
       - entity: sensor.pixel_2_wifi_connection
+      - entity: sensor.moto_x4_battery_level
+      - entity: sensor.moto_x4_wifi_connection
