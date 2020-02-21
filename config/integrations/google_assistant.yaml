@@ -38,6 +38,12 @@ google_assistant:
     switch.living_room_outlet_stairs:
       room: Living Room
       name: Living Room Outlet Stairs
+    switch.camera_living_motion_detection:
+      room: Living Room
+    input_boolean.guest_mode:
+      room: Living Room
+    vacuum.deebot:
+      room: Living Room
 ################## Office ################################
     switch.office_outlet:
       room: Office
@@ -51,6 +57,8 @@ google_assistant:
     switch.porch_light:
       room: Outside
       name: Porch Light
+    switch.camera_garage_motion_detection:
+      room: Outside
     light.garage_leds:
       room: Outside
       name: Garage LEDs
@@ -92,4 +100,10 @@ google_assistant:
     media_player.kitchen_display:
       expose: false
     media_player.office_speaker:
+      expose: false
+    sensor.family_room_thermostat_target:
+      expose: false
+    sensor.family_room_thermostat_temperature:
+      expose: false
+    sensor.family_room_thermostat_humidity:
       expose: false
