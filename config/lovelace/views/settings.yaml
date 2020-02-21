@@ -110,5 +110,5 @@ cards:
     entities:
       - entity: sensor.pixel_2_battery_level
       - entity: sensor.pixel_2_wifi_connection
-      - entity: sensor.moto_x4_battery_level
-      - entity: sensor.moto_x4_wifi_connection
+      - entity: sensor.pixel_3a_xl_battery_level
+      - entity: sensor.pixel_3a_xl_wifi_connection

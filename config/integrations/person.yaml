@@ -8,4 +8,4 @@ person:
     name: Shannon
     user_id: 7b2802e34eba4b19b628c0cf6874e4e6
     device_trackers:
-      - device_tracker.moto_x4
+      - device_tracker.pixel_3a_xl
