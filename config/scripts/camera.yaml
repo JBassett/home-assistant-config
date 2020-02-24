@@ -1,23 +1,12 @@
 camera_motion:
   alias: Camera Motion Detected
   sequence:
-    - service: camera.snapshot
-      data_template:
-        entity_id: >-
-          {% if cameraNum == 3 %}
-            camera.living_room
-          {% elif cameraNum == 4 %}
-            camera.garage
-          {% elif cameraNum == 5 %}
-            camera.driveway
-          {% endif %}
-        filename: '/config/www/snapshots/{{cameraNum}}.jpg'
     - service: notify.mobile_app_pixel_2
       data_template:
         message: '{{ camera }} detected motion {{ now().strftime("%H:%M") }}'
         title: 'Motion Detected'
         data:
-          image: !secret camera_snapshot_url
+          image: '/api/camera_proxy/{{entity}}'
 
 camera_motion_enable:
   alias: Enable Camera Motion

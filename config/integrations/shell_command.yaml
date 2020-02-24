@@ -1,2 +1,1 @@
 shell_command:
-  clean_snapshots: 'rm /config/www/snapshots/*'

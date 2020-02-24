@@ -11,7 +11,6 @@ goodnight:
         entity_id: media_player.living_room_tv
 ######################## Cache Cleanup ##################
     - service: tts.clear_cache
-    - service: shell_command.clean_snapshots
 
     - service: script.kitchen_off
     - service: script.livingroom_off
