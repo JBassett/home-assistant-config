@@ -89,17 +89,18 @@ cards:
       - entity: binary_sensor.family_room_thermostat_online
       - entity: switch.gaming_pc
 
-  - type: 'custom:monster-card'
+  - type: 'custom:auto-entities'
     card:
       title: Z-Wave
-      type: glance
+      type: entities
     filter:
       include:
         - domain: zwave
-  - type: 'custom:monster-card'
+  - type: 'custom:auto-entities'
     card:
       title: Automations
       type: entities
+      show_header_toggle: false
     filter:
       include:
         - domain: automation

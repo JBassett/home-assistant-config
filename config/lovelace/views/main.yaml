@@ -39,7 +39,17 @@ cards:
         entities:
           - entity: sensor.home_status
           - entity: person.justin
+            hold_action: 
+              action: call-service
+              service: notify.mobile_app_pixel_2
+              service_data:
+                message: request_location_update
           - entity: person.shannon
+            hold_action: 
+              action: call-service
+              service: notify.mobile_app_pixel_3a_xl
+              service_data:
+                message: request_location_update
           - entity: input_boolean.guest_mode
       - type: map
         # aspect_ratio: '16:9'
