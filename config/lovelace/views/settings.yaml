@@ -2,53 +2,78 @@ title: Settings
 icon: 'mdi:settings'
 badges: []
 cards:
-  - type: horizontal-stack
-    cards:
-      - title: Download
-        type: 'custom:mini-graph-card'
-        extrema: true
-        hours_to_show: 48
-        points_per_hour: 0.25
+  - type: entities
+    title: Network Speed
+    show_header_toggle: false
+    entities:
+      - type: custom:fold-entity-row
+        head: sensor.speedtest_download
         entities:
-          - entity: sensor.speedtest_download
-            name: Download
+          - type: 'custom:mini-graph-card'
+            hours_to_show: 168
+            points_per_hour: 0.25
+            entities:
+              - entity: sensor.speedtest_download
+            show:
+              name: false
+              icon: false
+              state: false
+              average: true
+              extrema: true
 
-      - title: Upload
-        type: 'custom:mini-graph-card'
-        extrema: true
-        hours_to_show: 48
-        points_per_hour: 0.25
+      - type: custom:fold-entity-row
+        head: sensor.speedtest_upload
         entities:
-          - entity: sensor.speedtest_upload
-            name: Upload
+          - type: 'custom:mini-graph-card'
+            hours_to_show: 168
+            points_per_hour: 0.25
+            entities:
+              - entity: sensor.speedtest_upload
+            show:
+              name: false
+              icon: false
+              state: false
+              average: true
+              extrema: true
 
-      - title: Ping
-        type: 'custom:mini-graph-card'
-        extrema: true
-        hours_to_show: 48
-        points_per_hour: 0.25
+      - type: custom:fold-entity-row
+        head: sensor.speedtest_ping
         entities:
-          - entity: sensor.speedtest_ping
-            name: Ping
+          - type: 'custom:mini-graph-card'
+            hours_to_show: 168
+            points_per_hour: 0.25
+            entities:
+              - entity: sensor.speedtest_ping
+            show:
+              name: false
+              icon: false
+              state: false
+              average: true
+              extrema: true
 
   - title: Certificates
     type: entities
     show_header_toggle: false
     entities:
-      - sensor.home_assistant_cert_expiration
-      - sensor.auth_cert_expiration
-      - sensor.code_cert_expiration
-      - sensor.tv_cert_expiration
-      - sensor.movies_cert_expiration
-      - sensor.plex_cert_expiration
-      - sensor.grafana_cert_expiration
-      - sensor.security_cert_expiration
-      - sensor.unraid_cert_expiration
-      - sensor.pfsense_cert_expiration
-      - sensor.music_cert_expiration
-      - sensor.sync_cert_expiration
-      - sensor.hydra_cert_expiration
-      - sensor.usenet_cert_expiration
+      - type: custom:fold-entity-row
+        head:
+          type: section
+          label: Details
+        entities:
+          - sensor.home_assistant_cert_expiration
+          - sensor.auth_cert_expiration
+          - sensor.code_cert_expiration
+          - sensor.tv_cert_expiration
+          - sensor.movies_cert_expiration
+          - sensor.plex_cert_expiration
+          - sensor.grafana_cert_expiration
+          - sensor.security_cert_expiration
+          - sensor.unraid_cert_expiration
+          - sensor.pfsense_cert_expiration
+          - sensor.music_cert_expiration
+          - sensor.sync_cert_expiration
+          - sensor.hydra_cert_expiration
+          - sensor.usenet_cert_expiration
     
   - title: Unraid
     type: entities
@@ -89,27 +114,143 @@ cards:
       - entity: binary_sensor.family_room_thermostat_online
       - entity: switch.gaming_pc
 
-  - type: 'custom:auto-entities'
-    card:
-      title: Z-Wave
-      type: entities
-    filter:
-      include:
-        - domain: zwave
-  - type: 'custom:auto-entities'
-    card:
-      title: Automations
-      type: entities
-      show_header_toggle: false
-    filter:
-      include:
-        - domain: automation
-  
   - type: entities
-    title: Phones
+    title: Z-Wave
     show_header_toggle: false
     entities:
-      - entity: sensor.pixel_2_battery_level
-      - entity: sensor.pixel_2_wifi_connection
-      - entity: sensor.pixel_3a_xl_battery_level
-      - entity: sensor.pixel_3a_xl_wifi_connection
+      - type: 'custom:auto-entities'
+        card:
+          type: custom:fold-entity-row
+          head:
+            type: section
+            label: Details
+        filter:
+          include:
+            - domain: zwave
+        sort:
+          method: name
+
+  - type: entities
+    title: Automations
+    show_header_toggle: false
+    entities:
+      - type: 'custom:auto-entities'
+        card:
+          type: custom:fold-entity-row
+          head:
+            type: section
+            label: AC Frozen
+        filter:
+          include:
+            - domain: automation
+              name: 'AC Frozen - *'
+        sort:
+          method: name
+      - type: 'custom:auto-entities'
+        card:
+          type: custom:fold-entity-row
+          head:
+            type: section
+            label: Almost Home
+        filter:
+          include:
+            - domain: automation
+              name: 'Almost Home - *'
+        sort:
+          method: name
+      - type: 'custom:auto-entities'
+        card:
+          type: custom:fold-entity-row
+          head:
+            type: section
+            label: Garage Door
+        filter:
+          include:
+            - domain: automation
+              name: 'Garage Door - *'
+        sort:
+          method: name
+      - type: 'custom:auto-entities'
+        card:
+          type: custom:fold-entity-row
+          head:
+            type: section
+            label: House Status
+        filter:
+          include:
+            - domain: automation
+              name: 'House Status - *'
+        sort:
+          method: name
+      - type: 'custom:auto-entities'
+        card:
+          type: custom:fold-entity-row
+          head:
+            type: section
+            label: Kids
+        filter:
+          include:
+            - domain: automation
+              name: 'Kids - *'
+        sort:
+          method: name
+      - type: 'custom:auto-entities'
+        card:
+          type: custom:fold-entity-row
+          head:
+            type: section
+            label: Lifecycles
+        filter:
+          include:
+            - domain: automation
+              name: 'Lifecycles - *'
+        sort:
+          method: name
+      - type: 'custom:auto-entities'
+        card:
+          type: custom:fold-entity-row
+          head:
+            type: section
+            label: Maintenance
+        filter:
+          include:
+            - domain: automation
+              name: 'Maintenance - *'
+        sort:
+          method: name
+      - type: 'custom:auto-entities'
+        card:
+          type: custom:fold-entity-row
+          head:
+            type: section
+            label: Plex
+        filter:
+          include:
+            - domain: automation
+              name: 'Plex - *'
+        sort:
+          method: name
+      - type: 'custom:auto-entities'
+        card:
+          type: custom:fold-entity-row
+          head:
+            type: section
+            label: Sun
+        filter:
+          include:
+            - domain: automation
+              name: 'Sun - *'
+        sort:
+          method: name
+      - type: 'custom:auto-entities'
+        card:
+          type: custom:fold-entity-row
+          head:
+            type: section
+            label: Theater
+        filter:
+          include:
+            - domain: automation
+              name: 'Theater - *'
+        sort:
+          method: name
