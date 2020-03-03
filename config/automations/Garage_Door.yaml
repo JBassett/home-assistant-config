@@ -1,5 +1,5 @@
 - id: '1523975149744'
-  alias: '[Notification] Garage Left Open'
+  alias: 'Garage Door - Left Open Notification'
   initial_state: 'on'
   trigger:
     - platform: state
@@ -20,7 +20,7 @@
             title: Close Door
 
 - id: '1523975760898'
-  alias: '[Notification - Action] Close Garage'
+  alias: 'Garage Door - Close'
   initial_state: 'on'
   trigger:
     - platform: event
@@ -34,7 +34,7 @@
         entity_id: cover.garage_door_opener
 
 - id: '1524146043949'
-  alias: '[Notification] Open Garage'
+  alias: 'Garage Door - Almost Home Notification'
   initial_state: 'on'
   trigger:
   - platform: numeric_state
@@ -58,7 +58,7 @@
               action: open_garage
 
 - id: '1524146180812'
-  alias: '[Notification - Action] Open Garage'
+  alias: 'Garage Door - Open'
   initial_state: 'on'
   trigger:
     - platform: event
@@ -73,7 +73,7 @@
 
 
 - id: '1524579938313'
-  alias: '[Notification] Garage Opened/Closed'
+  alias: 'Garage Door - Opened/Closed not home'
   initial_state: 'on'
   trigger:
     - entity_id: cover.garage_door_opener

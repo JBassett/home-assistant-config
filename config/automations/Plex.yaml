@@ -1,4 +1,4 @@
-- alias: '[TTS] Movie Downloaded'
+- alias: 'Plex - Movie Downloaded'
   initial_state: 'on'
   trigger:
     - platform: event
@@ -20,7 +20,7 @@
     data_template:
       message: "Get the popcorn ready, I just downloaded {{ trigger.event.data['Metadata']['title'] }}."
 
-- alias: '[TTS] New TV Episode'
+- alias: 'Plex - New TV Episode'
   initial_state: 'on'
   trigger:
   - platform: event
@@ -42,7 +42,7 @@
     data_template:
       message: "Good news, I downloaded a new episode of {{ trigger.event.data['Metadata']['grandparentTitle'] }}."
 
-- alias: '[TTS] New Music Album'
+- alias: 'Plex - New Music Album'
   initial_state: 'on'
   trigger:
   - platform: event

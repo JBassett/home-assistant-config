@@ -1,4 +1,4 @@
-- alias: Update notification
+- alias: Maintenance - Update notification
   trigger:
     - platform: state
       entity_id: binary_sensor.updater

@@ -1,4 +1,4 @@
-- alias: '[TTS + Notification] AC Frozen'
+- alias: 'AC Frozen - AC Frozen'
   initial_state: 'on'
   trigger:
     platform: state

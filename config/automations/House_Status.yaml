@@ -1,4 +1,4 @@
-- alias: House Became Unoccupied
+- alias: House Status - Became Unoccupied
   initial_state: 'on'
   trigger:
     - platform: state
@@ -21,7 +21,7 @@
         minutes: 1
     - service: script.camera_motion_enable
 
-- alias: House Became Occupied
+- alias: House Status - Became Occupied
   initial_state: 'on' # Don't want to run every time we reboot and are home.
   trigger:
     - platform: state
