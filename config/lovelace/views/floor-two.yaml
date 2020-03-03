@@ -10,6 +10,8 @@ cards:
       - title: Westons's Room
         type: picture-entity
         entity: camera.weston_s_room
+        show_name: false
+        show_state: false
 
       - title: Weston's Room
         type: entities
@@ -41,6 +43,8 @@ cards:
       - title: Harrison's Room
         type: picture-entity
         entity: camera.harrison_s_room
+        show_name: false
+        show_state: false
 
       - title: Harrison's Room
         type: entities
