@@ -1,18 +1,9 @@
 - alias: 'Theater - Starting Media'
   initial_state: 'on'
   trigger:
-    - platform: event
-      event_type: PLEX_EVENT
-      event_data:
-        status: PLAYING
-        type: episode
-        playerUuid: !secret plex_living_room_uuid
-    - platform: event
-      event_type: PLEX_EVENT
-      event_data:
-        status: PLAYING
-        type: movie
-        playerUuid: !secret plex_living_room_uuid
+    - platform: state
+      entity_id: media_player.plex_living_room_tv
+      to: playing
   condition:
     - condition: state
       entity_id: input_boolean.dark_outside
@@ -33,18 +24,9 @@
 - alias: 'Theater - Stopping Media'
   initial_state: 'on'
   trigger:
-    - platform: event
-      event_type: PLEX_EVENT
-      event_data:
-        status: STOPPED
-        type: episode
-        playerUuid: !secret plex_living_room_uuid
-    - platform: event
-      event_type: PLEX_EVENT
-      event_data:
-        status: STOPPED
-        type: movie
-        playerUuid: !secret plex_living_room_uuid
+    - platform: state
+      entity_id: media_player.plex_living_room_tv
+      from: playing
   condition:
     - condition: state
       entity_id: input_boolean.dark_outside
