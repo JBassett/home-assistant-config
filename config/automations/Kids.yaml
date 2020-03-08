@@ -36,19 +36,9 @@
     - platform: state
       entity_id: input_boolean.weston_nap
       to: 'on'
-    # Stopped playing for random reason
     - platform: state
       entity_id: media_player.westons_room_speaker
-      to: 'off'
-      for: '00:00:10'
-    - platform: state
-      entity_id: media_player.westons_room_speaker
-      to: 'idle'
-      for: '00:00:10'
-    - platform: state
-      entity_id: media_player.westons_room_speaker
-      to: 'paused'
-      for: '00:00:10'
+      from: 'playing'
   condition:
     - condition: state
       entity_id: input_boolean.weston_nap
@@ -117,19 +107,9 @@
     - platform: state
       entity_id: input_boolean.harrison_nap
       to: 'on'
-    # Stopped playing for random reason
     - platform: state
       entity_id: media_player.harrisons_room_speaker
-      to: 'off'
-      for: '00:00:10'
-    - platform: state
-      entity_id: media_player.harrisons_room_speaker
-      to: 'idle'
-      for: '00:00:10'
-    - platform: state
-      entity_id: media_player.harrisons_room_speaker
-      to: 'paused'
-      for: '00:00:10'
+      from: 'playing'
   condition:
     - condition: state
       entity_id: input_boolean.harrison_nap
