@@ -163,6 +163,18 @@ cards:
           type: custom:fold-entity-row
           head:
             type: section
+            label: Cameras
+        filter:
+          include:
+            - domain: automation
+              name: 'Cameras - *'
+        sort:
+          method: name
+      - type: 'custom:auto-entities'
+        card:
+          type: custom:fold-entity-row
+          head:
+            type: section
             label: Garage Door
         filter:
           include:

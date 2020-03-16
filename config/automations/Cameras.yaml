@@ -1,0 +1,11 @@
+- id: 7c1e31f8-c6ed-44d5-87ca-719525873df0
+  alias: 'Cameras - Disable Cameras'
+  initial_state: 'on'
+  trigger:
+    - platform: event
+      event_type: mobile_app_notification_action
+      event_data:
+        action: disable_cameras
+  condition: []
+  action:
+    - service: script.camera_motion_disable

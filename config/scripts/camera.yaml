@@ -7,6 +7,10 @@ camera_motion:
         title: 'Motion Detected'
         data:
           image: '/api/camera_proxy/{{entity}}'
+          clickAction: /lovelace/7
+          actions:
+            - action: disable_cameras
+              title: Disable Detection
 
 camera_motion_enable:
   alias: Enable Camera Motion
