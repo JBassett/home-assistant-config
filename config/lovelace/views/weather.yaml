@@ -1,4 +1,5 @@
 title: Weather
+path: weather
 icon: 'mdi:weather-partly-cloudy'
 badges: []
 cards:

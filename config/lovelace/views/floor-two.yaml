@@ -1,4 +1,5 @@
 title: Second Floor
+path: floor-two
 icon: 'mdi:home-floor-2'
 badges: []
 # This is so the CSS isn't forcing everything into a single column

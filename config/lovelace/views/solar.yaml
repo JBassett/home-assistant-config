@@ -1,4 +1,5 @@
 title: Solar
+path: solar
 icon: 'mdi:solar-power'
 badges: []
 cards:
@@ -38,3 +39,43 @@ cards:
     entities:
       - sensor.solar_raw_total_power
       - sensor.solar_raw_house_usage
+
+  - type: entities
+    title: Panel Details
+    show_header_toggle: false
+    entities:
+      - type: 'custom:auto-entities'
+        card:
+          type: custom:fold-entity-row
+          head:
+            type: section
+            label: All
+        filter:
+          include:
+            - entity_id: sensor.solar_inverter_*
+        sort:
+          method: state
+          numeric: true
+          reverse: true
+
+      - type: custom:fold-entity-row
+        head:
+          type: section
+          label: Graph
+        entities:
+          - type: 'custom:auto-entities'
+            card:
+              type: 'custom:mini-graph-card'
+              extrema: true
+              hour24: true
+              hours_to_show: 24
+              points_per_hour: 4
+              upper_bound: .35
+              show:
+                name: false
+                icon: false
+                state: false
+                legend: false
+            filter:
+              include:
+                - entity_id: sensor.solar_inverter_*
