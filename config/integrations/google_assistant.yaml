@@ -5,6 +5,7 @@ google_assistant:
     private_key: !secret google_assistant_private_key
     client_email: !secret google_assistant_client_email
   secure_devices_pin: !secret google_assistant_pin
+  report_state: true
   exposed_domains:
     - camera
     # - group
