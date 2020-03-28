@@ -1,5 +1,5 @@
 # Home Assistant Configuration
-This is the configuration for my home instantance of [Home Assistant](https://www.home-assistant.io/).
+This is the configuration for my home instance of [Home Assistant](https://www.home-assistant.io/).
 
 # Screenshots
 ## Main Screen
@@ -11,7 +11,7 @@ This is the configuration for my home instantance of [Home Assistant](https://ww
 ## Second Floor
 ![Floor Two](.github/screenshots/Floor-2.PNG)
 
-# Noteable Custom Cards/Components
+# Notable Custom Cards/Components
 Here are a few of the notable custom integrations in use for my setup. 
 * [HACS](https://github.com/custom-components/hacs)
   * An embedded way to manage many cards and components.
