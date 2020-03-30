@@ -1,4 +1,4 @@
-- alias: Maintenance - Update notification
+- alias: Maintenance - HA Update Notification
   trigger:
     - platform: state
       entity_id: binary_sensor.updater
@@ -9,6 +9,26 @@
       data_template:
         title: 'New Home Assistant Release'
         message: "Home Assistant  {{ state_attr('binary_sensor.updater', 'newest_version') }}  is now available."
+
+- alias: Maintenance - HACS Update Notification
+  trigger:
+    - platform: state
+      entity_id: sensor.hacs
+  condition:
+    - condition: numeric_state
+      entity_id: sensor.hacs
+      above: 0
+  action:
+    - service: notify.mobile_app_pixel_2
+      data_template:
+        title: 'New HACS Componenet Release'
+        message: >-
+          Updates ready for: 
+          {% for repo in states.sensor.hacs.attributes.repositories -%} 
+            {{repo.display_name}}{%- if not loop.last %}, {% endif -%}
+          {%- endfor %}
+        data:
+          tag: HACS
 
 # TODO: Nightly Snapshots
 
