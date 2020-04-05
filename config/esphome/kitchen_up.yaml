@@ -1,0 +1,94 @@
+esphome:
+  name: kitchen_up
+  platform: ESP8266
+  board: esp01_1m
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_pass
+  manual_ip:
+    static_ip: !secret kitchen_up_ip
+    gateway: !secret gateway
+    subnet: !secret subnet
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Kitchen Up Fallback Hotspot"
+    password: !secret wifi_pass
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  password: !secret api_pass
+
+ota:
+  password: !secret ota_pass
+
+web_server:
+  port: 80
+
+light:
+  - platform: rgb
+    name: "Kitchen Up"
+    red: red_channel
+    green: green_channel
+    blue: blue_channel
+    effects:             # Add few effects : Slow and fast random colors and an "in alarm" mode.
+      - random:
+          name: "Slow Random Colors"
+          transition_length: 30s
+          update_interval: 30s
+      - random:
+          name: "Fast Random Colors"
+          transition_length: 4s
+          update_interval: 5s
+      - strobe:
+          name: In Alarm
+          colors:
+            - state: True
+              brightness: 100%
+              red: 100%
+              blue: 0%
+              green: 0%
+              duration: 150ms
+            - state: False
+              duration: 100ms
+            - state: True
+              brightness: 100%
+              red: 100%
+              blue: 0%
+              green: 0%
+              duration: 150ms
+            - state: False
+              duration: 100ms
+            - state: True
+              brightness: 100%
+              red: 0%
+              blue: 100%
+              green: 0%
+              duration: 150ms
+            - state: False
+              duration: 100ms
+            - state: True
+              brightness: 100%
+              red: 0%
+              blue: 100%
+              green: 0%
+              duration: 150ms
+            - state: False
+              duration: 100ms
+
+output:
+  - platform: esp8266_pwm
+    id: red_channel
+    pin: GPIO5
+  - platform: esp8266_pwm
+    id: green_channel
+    pin: GPIO12
+  - platform: esp8266_pwm
+    id: blue_channel
+    pin: GPIO13

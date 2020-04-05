@@ -1,12 +1,1 @@
 light:
-  # - platform: skybell
-
-  - platform: flux_led
-    devices:
-      192.168.5.3:
-        name: Kitchen - Down
-        mode: "rgb"
-
-      192.168.5.4:
-        name: Kitchen - Up
-        mode: "rgb"
