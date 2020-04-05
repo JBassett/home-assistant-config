@@ -13,7 +13,7 @@ cards:
     grid_energy_entity: sensor.house_daily_net_energy
     home_energy_entity: sensor.solar_daily_house_usage_energy
     solar_energy_entity: sensor.solar_daily_energy
-    energy_price: 0.11
+    energy_consumption_rate: 0.11
     money_unit: $
     production_is_positive: false
 
