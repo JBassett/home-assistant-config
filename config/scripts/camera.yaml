@@ -7,7 +7,7 @@ camera_motion:
         title: 'Motion Detected'
         data:
           image: '/api/camera_proxy/{{entity}}'
-          clickAction: /lovelace/7
+          clickAction: /lovelace/cameras
           actions:
             - action: disable_cameras
               title: Disable Detection
@@ -21,6 +21,7 @@ camera_motion_enable:
           - switch.camera_garage_motion_detection
           - switch.camera_living_motion_detection
           - switch.camera_driveway_motion_detection
+          # - switch.camera_front_door_motion_detection
 
 camera_motion_disable:
   alias: Disable Camera Motion
@@ -31,3 +32,4 @@ camera_motion_disable:
           - switch.camera_garage_motion_detection
           - switch.camera_living_motion_detection
           - switch.camera_driveway_motion_detection
+          # - switch.camera_front_door_motion_detection
