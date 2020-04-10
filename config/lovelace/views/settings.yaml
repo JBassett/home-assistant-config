@@ -248,6 +248,16 @@ cards:
           type: custom:fold-entity-row
           head:
             type: section
+            label: Solar
+        filter:
+          include:
+            - domain: automation
+              name: 'Solar - *'
+      - type: 'custom:auto-entities'
+        card:
+          type: custom:fold-entity-row
+          head:
+            type: section
             label: Sun
         filter:
           include:

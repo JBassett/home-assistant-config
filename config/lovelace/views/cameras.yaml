@@ -23,6 +23,10 @@ cards:
     entity: camera.driveway
     show_name: false
     show_state: false
+  - type: picture-entity
+    entity: camera.front_door
+    show_name: false
+    show_state: false
   - type: entities
     title: Motion Detection
     state_color: true
@@ -30,3 +34,4 @@ cards:
       - switch.camera_living_motion_detection
       - switch.camera_garage_motion_detection
       - switch.camera_driveway_motion_detection
+      - switch.camera_front_door_motion_detection
