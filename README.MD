@@ -53,7 +53,7 @@ My instance of Home Assistant is running as a docker container on my home [Unrai
 ![wyze-cam-v2](https://www.wyze.com/wp-content/uploads/2018/02/wyze-cam.jpg)
 
 These are the cameras on the inside of the house.  They are running [Dafang-Hacks](https://github.com/EliasKotlyar/Xiaomi-Dafang-Hacks) custom firmware.
-#### Skybell Doorbell
-[Product URL](http://www.skybell.com/)
+#### Amcrest Doorbell
+[Product URL](https://amcrest.com/smarthome-2-megapixel-wireless-doorbell-security-camera-1920-x-1080p-wifi-doorbell-camera-ip55-weatherproof-two-way-audio-ad110.html)
 
-![skybell-hd](https://cdn.shopify.com/s/files/1/0585/7745/products/skybell-hd-silver-blue-600x600.png?v=1472068680)
+![amcrest-ad110](https://amcrest.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/a/d/ad110-1.jpg)

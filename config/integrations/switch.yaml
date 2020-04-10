@@ -1,8 +1,4 @@
 switch:
-  # - platform: skybell
-  #   monitored_conditions:
-  #     - do_not_disturb
-  #     - motion_sensor
 
   - platform: wake_on_lan
     name: Gaming PC
@@ -34,3 +30,10 @@ switch:
         command_state: "curl -X GET 'http://192.168.2.1:9000/5/detection/status'"
         value_template: "{{ value | regex_search('ACTIVE') }}"
         friendly_name: 'Driveway Camera Motion Dedection'
+
+      camera_front_door_motion_detection:
+        command_on: "curl -X GET 'http://192.168.2.1:9000/6/detection/start'"
+        command_off: "curl -X GET 'http://192.168.2.1:9000/6/detection/pause'"
+        command_state: "curl -X GET 'http://192.168.2.1:9000/6/detection/status'"
+        value_template: "{{ value | regex_search('ACTIVE') }}"
+        friendly_name: 'Front Door Camera Motion Dedection'
