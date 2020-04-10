@@ -1,0 +1,26 @@
+- alias: Solar - Dark Outside
+  initial_state: 'on'
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.current_solar_power
+      below: .25
+      for:
+        minutes: 5
+  action:
+    - service: input_boolean.turn_on
+      data:
+        entity_id: input_boolean.dark_outside
+
+- alias: Solar - Bright Outside
+  initial_state: 'on'
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.current_solar_power
+      above: .3
+      for:
+        minutes: 5
+  action:
+    - service: input_boolean.turn_off
+      data:
+        entity_id: input_boolean.dark_outside
+

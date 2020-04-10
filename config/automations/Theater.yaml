@@ -18,8 +18,8 @@
         - light.kitchen_up
         - light.kitchen_down
       data:
-        rgb_color: [217, 255, 108]
-        brightness_pct: 2
+        rgb_color: [255, 255, 145]
+        brightness_pct: 25
 
 - alias: 'Theater - Stopping Media'
   initial_state: 'on'
