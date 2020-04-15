@@ -30,13 +30,13 @@ google_assistant:
       room: Kitchen
       name: Kitchen Up Lights
 ################## Living Room ##########################
-    switch.living_room_outlet_corner:
+    switch.living_room_corner:
       room: Living Room
       name: Living Room Outlet
       aliases:
         - Living Room Outlet Corner
         - Christmas Tree
-    switch.living_room_outlet_stairs:
+    switch.living_room_stairs:
       room: Living Room
       name: Living Room Outlet Stairs
     switch.camera_living_motion_detection:

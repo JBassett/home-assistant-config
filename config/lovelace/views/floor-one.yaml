@@ -24,8 +24,8 @@ cards:
         toggle: true
         entity: light.kitchen_down
 
-      - switch.living_room_outlet_corner
-      - switch.living_room_outlet_stairs
+      - switch.living_room_corner
+      - switch.living_room_stairs
       - switch.office_outlet
 
   - type: custom:mini-media-player

@@ -23,8 +23,8 @@ cards:
             hide_when_off: true
             toggle: true
           - entity: input_boolean.weston_nap
-          - entity: sensor.weston_humidity
-          - entity: sensor.weston_brightness
+          - entity: sensor.weston_relative_humidity
+          - entity: sensor.weston_luminance
 
       - title: Weston's Room Temp
         type: 'custom:mini-graph-card'
@@ -56,8 +56,8 @@ cards:
             hide_when_off: true
             toggle: true
           - entity: input_boolean.harrison_nap
-          - entity: sensor.harrison_humidity
-          - entity: sensor.harrison_brightness
+          - entity: sensor.harrison_relative_humidity
+          - entity: sensor.harrison_luminance
 
       - title: Harrison's Room Temp
         type: 'custom:mini-graph-card'

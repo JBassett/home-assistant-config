@@ -4,8 +4,8 @@ livingroom_off:
     - service: switch.turn_off
       data:
         entity_id:
-          - switch.living_room_outlet_corner
-          - switch.living_room_outlet_stairs
+          - switch.living_room_corner
+          - switch.living_room_stairs
 
 livingroom_on:
   alias: Livingroom - On
@@ -13,5 +13,5 @@ livingroom_on:
     - service: switch.turn_on
       data:
         entity_id:
-          - switch.living_room_outlet_corner
-          - switch.living_room_outlet_stairs
+          - switch.living_room_corner
+          - switch.living_room_stairs
