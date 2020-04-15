@@ -1,0 +1,21 @@
+- alias: 'Outside - On'
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: input_boolean.dark_outside
+      to: 'on'
+  condition:
+    - condition: state
+      entity_id: input_boolean.dark_outside
+      state: 'on'
+  action:
+    - service: script.outside_on
+
+- alias: 'Outside - Off'
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: input_boolean.sleeping
+      to: 'on'
+  action:
+    - service: script.outside_off

@@ -1,0 +1,38 @@
+- alias: 'Kitchen - On'
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: input_boolean.dark_outside
+      to: 'on'
+    - platform: state
+      entity_id: input_boolean.sleeping
+      to: 'off'
+    - platform: state
+      entity_id: sensor.home_status
+      to: 'Occupied'
+  condition:
+    - condition: state
+      entity_id: input_boolean.dark_outside
+      state: 'on'
+    - condition: state
+      entity_id: sensor.home_status
+      state: 'Occupied'
+  action:
+    - service: script.kitchen_on
+
+- alias: 'Kitchen - Off'
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: input_boolean.dark_outside
+      to: 'off'
+    - platform: state
+      entity_id: input_boolean.sleeping
+      to: 'on'
+    - platform: state
+      entity_id: sensor.home_status
+      to: 'Unoccupied'
+      for:  
+        minutes: 5
+  action:
+    - service: script.kitchen_off

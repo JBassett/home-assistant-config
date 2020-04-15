@@ -1,0 +1,49 @@
+- alias: Harrison - Keep Sleeping
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: input_boolean.harrison_nap
+      to: 'on'
+    - platform: state
+      entity_id: media_player.harrisons_room_speaker
+      from: 'playing'
+  condition:
+    - condition: state
+      entity_id: input_boolean.harrison_nap
+      state: 'on'
+  action:
+    - service: media_player.play_media
+      data:
+        entity_id: media_player.harrisons_room_speaker
+        media_content_id: !secret babbling_brook_url
+        media_content_type: 'music'
+
+- alias: Harrison - Wakup
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: input_boolean.harrison_nap
+      to: 'off'
+  action:
+    - service: input_boolean.turn_off
+      data:
+        entity_id: input_boolean.harrison_nap
+    - service: media_player.turn_off
+      data:
+        entity_id: media_player.harrisons_room_speaker
+    - service: fan.turn_off
+      data:
+        entity_id: fan.harrison_fan
+
+- alias: Harrison - Left the Building
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: sensor.home_status
+      to: 'Unoccupied'
+      for:  
+        minutes: 5
+  action:
+    - service: fan.turn_off
+      data:
+        entity_id: fan.harrison_fan

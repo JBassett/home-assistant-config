@@ -140,18 +140,6 @@ cards:
           type: custom:fold-entity-row
           head:
             type: section
-            label: AC Frozen
-        filter:
-          include:
-            - domain: automation
-              name: 'AC Frozen - *'
-        sort:
-          method: name
-      - type: 'custom:auto-entities'
-        card:
-          type: custom:fold-entity-row
-          head:
-            type: section
             label: Almost Home
         filter:
           include:
@@ -176,6 +164,18 @@ cards:
           type: custom:fold-entity-row
           head:
             type: section
+            label: Furnace
+        filter:
+          include:
+            - domain: automation
+              name: 'Furnace - *'
+        sort:
+          method: name
+      - type: 'custom:auto-entities'
+        card:
+          type: custom:fold-entity-row
+          head:
+            type: section
             label: Garage Door
         filter:
           include:
@@ -188,11 +188,11 @@ cards:
           type: custom:fold-entity-row
           head:
             type: section
-            label: House Status
+            label: Harrison
         filter:
           include:
             - domain: automation
-              name: 'House Status - *'
+              name: 'Harrison - *'
         sort:
           method: name
       - type: 'custom:auto-entities'
@@ -200,11 +200,11 @@ cards:
           type: custom:fold-entity-row
           head:
             type: section
-            label: Kids
+            label: Kitchen
         filter:
           include:
             - domain: automation
-              name: 'Kids - *'
+              name: 'Kitchen - *'
         sort:
           method: name
       - type: 'custom:auto-entities'
@@ -224,11 +224,47 @@ cards:
           type: custom:fold-entity-row
           head:
             type: section
+            label: Livingroom
+        filter:
+          include:
+            - domain: automation
+              name: 'Livingroom - *'
+        sort:
+          method: name
+      - type: 'custom:auto-entities'
+        card:
+          type: custom:fold-entity-row
+          head:
+            type: section
             label: Maintenance
         filter:
           include:
             - domain: automation
               name: 'Maintenance - *'
+        sort:
+          method: name
+      - type: 'custom:auto-entities'
+        card:
+          type: custom:fold-entity-row
+          head:
+            type: section
+            label: Master
+        filter:
+          include:
+            - domain: automation
+              name: 'Master - *'
+        sort:
+          method: name
+      - type: 'custom:auto-entities'
+        card:
+          type: custom:fold-entity-row
+          head:
+            type: section
+            label: Outside
+        filter:
+          include:
+            - domain: automation
+              name: 'Outside - *'
         sort:
           method: name
       - type: 'custom:auto-entities'
@@ -253,16 +289,6 @@ cards:
           include:
             - domain: automation
               name: 'Solar - *'
-      - type: 'custom:auto-entities'
-        card:
-          type: custom:fold-entity-row
-          head:
-            type: section
-            label: Sun
-        filter:
-          include:
-            - domain: automation
-              name: 'Sun - *'
         sort:
           method: name
       - type: 'custom:auto-entities'
@@ -275,5 +301,17 @@ cards:
           include:
             - domain: automation
               name: 'Theater - *'
+        sort:
+          method: name
+      - type: 'custom:auto-entities'
+        card:
+          type: custom:fold-entity-row
+          head:
+            type: section
+            label: Weston
+        filter:
+          include:
+            - domain: automation
+              name: 'Weston - *'
         sort:
           method: name

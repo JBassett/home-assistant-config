@@ -1,0 +1,12 @@
+- alias: Master - Left the Building
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: sensor.home_status
+      to: 'Unoccupied'
+      for:  
+        minutes: 5
+  action:
+    - service: fan.turn_off
+      data:
+        entity_id: fan.master_fan

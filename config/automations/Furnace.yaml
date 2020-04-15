@@ -1,0 +1,44 @@
+- alias: Furnace - AC Frozen
+  initial_state: 'on'
+  trigger:
+    platform: state
+    entity_id: sensor.family_room_thermostat_hvac_state
+    from: 'off'
+    to: 'cooling'
+    for:
+      hours: 4
+  action:
+    - service: tts.google_translate_say
+      entity_id: media_player.office_speaker
+      data:
+        message: 'Just a heads up, I think the AC might be frozen.'
+    - service: notify.mobile_app_pixel_2
+      data:
+        title: 'Possible AC Issue'
+        message: 'The AC has been running for 2 hours non stop.'
+
+- alias: Furnace - Away Mode
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: sensor.home_status
+      to: 'Unoccupied'
+      for:  
+        minutes: 5
+  action:
+    - service: nest.set_away_mode
+      data:
+        away_mode: away
+
+- alias: Furnace - Home Mode
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: sensor.home_status
+      to: 'Occupied'
+  action:
+    - service: nest.set_away_mode
+      data:
+        away_mode: home
+
+
