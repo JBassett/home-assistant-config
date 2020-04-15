@@ -11,3 +11,6 @@ input_boolean:
   dark_outside:
     name: Dark Outside
     icon: mdi:weather-night
+  sleeping:
+    name: Sleeping
+    icon: mdi:sleep
