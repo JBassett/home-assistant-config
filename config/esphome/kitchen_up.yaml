@@ -81,6 +81,49 @@ light:
               duration: 150ms
             - state: False
               duration: 100ms
+      - strobe:
+          name: Strobe - Rainbow
+          colors:
+            - state: True
+              brightness: 100%
+              red: 100%
+              green: 0%
+              blue: 0%
+              duration: 175ms
+            - state: False
+              duration: 175ms
+            - state: True
+              brightness: 100%
+              red: 0%
+              green: 100%
+              blue: 0%
+              duration: 175ms
+            - state: False
+              duration: 175ms
+            - state: True
+              brightness: 100%
+              red: 0%
+              green: 0%
+              blue: 100%
+              duration: 175ms
+            - state: False
+              duration: 175ms
+            - state: True
+              brightness: 100%
+              red: 100%
+              green: 14%
+              blue: 100%
+              duration: 175ms
+            - state: False
+              duration: 175ms
+            - state: True
+              brightness: 100%
+              red: 0%
+              green: 50%
+              blue: 100%
+              duration: 175ms
+            - state: False
+              duration: 175ms
 
 output:
   - platform: esp8266_pwm
