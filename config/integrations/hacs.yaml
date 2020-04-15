@@ -1,2 +1,0 @@
-hacs:
-  token: !secret github_pat

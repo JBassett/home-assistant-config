@@ -1,2 +1,0 @@
-roku:
-  - host: !secret tv_living_room_ip
