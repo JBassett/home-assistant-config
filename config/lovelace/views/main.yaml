@@ -78,7 +78,6 @@ cards:
           - zone.home
           - person.justin
           - person.shannon
-          
 
       - break
       
@@ -92,15 +91,3 @@ cards:
           - switch.driveway_light
           - light.garage_leds
           - light.porch_leds
-      
-      # - title: Chevy Bolt
-      #   type: entities
-      #   show_header_toggle: false
-      #   entities:
-      #     - binary_sensor.mychevy_2017_chevrolet_bolt_ev_plugged_in
-      #     - sensor.mychevy_2017_chevrolet_bolt_ev_battery_level
-      #     - sensor.mychevy_2017_chevrolet_bolt_ev_charge_mode
-      #     - sensor.mychevy_2017_chevrolet_bolt_ev_charged_by
-      #     - sensor.mychevy_2017_chevrolet_bolt_ev_electric_range
-      #     - sensor.mychevy_2017_chevrolet_bolt_ev_mileage
-      #     - sensor.mychevy_status

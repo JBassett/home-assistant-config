@@ -46,10 +46,6 @@ cards:
           data: 
             <<: *roku_remote
 
-  - title: Deebot
-    type: 'custom:more-info-card'
-    entity: vacuum.deebot
-
   - type: picture-entity
     entity: camera.living_room
     show_name: false

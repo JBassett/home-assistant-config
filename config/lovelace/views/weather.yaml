@@ -13,6 +13,13 @@ cards:
 
   - type: weather-forecast
     entity: weather.daily_forcast
+  - type: 'custom:weather-card-chart'
+    title: Weather Daily
+    weather: weather.daily_forcast
 
   - type: weather-forecast
     entity: weather.hourly_forcast
+  - type: 'custom:weather-card-chart'
+    title: Weather - Hourly
+    weather: weather.hourly_forcast
+    mode: hourly
