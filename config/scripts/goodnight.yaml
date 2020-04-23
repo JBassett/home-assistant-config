@@ -19,3 +19,8 @@ goodnight:
     - delay:
         minutes: 1
     - service: script.camera_motion_enable
+
+####################### Set Sleeping #####################
+    - service: input_boolean.turn_on
+      data:
+        entity_id: input_boolean.sleeping

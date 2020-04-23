@@ -8,12 +8,7 @@
       entity_id: sensor.home_status
       state: 'Occupied'
   action:
-    - service: script.camera_motion_disable
-    - delay:
-        seconds: 5
-    - service: input_boolean.turn_off
-      data:
-        entity_id: input_boolean.sleeping
+    - service: script.goodmorning
 
 
 - alias: 'Schedule - Bedtime'

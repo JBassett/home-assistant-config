@@ -3,7 +3,7 @@
   trigger:
     - platform: numeric_state
       entity_id: sensor.current_solar_power
-      below: .6
+      below: .8
       for:
         minutes: 5
   action:
@@ -16,7 +16,7 @@
   trigger:
     - platform: numeric_state
       entity_id: sensor.current_solar_power
-      above: .3
+      above: .8
       for:
         minutes: 5
   action:
