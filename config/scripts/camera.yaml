@@ -6,6 +6,7 @@ camera_motion:
         message: '{{ camera }} detected motion {{ now().strftime("%H:%M") }}'
         title: 'Motion Detected'
         data:
+          channel: Cameras
           image: '/api/camera_proxy/{{entity}}'
           clickAction: /lovelace/cameras
           actions:

@@ -16,6 +16,8 @@
       data:
         title: 'Possible AC Issue'
         message: 'The AC has been running for 2 hours non stop.'
+        data:
+          channel: Critical
 
 - alias: Furnace - Away Mode
   initial_state: 'on'

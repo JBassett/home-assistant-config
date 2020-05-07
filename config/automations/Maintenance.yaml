@@ -9,6 +9,8 @@
       data_template:
         title: 'New Home Assistant Release'
         message: "Home Assistant  {{ state_attr('binary_sensor.updater', 'newest_version') }}  is now available."
+        data:
+          channel: Updates
 
 - alias: Maintenance - HACS Update Notification
   trigger:
@@ -28,6 +30,7 @@
             {{repo.display_name}}{%- if not loop.last %}, {% endif -%}
           {%- endfor %}
         data:
+          channel: Updates
           tag: HACS
 
 # TODO: Nightly Snapshots
