@@ -76,6 +76,12 @@ cards:
         hours_to_show: 24
         entities:
           - zone.home
+          - zone.ofd_station_1
+          - zone.ofd_station_2
+          - zone.ofd_station_3
+          - zone.paychex_basket
+          - zone.rgh
+          - zone.urgent_care_now
           - person.justin
           - person.shannon
 
