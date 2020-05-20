@@ -6,5 +6,3 @@ http:
   ip_ban_enabled: true
 
   login_attempts_threshold: 5
-
-  base_url: !secret ha_url
