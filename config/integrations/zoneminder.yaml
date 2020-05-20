@@ -1,0 +1,2 @@
+zoneminder:
+  - host: !secret zoneminder_ip

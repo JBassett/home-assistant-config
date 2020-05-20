@@ -12,7 +12,8 @@
       to: 'Occupied'
   condition: []
   action:
-    - service: script.camera_motion_disable
+    - service: switch.turn_off
+      entity_id: switch.motion_detection
 
 - alias: Cameras - Enable Motion
   initial_state: 'on'
@@ -23,4 +24,5 @@
       for:  
         minutes: 6
   action:
-    - service: script.camera_motion_enable
+    - service: switch.turn_on
+      entity_id: switch.motion_detection

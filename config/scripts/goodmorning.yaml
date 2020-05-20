@@ -4,6 +4,8 @@ goodmorning:
     - service: input_boolean.turn_off
       data:
         entity_id: input_boolean.sleeping
-    - service: script.camera_motion_disable
+    - service: switch.turn_off
+      data:
+        entity_id: switch.motion_detection
     - service: script.kitchen_on
     - service: script.livingroom_on

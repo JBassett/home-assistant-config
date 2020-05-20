@@ -39,8 +39,6 @@ google_assistant:
     switch.living_room_stairs:
       room: Living Room
       name: Living Room Outlet Stairs
-    switch.camera_living_motion_detection:
-      room: Living Room
     input_boolean.guest_mode:
       room: Living Room
     vacuum.deebot:
@@ -58,8 +56,6 @@ google_assistant:
     switch.porch_light:
       room: Outside
       name: Porch Light
-    switch.camera_garage_motion_detection:
-      room: Outside
     light.garage_leds:
       room: Outside
       name: Garage LEDs

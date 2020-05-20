@@ -1,3 +1,6 @@
+- platform: zoneminder
+  include_archived: false
+
 - platform: plex_recently_added
   host: !secret plex_ip
   token: !secret plex_token

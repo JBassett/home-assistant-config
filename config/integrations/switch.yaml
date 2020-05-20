@@ -6,34 +6,24 @@ switch:
     broadcast_address: !secret gaming_pc_brodcast_ip
     host: !secret gaming_pc_ip
 
-  - platform: command_line
-    scan_interval:
-      seconds: 30
+  - platform: template
     switches:
-      camera_living_motion_detection:
-        command_on: "curl -X GET 'http://192.168.2.1:9000/3/detection/start'"
-        command_off: "curl -X GET 'http://192.168.2.1:9000/3/detection/pause'"
-        command_state: "curl -X GET 'http://192.168.2.1:9000/3/detection/status'"
-        value_template: "{{ value | regex_search('ACTIVE') }}"
-        friendly_name: 'Living Room Camera Motion Dedection'
-      
-      camera_garage_motion_detection:
-        command_on: "curl -X GET 'http://192.168.2.1:9000/4/detection/start'"
-        command_off: "curl -X GET 'http://192.168.2.1:9000/4/detection/pause'"
-        command_state: "curl -X GET 'http://192.168.2.1:9000/4/detection/status'"
-        value_template: "{{ value | regex_search('ACTIVE') }}"
-        friendly_name: 'Garage Camera Motion Dedection'
-      
-      camera_driveway_motion_detection:
-        command_on: "curl -X GET 'http://192.168.2.1:9000/5/detection/start'"
-        command_off: "curl -X GET 'http://192.168.2.1:9000/5/detection/pause'"
-        command_state: "curl -X GET 'http://192.168.2.1:9000/5/detection/status'"
-        value_template: "{{ value | regex_search('ACTIVE') }}"
-        friendly_name: 'Driveway Camera Motion Dedection'
-
-      camera_front_door_motion_detection:
-        command_on: "curl -X GET 'http://192.168.2.1:9000/6/detection/start'"
-        command_off: "curl -X GET 'http://192.168.2.1:9000/6/detection/pause'"
-        command_state: "curl -X GET 'http://192.168.2.1:9000/6/detection/status'"
-        value_template: "{{ value | regex_search('ACTIVE') }}"
-        friendly_name: 'Front Door Camera Motion Dedection'
+      motion_detection:
+        friendly_name: Motion Detection
+        value_template: "{{ not is_state('sensor.run_state', 'Monitor') }}"
+        turn_on:
+          service: zoneminder.set_run_state
+          data:
+            id: !secret zoneminder_ip
+            name: Record Motion
+        turn_off:
+          service: zoneminder.set_run_state
+          data:
+            id: !secret zoneminder_ip
+            name: Monitor
+        icon_template: >-
+          {% if not is_state('sensor.run_state', 'Monitor') %}
+            mdi:motion-sensor
+          {% else %}
+            mdi:motion-sensor-off
+          {% endif %}

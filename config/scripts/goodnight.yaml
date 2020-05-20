@@ -15,10 +15,10 @@ goodnight:
     - service: script.kitchen_off
     - service: script.livingroom_off
     - service: script.outside_off
-    # Need to make sure lights are really out before we start looking for motion.
-    - delay:
-        minutes: 1
-    - service: script.camera_motion_enable
+    
+    - service: switch.turn_off
+      data:
+        entity_id: switch.motion_detection
 
 ####################### Set Sleeping #####################
     - service: input_boolean.turn_on

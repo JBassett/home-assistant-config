@@ -2,19 +2,18 @@ title: Settings
 path: settings
 icon: 'mdi:settings'
 badges: []
+visible:
+  - user: !secret userid_justin
 cards:
-  - type: entities
-    title: Motion Detection
-    state_color: true
-    entities:
-      - switch.camera_living_motion_detection
-      - switch.camera_garage_motion_detection
-      - switch.camera_driveway_motion_detection
-      - switch.camera_front_door_motion_detection
   - type: entities
     title: Network Speed
     show_header_toggle: false
     entities:
+      - type: button
+        name: Start Test
+        tap_action:
+          action: call-service
+          service: speedtestdotnet.speedtest
       - type: custom:fold-entity-row
         head: sensor.speedtest_download
         entities:
