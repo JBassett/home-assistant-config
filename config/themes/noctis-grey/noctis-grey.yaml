@@ -14,10 +14,12 @@ noctis-grey:
   text-color: '#ffffff'
   primary-text-color: 'var(--text-color)'
   text-primary-color: 'var(--text-color)'
+  rgb-primary-text-color: 'var(--text-color)'
+  rgb-text-primary-color: 'var(--text-color)'
   secondary-text-color: '#BAC0C6'
   text-medium-light-color: '#A0A2A8'
   text-medium-color: '#80828A'
-  primary-color: '#1A89F5'
+  primary-color: 'var(--accent-color)'
 
   # Main Colors
   app-header-background-color: '#212121'
@@ -26,9 +28,10 @@ noctis-grey:
 
   # Background
   background-color: '#212121'
-  primary-background-color: '#212121'
+  primary-background-color: 'var(--background-color)'
   background-color-2: '#606060'
   secondary-background-color: 'none'
+  markdown-code-background-color: '#424242'
 
   # Card
   card-background-color: 'var(--paper-card-background-color)'
@@ -42,11 +45,11 @@ noctis-grey:
   paper-item-icon-active-color: 'var(--accent-color)'
 
   # Sidebar
-  sidebar-background-color: '#212121'
+  sidebar-background-color: 'var(--background-color)'
   sidebar-icon-color: '#7b7d80'
   sidebar-selected-icon-color: 'var(--accent-color)'
   sidebar-selected-text-color: 'var(--text-color)'
-  divider-color: '#212121'
+  divider-color: 'var(--background-color)'
   light-primary-color: 'var(--paper-card-background-color)'
 
   # Sliders
@@ -66,21 +69,24 @@ noctis-grey:
   switch-checked-track-color: 'var(--background-color-2)'
 
   # ListBox
-  paper-listbox-background-color: '#212121' # Also changes partial sidebar color
+  paper-listbox-background-color: 'transparent' # Also changes partial sidebar color
 
   # Radio Button
   paper-radio-button-checked-color: 'var(--accent-color)'
 
+  # Checkboxes
+  mdc-checkbox-unchecked-color: var(--text-medium-color);
+
   # Popups
   more-info-header-background: 'var(--secondary-background-color)'
-  paper-dialog-background-color: '#212121'
+  paper-dialog-background-color: 'var(--background-color)'
 
   # Tables
-  table-row-background-color: '#212121'
+  table-row-background-color: 'var(--background-color)'
   table-row-alternative-background-color: 'var(--paper-card-background-color)'
 
   # Badges and gauges
-  label-badge-background-color: '#212121'
+  label-badge-background-color: 'var(--background-color)'
   label-badge-text-color: 'var(--text-primary-color)'
   label-badge-red: '#B54949'
   label-badge-blue: '#539BE1'
@@ -93,7 +99,7 @@ noctis-grey:
   paper-toast-background-color: '#353535'
 
   # Custom Header
-  ch-background: '#212121'
+  ch-background: 'var(--background-color)'
   ch-active-tab-color: 'var(--accent-color)'
   ch-notification-dot-color: 'var(--accent-color)'
   ch-all-tabs-color: 'var(--sidebar-icon-color)'
