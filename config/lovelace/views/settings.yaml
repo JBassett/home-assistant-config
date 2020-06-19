@@ -59,6 +59,15 @@ cards:
               average: true
               extrema: true
 
+  - title: SpaceX
+    type: entities
+    show_header_toggle: false
+    entities:
+      - sensor.spacex_next_mission_name
+      - sensor.spacex_next_launch
+      - sensor.spacex_next_rocket
+      - sensor.spacex_next_launch_site
+
   - title: Certificates
     type: entities
     show_header_toggle: false

@@ -1,0 +1,34 @@
+- platform: rest
+  name: SpaceX
+  json_attributes:
+    - mission_name
+    - launch_site
+    - rocket
+    - links
+    - is_tentative
+  value_template: '{{ value_json["launch_date_unix"] }}'
+  resource: 'https://api.spacexdata.com/v2/launches/next'
+
+- platform: template
+  sensors:
+    spacex_next_launch:
+      friendly_name: 'Next Launch'
+      value_template: >- 
+        {% if states.sensor.spacex.attributes.is_tentative %}
+          TBD
+        {% else %}
+          {{ states["sensor.spacex"].state | int | timestamp_local }}
+        {% endif %}
+      device_class: timestamp
+
+    spacex_next_rocket:
+      friendly_name: 'Rocket'
+      value_template: '{{ states.sensor.spacex.attributes["rocket"]["rocket_name"] }}'
+
+    spacex_next_launch_site:
+      friendly_name: 'Site'
+      value_template: '{{ states.sensor.spacex.attributes["launch_site"]["site_name"] }}'
+
+    spacex_next_mission_name:
+      friendly_name: 'Mission'
+      value_template: '{{ states.sensor.spacex.attributes["mission_name"] }}'
