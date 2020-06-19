@@ -33,18 +33,27 @@ cards:
 
   - type: custom:mini-media-player
     entity: media_player.office_speaker
+  - title: Office
+    type: entities
+    entities:
+      - sensor.office_temperature
+      - sensor.office_relative_humidity
 
-  - type: custom:mini-media-player
-    title: Living Room TV
-    entity: media_player.living_room_tv
-    volume_stateless: true
-    shortcuts:
-      buttons:
-        - icon: mdi:remote-tv
-          type: service
-          id: browser_mod.popup
-          data: 
-            <<: *roku_remote
+
+  - type: entities
+    entities:
+      - type: custom:mini-media-player
+        title: Living Room TV
+        entity: media_player.living_room_tv
+        volume_stateless: true
+      - type: custom:fold-entity-row
+        head:
+          type: section
+          label: Remote
+        entities:
+          - type: 'custom:roku-card'
+            entity: media_player.living_room_tv
+            tv: true
 
   - type: picture-entity
     entity: camera.living_room

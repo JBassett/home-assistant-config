@@ -29,6 +29,7 @@ cards:
         points_per_hour: 2
         entities:
           - sensor.family_room_thermostat_temperature
+          - sensor.office_temperature
           - sensor.weston_temperature
           - sensor.harrison_temperature
 
