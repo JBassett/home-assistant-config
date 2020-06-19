@@ -1,0 +1,35 @@
+- platform: rest
+  name: Bolt Raw
+  resource: !secret abrp_url
+  headers:
+    authorization: !secret abrp_auth
+  scan_interval: 30
+  json_attributes_path: $.result[0].tlm
+  json_attributes:
+    - batt_temp
+    - elevation
+    - heading
+    - is_charging
+    - lat
+    - lon
+    - outside_temp
+    - soc
+    - utc
+  value_template: '{{ value_json.result[0].tlm.soc }}'
+  unit_of_measurement: '%'
+  device_class: battery
+
+- platform: template
+  sensors:
+    bolt_soc:
+      friendly_name: Bolt - Current Charge
+      entity_id: sensor.bolt_raw
+      value_template: '{{ states["sensor.bolt_raw"].state | round(2) }}'
+      unit_of_measurement: '%'
+      device_class: battery
+
+    bolt_last_update:
+      friendly_name: Bolt - Last Update
+      entity_id: sensor.bolt_raw
+      value_template: '{{ states["sensor.bolt_raw"].attributes.utc | timestamp_local }}'
+      device_class: timestamp
