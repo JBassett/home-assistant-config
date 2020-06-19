@@ -5,25 +5,3 @@ switch:
     mac: !secret gaming_pc_mac
     broadcast_address: !secret gaming_pc_brodcast_ip
     host: !secret gaming_pc_ip
-
-  - platform: template
-    switches:
-      motion_detection:
-        friendly_name: Motion Detection
-        value_template: "{{ not is_state('sensor.run_state', 'Monitor') }}"
-        turn_on:
-          service: zoneminder.set_run_state
-          data:
-            id: !secret zoneminder_ip
-            name: Record Motion
-        turn_off:
-          service: zoneminder.set_run_state
-          data:
-            id: !secret zoneminder_ip
-            name: Monitor
-        icon_template: >-
-          {% if not is_state('sensor.run_state', 'Monitor') %}
-            mdi:motion-sensor
-          {% else %}
-            mdi:motion-sensor-off
-          {% endif %}

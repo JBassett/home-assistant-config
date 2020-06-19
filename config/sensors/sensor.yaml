@@ -1,6 +1,3 @@
-- platform: zoneminder
-  include_archived: false
-
 - platform: plex_recently_added
   host: !secret plex_ip
   token: !secret plex_token
@@ -28,14 +25,6 @@
   port: !secret radarr_port
   days: 120
 
-- platform: sonarr
-  api_key: !secret sonarr_api
-  host: !secret sonarr_ip
-  port: !secret sonarr_port
-  monitored_conditions:
-    - upcoming
-    - wanted
-    - commands
 - platform: sonarr_upcoming_media
   api_key: !secret sonarr_api
   host: !secret sonarr_ip
