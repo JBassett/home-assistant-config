@@ -98,3 +98,10 @@ cards:
           - switch.driveway_light
           - light.garage_leds
           - light.porch_leds
+
+      - title: Bolt
+        type: entities
+        show_header_toggle: false
+        entities:
+          - sensor.bolt_soc
+          - sensor.bolt_last_update

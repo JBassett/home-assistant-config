@@ -1,0 +1,22 @@
+- alias: Bolt - Plug Me In
+  initial_state: 'on'
+  trigger:
+    - platform: time
+      at: "21:00:00"
+    - platform: state
+      entity_id: input_boolean.sleeping
+      to: 'on'
+  condition:
+    - condition: state
+      entity_id: person.justin
+      state: home
+    - condition: numeric_state
+      entity_id: sensor.bolt_soc
+      below: 60
+    - condition: template
+      value_template: "{{ states.sensor.bolt_raw.attributes.is_charging == 0 }}"
+  action:
+    - service: notify.mobile_app_pixel_2
+      data:
+        message: Bolt is currently at {{ states.sensor.bolt_soc.state }}%
+        title: Don't Forget to Charge

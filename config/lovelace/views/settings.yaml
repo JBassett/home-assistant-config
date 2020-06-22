@@ -168,6 +168,18 @@ cards:
           type: custom:fold-entity-row
           head:
             type: section
+            label: Bolt
+        filter:
+          include:
+            - domain: automation
+              name: 'Bolt - *'
+        sort:
+          method: name
+      - type: 'custom:auto-entities'
+        card:
+          type: custom:fold-entity-row
+          head:
+            type: section
             label: Cameras
         filter:
           include:
