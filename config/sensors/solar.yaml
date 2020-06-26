@@ -26,31 +26,3 @@
       value_template: >-
         {{states('sensor.solar_daily_energy')|float + states('sensor.house_daily_net_energy')|float}}
 
-- platform: filter
-  name: 'Current Solar Power'
-  entity_id: sensor.solar_raw_total_power
-  filters:
-    - filter: lowpass
-      time_constant: 15
-      precision: 2
-- platform: filter
-  name: 'Current House Usage'
-  entity_id: sensor.solar_raw_house_usage
-  filters:
-    - filter: lowpass
-      time_constant: 15
-      precision: 2
-- platform: filter
-  name: 'Current Power Export'
-  entity_id: sensor.solar_raw_grid_export
-  filters:
-    - filter: lowpass
-      time_constant: 15
-      precision: 2
-- platform: filter
-  name: 'Current House Consumption'
-  entity_id: sensor.solar_consumptionmeter_pvs5m644235c
-  filters:
-    - filter: lowpass
-      time_constant: 15
-      precision: 2

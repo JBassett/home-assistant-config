@@ -2,7 +2,7 @@
   initial_state: 'on'
   trigger:
     - platform: numeric_state
-      entity_id: sensor.current_solar_power
+      entity_id: sensor.solar_raw_total_power
       below: .8
       for:
         minutes: 5
@@ -15,7 +15,7 @@
   initial_state: 'on'
   trigger:
     - platform: numeric_state
-      entity_id: sensor.current_solar_power
+      entity_id: sensor.solar_raw_total_power
       above: .8
       for:
         minutes: 5
