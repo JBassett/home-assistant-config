@@ -35,7 +35,7 @@ cards:
 
       - break
 
-      - title: Locations
+      - title: People
         type: entities
         show_header_toggle: false
         entities:
@@ -105,3 +105,13 @@ cards:
         entities:
           - sensor.bolt_soc
           - sensor.bolt_last_update
+          - type: 'custom:mini-graph-card'
+            hour24: true
+            extrema: true
+            hours_to_show: 6
+            points_per_hour: 10
+            show:
+              icon: false
+              state: false
+            entities:
+              - sensor.bolt_soc

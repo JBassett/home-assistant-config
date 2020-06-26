@@ -5,8 +5,8 @@ badges: []
 visible:
   - user: !secret userid_justin
 cards:
-  - type: entities
-    title: Network Speed
+  - title: Network Speed
+    type: entities
     show_header_toggle: false
     entities:
       - type: button
@@ -147,8 +147,8 @@ cards:
         sort:
           method: name
 
-  - type: entities
-    title: Automations
+  - title: Automations
+    type: entities
     show_header_toggle: false
     entities:
       - type: 'custom:auto-entities'
