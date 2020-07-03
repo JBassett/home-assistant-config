@@ -12,7 +12,7 @@
   action:
     - service: notify.mobile_app_pixel_2
       data:
-        message: SpaceX will be launching at {{ states.sensor.spacex.state | timestamp_local }}
+        message: SpaceX will be launching at {{ states.sensor.spacex.state | int | timestamp_local }}
         title: SpaceX Launch Soon
         data:
           clickAction: "{{ states.sensor.spacex.attributes.links.video_link }}"
