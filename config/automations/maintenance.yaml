@@ -33,6 +33,20 @@
           channel: Updates
           tag: HACS
 
+- alias: Maintenance - HACS Clear Update Notification
+  trigger:
+    - platform: state
+      entity_id: sensor.hacs
+      to: "0"
+  condition: []
+  action:
+    - service: notify.mobile_app_pixel_2
+      data:
+        message: clear_notification
+        data:
+          channel: Updates
+          tag: HACS
+
 # TODO: Nightly Snapshots
 
 # TODO: Pre Upgrade Snapshot
