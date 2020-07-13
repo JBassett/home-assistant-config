@@ -15,7 +15,7 @@
     - service: media_player.play_media
       data:
         entity_id: media_player.harrisons_room_speaker
-        media_content_id: !secret babbling_brook_url
+        media_content_id: !secret ocean_sounds_url
         media_content_type: 'music'
 
 - alias: Harrison - Wakup
