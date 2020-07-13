@@ -44,7 +44,6 @@
       data:
         message: clear_notification
         data:
-          channel: Updates
           tag: HACS
 
 # TODO: Nightly Snapshots
