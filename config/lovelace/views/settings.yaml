@@ -1,6 +1,6 @@
 title: Settings
 path: settings
-icon: 'mdi:settings'
+icon: 'mdi:cog'
 badges: []
 visible:
   - user: !secret userid_justin

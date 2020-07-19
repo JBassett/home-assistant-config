@@ -1,6 +1,6 @@
 title: Financial
 path: finance
-icon: 'mdi:square-inc-cash'
+icon: 'mdi:account-cash-outline'
 badges: []
 # This is so the CSS isn't forcing everything into a single column
 panel: true
