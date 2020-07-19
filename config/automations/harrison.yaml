@@ -1,3 +1,25 @@
+- alias: Harrison - Sleep
+  initial_state: 'on'
+  trigger:
+    # Start times
+    - platform: time
+      at: '08:45:00'
+    - platform: time
+      at: '12:45:00'
+    - platform: time
+      at: '18:15:00'
+  condition:
+    - condition: state
+      entity_id: sensor.home_status
+      state: Occupied
+  action:
+    - service: input_boolean.turn_on
+      data:
+        entity_id: input_boolean.harrison_nap
+    - service: automation.trigger
+      data:
+        entity_id: automation.harrison_fan_control
+
 - alias: Harrison - Keep Sleeping
   initial_state: 'on'
   trigger:
@@ -34,6 +56,35 @@
     - service: fan.turn_off
       data:
         entity_id: fan.harrison_fan
+
+- alias: Harrison - Fan Control
+  initial_state: 'on'
+  trigger:
+    # This doesn't update too much, should be safe
+    - platform: state
+      entity_id: sensor.harrison_temperature
+  condition:
+    - condition: state
+      entity_id: input_boolean.harrison_nap
+      state: 'on'
+    - condition: state
+      entity_id: sensor.family_room_thermostat_operation_mode
+      state: 'cool'
+  action:
+    - service: fan.set_speed
+      data_template:
+        entity_id: fan.harrison_fan
+        speed: >
+          {%set diff=states('sensor.harrison_temperature')|float - state_attr('climate.family_room', 'current_temperature')|float%}
+          {% if diff < 2 %}
+            off
+          {% elif diff < 4 %}
+            low
+          {% elif diff < 6 %}
+            medium
+          {% else %}
+            high
+          {% endif%}
 
 - alias: Harrison - Left the Building
   initial_state: 'on'
