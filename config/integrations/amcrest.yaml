@@ -1,6 +1,6 @@
-amcrest:
-  - host: !secret amcrest_ip
-    username: !secret amcrest_user
-    password: !secret amcrest_pass 
-    name: Front Door
-    binary_sensors: [motion_detected, online]
+# amcrest:
+#   - host: !secret amcrest_ip
+#     username: !secret amcrest_user
+#     password: !secret amcrest_pass 
+#     name: Front Door
+#     binary_sensors: [motion_detected, online]
