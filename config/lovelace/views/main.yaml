@@ -105,12 +105,22 @@ cards:
         show_header_toggle: false
         entities:
           - sensor.bolt_soc
-          - sensor.bolt_last_update
+          - sensor.bolt_battery_temp
           - type: 'custom:mini-graph-card'
             hour24: true
             extrema: true
             hours_to_show: 6
             points_per_hour: 10
+            lower_bound: 0
+            upper_bound: 100
+            color_thresholds:
+              - value: 100
+                color: green
+              - value: 50
+                color: yellow
+              - value: 0
+                color: red
+          
             show:
               icon: false
               state: false

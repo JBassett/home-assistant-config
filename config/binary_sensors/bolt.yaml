@@ -3,5 +3,5 @@
     bolt_charging:
       friendly_name: 'Bolt - Charging'
       entity_id: sensor.bolt_raw
-      value_template: '{{ states["sensor.bolt_raw"].attributes.is_charging == 1 }}'
+      value_template: '{{ states["sensor.bolt_raw"].attributes.is_charging }}'
       device_class: battery_charging
