@@ -1,4 +1,5 @@
-- alias: Harrison - Sleep
+- id: 8c854893-f82c-4fe5-9d37-d3d6f36f89b1
+  alias: Harrison - Sleep
   initial_state: 'on'
   trigger:
     # Start times
@@ -20,7 +21,8 @@
       data:
         entity_id: automation.harrison_fan_control
 
-- alias: Harrison - Keep Sleeping
+- id: 65b05a5e-aa84-4ee7-8758-27927054b049
+  alias: Harrison - Keep Sleeping
   initial_state: 'on'
   trigger:
     - platform: state
@@ -40,7 +42,8 @@
         media_content_id: !secret ocean_sounds_url
         media_content_type: 'music'
 
-- alias: Harrison - Wakup
+- id: 71ff4a11-7a4d-4f49-9d8e-de8b024feaa6
+  alias: Harrison - Wakup
   initial_state: 'on'
   trigger:
     - platform: state
@@ -57,7 +60,8 @@
       data:
         entity_id: fan.harrison_fan
 
-- alias: Harrison - Fan Control
+- id: 8880f282-3b23-48ad-b9d8-34c83abb535c
+  alias: Harrison - Fan Control
   initial_state: 'on'
   trigger:
     # This doesn't update too much, should be safe
@@ -86,7 +90,8 @@
             high
           {% endif%}
 
-- alias: Harrison - Left the Building
+- id: e688ff91-671f-426a-a63b-28e507e35706
+  alias: Harrison - Left the Building
   initial_state: 'on'
   trigger:
     - platform: state

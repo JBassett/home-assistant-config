@@ -1,4 +1,5 @@
-- alias: Maintenance - HA Update Notification
+- id: a212fb84-d631-4227-a434-54df8801b915
+  alias: Maintenance - HA Update Notification
   trigger:
     - platform: state
       entity_id: binary_sensor.updater
@@ -12,7 +13,8 @@
         data:
           channel: Updates
 
-- alias: Maintenance - HACS Update Notification
+- id: 35d10f53-5a94-468c-bce2-152c2903bda3
+  alias: Maintenance - HACS Update Notification
   trigger:
     - platform: state
       entity_id: sensor.hacs
@@ -33,7 +35,8 @@
           channel: Updates
           tag: HACS
 
-- alias: Maintenance - HACS Clear Update Notification
+- id: 315d8975-7f69-4348-b191-31ec1608d3d8
+  alias: Maintenance - HACS Clear Update Notification
   trigger:
     - platform: state
       entity_id: sensor.hacs

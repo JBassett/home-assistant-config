@@ -1,4 +1,5 @@
-- alias: 'Schedule - Wake Up'
+- id: 80b144d9-d108-4f29-a7cd-01c730e7b8ea
+  alias: 'Schedule - Wake Up'
   initial_state: 'on'
   trigger:
     - platform: time
@@ -11,7 +12,8 @@
     - service: script.goodmorning
 
 
-- alias: 'Schedule - Bedtime'
+- id: 775bbb47-3e20-4c6f-bf19-b2c8d232490b
+  alias: 'Schedule - Bedtime'
   initial_state: 'on'
   trigger:
     - platform: time

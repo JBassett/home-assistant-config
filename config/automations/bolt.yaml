@@ -1,4 +1,5 @@
-- alias: Bolt - Plug Me In
+- id: 6cf596d9-0cff-40ee-90fc-71aa64dddff2
+  alias: Bolt - Plug Me In
   initial_state: 'on'
   trigger:
     - platform: time

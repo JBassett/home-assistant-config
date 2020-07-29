@@ -1,4 +1,5 @@
-- alias: 'SpaceX - Push Notification'
+- id: c43a47e8-ce29-4ac0-b6ff-cbc35f13acb9
+  alias: 'SpaceX - Push Notification'
   initial_state: 'on'
   trigger:
     - platform: time_pattern
@@ -20,7 +21,8 @@
       data: 
         entity_id: automation.spacex_tts
 
-- alias: 'SpaceX - TTS'
+- id: 20c8c7d2-fdb3-443d-89f6-6ad2d7449b12
+  alias: 'SpaceX - TTS'
   initial_state: 'off'
   trigger:
     - platform: time_pattern

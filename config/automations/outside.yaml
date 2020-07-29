@@ -1,4 +1,5 @@
-- alias: 'Outside - On'
+- id: 431ca703-0f9c-4a0f-a216-14423705634d
+  alias: 'Outside - On'
   initial_state: 'on'
   trigger:
     - platform: state
@@ -11,7 +12,8 @@
   action:
     - service: script.outside_on
 
-- alias: 'Outside - Off'
+- id: 20dd259f-f98b-4200-875d-305552701c50
+  alias: 'Outside - Off'
   initial_state: 'on'
   trigger:
     - platform: state

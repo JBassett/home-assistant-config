@@ -1,4 +1,5 @@
-- alias: Weston - Sleep
+- id: ee48101c-720f-4d4d-84c4-796f3a3eb424
+  alias: Weston - Sleep
   initial_state: 'on'
   trigger:
     # Start times
@@ -30,7 +31,8 @@
       data:
         entity_id: automation.weston_fan_control
 
-- alias: Weston - Keep Sleeping
+- id: 9d684000-821b-49c3-9770-3fa876b6effb
+  alias: Weston - Keep Sleeping
   initial_state: 'on'
   trigger:
     - platform: state
@@ -50,7 +52,8 @@
         media_content_id: !secret ocean_sounds_url
         media_content_type: 'music'
 
-- alias: Weston - Wakup
+- id: 8ab6d2cd-32fa-494f-a0e8-271dda57fa04
+  alias: Weston - Wakup
   initial_state: 'on'
   trigger:
     - platform: state
@@ -71,7 +74,8 @@
       data:
         entity_id: fan.weston_fan
 
-- alias: Weston - Fan Control
+- id: d1007417-f48d-4f5c-a06e-8d712a2ef51a
+  alias: Weston - Fan Control
   initial_state: 'on'
   trigger:
     # This doesn't update too much, should be safe
@@ -100,7 +104,8 @@
             high
           {% endif%}
 
-- alias: Weston - Left the Building
+- id: bf581eb5-e533-48fe-a374-20be26d49b48
+  alias: Weston - Left the Building
   initial_state: 'on'
   trigger:
     - platform: state

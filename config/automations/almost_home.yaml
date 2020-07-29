@@ -1,4 +1,4 @@
-- id: '1529578174545'
+- id: 40093ae1-3ed7-44bf-8054-8ad8a629e293
   alias: 'Almost Home - Shannon Almost Home'
   initial_state: 'on'
   trigger:
@@ -15,7 +15,7 @@
       data:
         message: Shannon is almost home!
 
-- id: '1529578278693'
+- id: 34b1357f-3b64-44ed-b269-2206a6a3b217
   alias: 'Almost Home - Justin Almost Home'
   initial_state: 'on'
   trigger:
