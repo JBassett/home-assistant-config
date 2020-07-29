@@ -19,6 +19,7 @@
   - service: tts.google_translate_say
     entity_id: media_player.kitchen_display
     data_template:
+      cache: false
       message: "Get the popcorn ready, I just downloaded {{ trigger.event.data['Metadata']['title'] }}."
 
 - id: aab1c07c-d1b3-4164-aeeb-52b4a92f7835
@@ -42,6 +43,7 @@
   - service: tts.google_translate_say
     entity_id: media_player.kitchen_display
     data_template:
+      cache: false
       message: "Good news, I downloaded a new episode of {{ trigger.event.data['Metadata']['grandparentTitle'] }}."
 
 - id: 88ecff53-91aa-4851-9e80-22997499db11
@@ -65,4 +67,5 @@
   - service: tts.google_translate_say
     entity_id: media_player.kitchen_display
     data_template:
+      cache: false
       message: "Music to my ears, {{ trigger.event.data['album'] }} by {{ trigger.event.data['artist'] }} is ready for a listen."

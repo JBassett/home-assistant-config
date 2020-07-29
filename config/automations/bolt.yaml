@@ -14,10 +14,19 @@
     - condition: numeric_state
       entity_id: sensor.bolt_soc
       below: 60
-    - condition: template
-      value_template: "{{ states.sensor.bolt_raw.attributes.is_charging == 0 }}"
+    - condition: state
+      entity_id: binary_sensor.bolt_charging
+      state: 'off'
   action:
     - service: notify.mobile_app_pixel_2
       data:
         message: Bolt is currently at {{ states.sensor.bolt_soc.state }}%
         title: Don't Forget to Charge
+    - service: tts.google_translate_say
+      entity_id: 
+        - media_player.kitchen_display
+        - media_player.office_speaker
+        - media_player.master_bedroom_speaker
+      data_template:
+        cache: false
+        message: "The bolt isn't charging and is only at {{ states.sensor.bolt_soc.state | round }} percent."
