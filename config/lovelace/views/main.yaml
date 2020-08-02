@@ -86,6 +86,7 @@ cards:
           - zone.urgent_care_now
           - person.justin
           - person.shannon
+          - device_tracker.bolt
 
       - break
       

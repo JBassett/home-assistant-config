@@ -3,3 +3,6 @@ person.justin:
 
 person.shannon:
   entity_picture: /local/avatars/Shannon.jpg
+
+device_tracker.bolt:
+  entity_picture: /local/avatars/Bolt.jpg

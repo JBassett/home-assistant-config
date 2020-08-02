@@ -9,7 +9,7 @@
       to: 'on'
   condition:
     - condition: state
-      entity_id: person.justin
+      entity_id: device_tracker.bolt
       state: home
     - condition: numeric_state
       entity_id: sensor.bolt_soc
@@ -30,3 +30,17 @@
       data_template:
         cache: false
         message: "The bolt isn't charging and is only at {{ states.sensor.bolt_soc.state | round }} percent."
+
+- id: 59095d08-adb2-4ee1-be4f-adce49b1feca
+  alias: Bolt - Location Update
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: sensor.bolt_raw
+  action:
+    - service: device_tracker.see
+      data_template:
+        dev_id: bolt
+        gps:
+          - "{{ state_attr('sensor.bolt_raw', 'lat') }}"
+          - "{{ state_attr('sensor.bolt_raw', 'lon') }}"
