@@ -41,6 +41,7 @@
     - service: device_tracker.see
       data_template:
         dev_id: bolt
+        gps_accuracy: 50
         gps:
           - "{{ state_attr('sensor.bolt_raw', 'lat') }}"
           - "{{ state_attr('sensor.bolt_raw', 'lon') }}"
