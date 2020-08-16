@@ -12,10 +12,10 @@ cards:
     entity: camera.radar
 
   - type: weather-forecast
-    entity: weather.daily_forcast
+    entity: weather.misty_way
   - type: 'custom:weather-card-chart'
     title: Weather Daily
-    weather: weather.daily_forcast
+    weather: weather.misty_way
 
   - type: weather-forecast
     entity: weather.hourly_forcast
