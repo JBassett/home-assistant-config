@@ -2,6 +2,11 @@
   alias: Bolt - Plug Me In
   initial_state: 'on'
   trigger:
+    - platform: state
+      entity_id: device_tracker.bolt
+      to: "home"
+      for: 
+        minutes: 10
     - platform: time
       at: "21:00:00"
     - platform: state
