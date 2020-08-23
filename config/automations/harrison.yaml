@@ -4,11 +4,9 @@
   trigger:
     # Start times
     - platform: time
-      at: '08:45:00'
-    - platform: time
-      at: '12:45:00'
-    - platform: time
-      at: '18:15:00'
+      at: 
+        - '11:45:00'
+        - '18:30:00'
   condition:
     - condition: state
       entity_id: sensor.home_status

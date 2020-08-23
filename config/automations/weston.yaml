@@ -4,25 +4,13 @@
   trigger:
     # Start times
     - platform: time
-      at: '12:30:00'
-    - platform: time
-      at: '19:00:00'
-    - platform: state
-      entity_id: sensor.home_status
-      from: Unoccupied
-      to: Occupied
+      at: 
+        - '11:45:00'
+        - '19:15:00'
   condition:
     - condition: state
       entity_id: sensor.home_status
       state: Occupied
-    - condition: or
-      conditions:
-        - condition: time
-          after: '12:30:00'
-          before: '16:00:00'
-        - condition: time
-          after: '19:00:00'
-          before: '08:30:00'
   action:
     - service: input_boolean.turn_on
       data:
