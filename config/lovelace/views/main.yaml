@@ -124,5 +124,5 @@ cards:
               labels: true
             entities:
               - sensor.bolt_soc
-
+          - binary_sensor.bolt_charging
           - sensor.bolt_battery_temp
