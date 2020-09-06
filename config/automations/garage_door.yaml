@@ -53,9 +53,32 @@
         title: Almost Home!
         message: Would you like to open the garage door?
         data:
+          tag: garage_door
           actions:
             - title: Open Door
               action: open_garage
+
+- alias: 'Garage Door - Cancel Notification'
+  id: dadccb33-a645-4f21-801d-0ecade15e227
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: device_tracker.pixel_2
+      from: away
+      to: home
+      for:
+        minutes: 2
+    - platform: state
+      entity_id: cover.garage_door_opener
+      from: closed
+      to: open
+  condition: []
+  action:
+    - service: notify.mobile_app_pixel_2
+      data:
+        message: clear_notification
+        data:
+          tag: garage_door
 
 - alias: 'Garage Door - Open'
   id: 7f9ab45d-493d-4ff0-9c9f-483bebdf1f20
