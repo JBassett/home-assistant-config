@@ -1,5 +1,5 @@
-- id: f2e584e1-3c07-4da2-ac24-99ada3fd659f
-  alias: 'Garage Door - Left Open Notification'
+- alias: 'Garage Door - Left Open Notification'
+  id: f2e584e1-3c07-4da2-ac24-99ada3fd659f
   initial_state: 'on'
   trigger:
     - platform: state
@@ -19,8 +19,8 @@
           - action: close_garage
             title: Close Door
 
-- id: 04e14641-dec5-4fff-bfad-c63cae25e1f6
-  alias: 'Garage Door - Close'
+- alias: 'Garage Door - Close'
+  id: 04e14641-dec5-4fff-bfad-c63cae25e1f6
   initial_state: 'on'
   trigger:
     - platform: event
@@ -33,14 +33,14 @@
       data:
         entity_id: cover.garage_door_opener
 
-- id: d24a2f83-eade-47f2-a7dd-2563fb7c7d83
-  alias: 'Garage Door - Almost Home Notification'
+- alias: 'Garage Door - Almost Home Notification'
+  id: d24a2f83-eade-47f2-a7dd-2563fb7c7d83
   initial_state: 'on'
   trigger:
-  - platform: numeric_state
-    entity_id: proximity.home_justin
-    above: '0'
-    below: '2'
+    - platform: numeric_state
+      entity_id: proximity.home_justin
+      above: '0'
+      below: '2'
   condition:
     - condition: state
       entity_id: cover.garage_door_opener
@@ -57,8 +57,8 @@
             - title: Open Door
               action: open_garage
 
-- id: 7f9ab45d-493d-4ff0-9c9f-483bebdf1f20
-  alias: 'Garage Door - Open'
+- alias: 'Garage Door - Open'
+  id: 7f9ab45d-493d-4ff0-9c9f-483bebdf1f20
   initial_state: 'on'
   trigger:
     - platform: event
@@ -71,9 +71,8 @@
       data:
         entity_id: cover.garage_door_opener
 
-
-- id: 52340028-d645-4654-9c06-ee4158ef027b
-  alias: 'Garage Door - Opened/Closed not home'
+- alias: 'Garage Door - Opened/Closed not home'
+  id: 52340028-d645-4654-9c06-ee4158ef027b
   initial_state: 'on'
   trigger:
     - entity_id: cover.garage_door_opener
@@ -86,7 +85,7 @@
       to: Open
   condition:
     - condition: state
-      entity_id: group.home_status
+      entity_id: sensor.home_status
       state: Unoccupied
   action:
     - service: notify.mobile_app_pixel_2
