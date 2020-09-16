@@ -74,7 +74,7 @@
       state: 'cool'
   action:
     - service: fan.set_speed
-      data_template:
+      data:
         entity_id: fan.harrison_fan
         speed: >
           {%set diff=states('sensor.harrison_temperature')|float - state_attr('climate.family_room', 'current_temperature')|float%}

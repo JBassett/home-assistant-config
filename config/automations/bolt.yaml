@@ -32,7 +32,7 @@
         - media_player.kitchen_display
         - media_player.office_speaker
         - media_player.master_bedroom_speaker
-      data_template:
+      data:
         cache: false
         message: "The bolt isn't charging and is only at {{ states.sensor.bolt_soc.state | round }} percent."
 
@@ -44,7 +44,7 @@
       entity_id: sensor.bolt_raw
   action:
     - service: device_tracker.see
-      data_template:
+      data:
         dev_id: bolt
         gps_accuracy: 50
         gps:

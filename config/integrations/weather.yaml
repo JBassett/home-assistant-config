@@ -2,13 +2,3 @@ weather:
   - platform: darksky
     api_key: !secret darksky_key
     mode: daily
-
-  - platform: openweathermap
-    api_key: !secret openWeatherMapApiKey
-    name: Hourly Forcast
-    mode: hourly
-
-  - platform: openweathermap
-    api_key: !secret openWeatherMapApiKey
-    name: Daily Forcast
-    mode: freedaily

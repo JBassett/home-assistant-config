@@ -1,3 +1,0 @@
-mychevy:
-  username: !secret mychevy_user
-  password: !secret mychevy_pass

@@ -7,7 +7,7 @@
       to: 'on'
   action:
     - service: notify.mobile_app_pixel_2
-      data_template:
+      data:
         title: 'New Home Assistant Release'
         message: "Home Assistant  {{ state_attr('binary_sensor.updater', 'newest_version') }}  is now available."
         data:
@@ -24,7 +24,7 @@
       above: 0
   action:
     - service: notify.mobile_app_pixel_2
-      data_template:
+      data:
         title: 'New HACS Componenet Release'
         message: >-
           Updates ready for: 

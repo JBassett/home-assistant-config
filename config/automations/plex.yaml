@@ -18,7 +18,7 @@
   action:
   - service: tts.google_translate_say
     entity_id: media_player.kitchen_display
-    data_template:
+    data:
       cache: false
       message: "Get the popcorn ready, I just downloaded {{ trigger.event.data['Metadata']['title'] }}."
 
@@ -42,7 +42,7 @@
   action:
   - service: tts.google_translate_say
     entity_id: media_player.kitchen_display
-    data_template:
+    data:
       cache: false
       message: "Good news, I downloaded a new episode of {{ trigger.event.data['Metadata']['grandparentTitle'] }}."
 
@@ -66,6 +66,6 @@
   action:
   - service: tts.google_translate_say
     entity_id: media_player.kitchen_display
-    data_template:
+    data:
       cache: false
       message: "Music to my ears, {{ trigger.event.data['album'] }} by {{ trigger.event.data['artist'] }} is ready for a listen."
