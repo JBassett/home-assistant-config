@@ -54,3 +54,4 @@ __pycache__/
 # VS Code Settings
 .vscode/*
 config/google_calendars.yaml
+config/zigbee.db
