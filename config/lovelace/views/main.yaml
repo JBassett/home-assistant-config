@@ -33,6 +33,7 @@ cards:
           - sensor.office_temperature
           - sensor.weston_temperature
           - sensor.harrison_temperature
+          - sensor.master_temperature_zigbee
 
       - break
 

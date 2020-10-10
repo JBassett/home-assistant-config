@@ -90,6 +90,18 @@ cards:
             entity: fan.master_fan
             hide_when_off: true
             toggle: true
+          - sensor.master_humidity_zigbee
+          - sensor.master_temperature_zigbee
+
+      - title: Master's Room Temp
+        type: 'custom:mini-graph-card'
+        extrema: true
+        hours_to_show: 24
+        points_per_hour: 2
+        show:
+          labels: true
+        entities:
+          - sensor.master_temperature_zigbee
 
       - type: custom:mini-media-player
         entity: media_player.master_bedroom_speaker
