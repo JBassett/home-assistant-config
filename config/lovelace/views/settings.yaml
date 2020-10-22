@@ -63,10 +63,11 @@ cards:
     type: entities
     show_header_toggle: false
     entities:
-      - sensor.spacex_next_mission_name
-      - sensor.spacex_next_launch
-      - sensor.spacex_next_rocket
-      - sensor.spacex_next_launch_site
+      - sensor.next_launch_mission
+      - sensor.next_launch_day
+      - sensor.next_launch_time
+      - sensor.next_launch_site
+      - sensor.next_launch_rocket
 
   - title: Certificates
     type: entities
