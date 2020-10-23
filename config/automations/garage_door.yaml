@@ -1,10 +1,13 @@
 - alias: 'Garage Door - Left Open Notification'
   id: f2e584e1-3c07-4da2-ac24-99ada3fd659f
   initial_state: 'on'
+  mode: restart
   trigger:
     - platform: state
       entity_id: sensor.home_status
       to: 'Unoccupied'
+      for:
+        minutues: 5
   condition:
     - condition: state
       entity_id: cover.garage_door_opener
@@ -18,94 +21,23 @@
           actions:
           - action: close_garage
             title: Close Door
-
-- alias: 'Garage Door - Close'
-  id: 04e14641-dec5-4fff-bfad-c63cae25e1f6
-  initial_state: 'on'
-  trigger:
-    - platform: event
-      event_type: mobile_app_notification_action
-      event_data:
-        action: close_garage
-  condition: []
-  action:
+    - wait_for_trigger:
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: close_garage
+    
     - service: cover.close_cover
-      data:
-        entity_id: cover.garage_door_opener
-
-- alias: 'Garage Door - Almost Home Notification'
-  id: d24a2f83-eade-47f2-a7dd-2563fb7c7d83
-  initial_state: 'on'
-  trigger:
-    - platform: numeric_state
-      entity_id: proximity.home_justin
-      above: '0'
-      below: '2'
-  condition:
-    - condition: state
-      entity_id: cover.garage_door_opener
-      state: closed
-    - condition: template
-      value_template: '{{ states.proximity.home_justin.attributes.dir_of_travel == "towards" }}'
-  action:
-    - service: notify.mobile_app_pixel_2
-      data:
-        title: Almost Home!
-        message: Would you like to open the garage door?
-        data:
-          tag: garage_door
-          actions:
-            - title: Open Door
-              action: open_garage
-
-- alias: 'Garage Door - Cancel Notification'
-  id: dadccb33-a645-4f21-801d-0ecade15e227
-  initial_state: 'on'
-  trigger:
-    - platform: state
-      entity_id: device_tracker.pixel_2
-      from: away
-      to: home
-      for:
-        minutes: 2
-    - platform: state
-      entity_id: cover.garage_door_opener
-      from: closed
-      to: open
-  condition: []
-  action:
-    - service: notify.mobile_app_pixel_2
-      data:
-        message: clear_notification
-        data:
-          tag: garage_door
-
-- alias: 'Garage Door - Open'
-  id: 7f9ab45d-493d-4ff0-9c9f-483bebdf1f20
-  initial_state: 'on'
-  trigger:
-    - platform: event
-      event_type: mobile_app_notification_action
-      event_data:
-        action: open_garage
-  condition: []
-  action:
-    - service: cover.open_cover
       data:
         entity_id: cover.garage_door_opener
 
 - alias: 'Garage Door - Opened/Closed not home'
   id: 52340028-d645-4654-9c06-ee4158ef027b
   initial_state: 'on'
+  mode: restart
   trigger:
     - entity_id: cover.garage_door_opener
       platform: state
-      from: Open
-      to: Closed
-    - entity_id: cover.garage_door_opener
-      platform: state
-      from: Closed
-      to: Open
   condition:
     - condition: state
       entity_id: sensor.home_status
@@ -119,5 +51,12 @@
           actions:
             - action: close_garage
               title: Close Door
-            - action: open_garage
-              title: Open Door
+    - wait_for_trigger:
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: close_garage
+    
+    - service: cover.close_cover
+      data:
+        entity_id: cover.garage_door_opener
