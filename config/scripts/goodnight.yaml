@@ -6,6 +6,9 @@ goodnight:
       data:
         entity_id: cover.garage_door_opener
 ######################## TV #############################
+    - service: media_player.media_stop
+      data:
+        entity_id: media_player.plex_living_room_tv
     - service: media_player.turn_off
       data:
         entity_id: media_player.living_room_tv
