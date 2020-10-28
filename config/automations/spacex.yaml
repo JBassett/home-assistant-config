@@ -33,9 +33,6 @@
         title: SpaceX Launch Soon
         data:
           clickAction: "{{ states.sensor.spacex.attributes.links.video_link }}"
-    - service: automation.turn_on
-      data: 
-        entity_id: automation.spacex_tts
 
 - id: 20c8c7d2-fdb3-443d-89f6-6ad2d7449b12
   alias: 'SpaceX - TTS'
@@ -49,14 +46,11 @@
         - media_player.office_speaker
         - media_player.kitchen_display
       data:
-        message: 'SpaceX will be launching in less than 10 minutes!'
+        message: 'SpaceX will be launching in 5 minutes!'
 
     - service: notify.mobile_app_pixel_2
       data:
         message: SpaceX final countdown!
         title: SpaceX Launch Imminent
         data:
-          clickAction: "{{ states.sensor.spacex.attributes.links.video_link }}"
-    - service: automation.turn_off
-      data: 
-        entity_id: automation.spacex_tts
+          clickAction: "{{ states.sensor.next_launch_mission.attributes.video_link }}"
