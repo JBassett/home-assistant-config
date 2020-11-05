@@ -6,6 +6,6 @@
       unit_of_measurement: '%'
       device_class: battery
     bolt_battery_temp:
-        friendly_name: Bolt - Battery Temperature
-        value_template: '{{ states["sensor.bolt_raw"].attributes.battery_temp }}'
-        unit_of_measurement: '°C'
+      friendly_name: Bolt - Battery Temperature
+      value_template: '{{ states["sensor.bolt_raw"].attributes.battery_temp }}'
+      unit_of_measurement: '°C'
