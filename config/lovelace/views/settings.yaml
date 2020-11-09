@@ -73,25 +73,7 @@ cards:
     type: entities
     show_header_toggle: false
     entities:
-      - type: custom:fold-entity-row
-        head:
-          type: section
-          label: Details
-        entities:
-          - sensor.home_assistant_cert_expiration
-          - sensor.auth_cert_expiration
-          - sensor.code_cert_expiration
-          - sensor.tv_cert_expiration
-          - sensor.movies_cert_expiration
-          - sensor.plex_cert_expiration
-          - sensor.grafana_cert_expiration
-          - sensor.security_cert_expiration
-          - sensor.unraid_cert_expiration
-          - sensor.pfsense_cert_expiration
-          - sensor.music_cert_expiration
-          - sensor.sync_cert_expiration
-          - sensor.hydra_cert_expiration
-          - sensor.usenet_cert_expiration
+      - sensor.cert_expiry_timestamp_ssvnormandy_com
     
   - title: Unraid
     type: entities
