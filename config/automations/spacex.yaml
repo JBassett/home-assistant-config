@@ -29,10 +29,10 @@
   action:
     - service: notify.mobile_app_pixel_2
       data:
-        message: SpaceX will be launching at {{ states.sensor.spacex.state | int | timestamp_local }}
+        message: SpaceX will be launching at {{ state_attr('sensor.next_launch_day', 'launch_date_unix') | int | timestamp_local }}
         title: SpaceX Launch Soon
         data:
-          clickAction: "{{ states.sensor.spacex.attributes.links.video_link }}"
+          clickAction: "{{ state_attr('sensor.next_launch_mission', 'video_link') }}"
 
 - id: 20c8c7d2-fdb3-443d-89f6-6ad2d7449b12
   alias: 'SpaceX - TTS'
@@ -53,4 +53,4 @@
         message: SpaceX final countdown!
         title: SpaceX Launch Imminent
         data:
-          clickAction: "{{ states.sensor.next_launch_mission.attributes.video_link }}"
+          clickAction: "{{ state_attr('sensor.next_launch_mission', 'video_link') }}"
