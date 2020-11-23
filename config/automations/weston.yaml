@@ -18,6 +18,11 @@
     - service: automation.trigger
       data:
         entity_id: automation.weston_fan_control
+    - service: light.turn_on
+      data:
+        entity_id: light.weston_lamp_zigbee
+        brightness: 90
+        rgb_color: [255, 0, 0]
 
 - id: 9d684000-821b-49c3-9770-3fa876b6effb
   alias: Weston - Keep Sleeping
@@ -61,6 +66,9 @@
     - service: fan.turn_off
       data:
         entity_id: fan.weston_fan
+    - service: light.turn_off
+      data:
+        entity_id: light.weston_lamp_zigbee
 
 - id: d1007417-f48d-4f5c-a06e-8d712a2ef51a
   alias: Weston - Fan Control
@@ -105,3 +113,6 @@
     - service: fan.turn_off
       data:
         entity_id: fan.weston_fan
+    - service: light.turn_off
+      data:
+        entity_id: light.weston_lamp_zigbee
