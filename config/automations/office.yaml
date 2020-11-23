@@ -1,0 +1,39 @@
+- id: a0afc6fd-d728-4af8-bb3a-cb4744c071bd
+  alias: Office - Turn On
+  description: ''
+  mode: single
+  trigger:
+    - platform: state
+      entity_id: switch.gaming_pc
+      from: 'off'
+      to: 'on'
+  condition: []
+  action:
+    - service: light.turn_on
+      data:
+        entity_id: light.office_lamp_zigbee
+        brightness: 90
+        rgb_color: [ 255, 0, 0 ]
+    - service: switch.turn_on
+      data:
+        entity_id: switch.office_outlet
+
+- id: fb33725a-b344-4fa7-bdde-c05364c4a6ad
+  alias: Office - Turn Off
+  description: ''
+  mode: single
+  trigger:
+    - platform: state
+      entity_id: switch.gaming_pc
+      for:
+        minutes: 5
+      from: 'on'
+      to: 'off'
+  condition: []
+  action:
+    - service: light.turn_off
+      data:
+        entity_id: light.office_lamp_zigbee
+    - service: switch.turn_off
+      data:
+        entity_id: switch.office_outlet
