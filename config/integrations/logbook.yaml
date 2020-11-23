@@ -4,7 +4,7 @@ logbook:
     entities:
       - automation.bolt_location_update
     entity_globs:
-      - binary_sensor.pixel_2_*
-      - sensor.pixel_2_*
+      - binary_sensor.pixel_4a_*
+      - sensor.pixel_4a_*
       - binary_sensor.pixel_3a_xl_*
       - sensor.pixel_3a_xl_*

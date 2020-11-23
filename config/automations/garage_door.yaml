@@ -13,7 +13,7 @@
       entity_id: cover.garage_door_opener
       state: open
   action:
-    - service: notify.mobile_app_pixel_2
+    - service: notify.mobile_app_pixel_4a
       data:
         message: Looks like the garage was left open!! {{ now().strftime("%H:%M") }}
         title: Garage left open!
@@ -43,7 +43,7 @@
       entity_id: sensor.home_status
       state: Unoccupied
   action:
-    - service: notify.mobile_app_pixel_2
+    - service: notify.mobile_app_pixel_4a
       data:
         title: 'Garage Door: {{ states(''cover.garage_door_opener'') }}'
         message: Garage is now {{ states('cover.garage_door_opener') }} at {{ now().strftime("%H:%M") }}

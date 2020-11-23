@@ -6,7 +6,7 @@
       from: 'off'
       to: 'on'
   action:
-    - service: notify.mobile_app_pixel_2
+    - service: notify.mobile_app_pixel_4a
       data:
         title: 'New Home Assistant Release'
         message: "Home Assistant  {{ state_attr('binary_sensor.updater', 'newest_version') }}  is now available."
@@ -23,7 +23,7 @@
       entity_id: sensor.hacs
       above: 0
   action:
-    - service: notify.mobile_app_pixel_2
+    - service: notify.mobile_app_pixel_4a
       data:
         title: 'New HACS Componenet Release'
         message: >-
@@ -43,7 +43,7 @@
       to: "0"
   condition: []
   action:
-    - service: notify.mobile_app_pixel_2
+    - service: notify.mobile_app_pixel_4a
       data:
         message: clear_notification
         data:

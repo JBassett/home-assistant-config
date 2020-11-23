@@ -27,7 +27,7 @@
     - platform: time
       at: input_datetime.spacex_notification_push_time
   action:
-    - service: notify.mobile_app_pixel_2
+    - service: notify.mobile_app_pixel_4a
       data:
         message: SpaceX will be launching at {{ state_attr('sensor.next_launch_day', 'launch_date_unix') | int | timestamp_local }}
         title: SpaceX Launch Soon
@@ -48,7 +48,7 @@
       data:
         message: 'SpaceX will be launching in 5 minutes!'
 
-    - service: notify.mobile_app_pixel_2
+    - service: notify.mobile_app_pixel_4a
       data:
         message: SpaceX final countdown!
         title: SpaceX Launch Imminent

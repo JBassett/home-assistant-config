@@ -23,7 +23,7 @@
       entity_id: binary_sensor.bolt_charging
       state: 'off'
   action:
-    - service: notify.mobile_app_pixel_2
+    - service: notify.mobile_app_pixel_4a
       data:
         message: Bolt is currently at {{ states.sensor.bolt_soc.state }}%
         title: Don't Forget to Charge
