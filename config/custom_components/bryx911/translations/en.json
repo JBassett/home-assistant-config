@@ -1,0 +1,12 @@
+{
+    "config": {
+        "step": {
+            "user": {
+                "title": "Input API Key",
+                "data": {
+                  "api_key": "API Key"
+                }
+            }
+        }
+    }
+}

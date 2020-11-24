@@ -1,0 +1,19 @@
+- id: 3801c24c-e453-48f8-abc0-90b67f6b7d18
+  alias: Fire - Open Job
+  description: ''
+  mode: single
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.bryx_open_job
+      from: 'off'
+      to: 'on'
+  condition: []
+  action:
+    - service: tts.google_translate_say
+      data:
+        entity_id:
+          - media_player.kitchen_display
+          - media_player.office_speaker
+          - media_player.master_bedroom_speaker
+        cache: false
+        message: "Alert: {{ states('sensor.bryx_current_job_type') }} {{ states('sensor.bryx_current_job_synopsis') }} at {{ states('sensor.bryx_current_job_address') }}"

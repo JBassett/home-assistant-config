@@ -1,0 +1,10 @@
+{
+    "domain": "bryx911",
+    "name": "Bryx 911",
+    "config_flow": true,
+    "documentation": "",
+    "requirements": [ ],
+    "dependencies": ["http"],
+    "after_dependencies": [],
+    "codeowners": ["@JBassett"]
+  }

@@ -1,0 +1,13 @@
+{
+    "title": "Bryx 911",
+    "config": {
+      "step": {
+        "user": {
+          "title": "Input API Key",
+          "data": {
+            "api_key": "The API Key from an authenticated session"
+          }
+        }
+      }
+    }
+}
