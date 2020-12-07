@@ -34,6 +34,13 @@ class BryxConnection(BinarySensorEntity):
     async def async_update(self):
         await self.ws.ping()
 
+    async def async_added_to_hass(self):
+        _LOGGER.debug("BryxOpenJob -> added")
+        self.ws.register_callback(self.async_write_ha_state)
+
+    async def async_will_remove_from_hass(self):
+        self.ws.remove_callback(self.async_write_ha_state)
+
 class BryxOpenJob(BinarySensorEntity):
     should_poll = False
     name = "Bryx Open Job"

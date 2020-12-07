@@ -6,6 +6,7 @@ from functools import partial
 import json
 import logging
 import sys
+import uuid 
 
 import requests.exceptions
 from time import sleep
@@ -18,7 +19,8 @@ from .const import (
     TYPE_UPDATE_PUSH,
     TYPE_ACK,
     TYPE_INITAL_JOBS,
-    CONF_API_KEY
+    CONF_USER,
+    CONF_PASS
 )
 
 _LOGGER = logging.getLogger(__package__)
@@ -26,8 +28,13 @@ _LOGGER = logging.getLogger(__package__)
 # https://github.com/jjlawren/python-plexwebsocket/blob/master/plexwebsocket.py
 # https://docs.aiohttp.org/en/stable/client_quickstart.html#websockets
 class BryxWebsocket:
-    def __init__(self, api_key):
-        self._api_key = api_key
+    def __init__(self, username, password):
+        self._running = False
+        self._username = username
+        self._password = password
+        self._api_key = None
+        self._device_id = str(uuid.uuid1())
+
         self.session = aiohttp.ClientSession()
         self.ws_client = None
         self._callbacks = set()
@@ -35,33 +42,57 @@ class BryxWebsocket:
         self.last_job_update = {}
         self.jobs = {}
     
-    async def start(self):
-        _LOGGER.debug("start -> Begin")
-        try:
-            async with self.session.ws_connect(
-                f"wss://bryx911.com/api/2.2/ws?apiKey={self._api_key}",
-                heartbeat=15
-            ) as ws:
-                self.ws_client = ws
-                request = {
-                    "type": 0,
-                    "topic" : "jobs",
-                    "id" : self.message_id,
-                    "params" : {
-                        "fastForwardMode" : "reset"
-                    },
-                    "version" : 0
-                }
-                self.message_id = self.message_id + 1
-                await self.ws_client.send_str(json.dumps(request))
-                _LOGGER.debug("start -> inital request sent")
+    async def login(self):
+        _LOGGER.debug('login -> Begin')
+        async with self.session.post(
+            "https://bryx911.com/api/2.2/authorization/",
+            json = {
+                'email': self._username,
+                'password': self._password,
+                'deviceId': self._device_id,
+                'deviceName': 'Home Assistant',
+                'canUseForLocation': False
+            }
+        ) as resp:
+            json_response = await resp.json()
+            _LOGGER.debug("Auth response: %s", json_response)
+            self._api_key = json_response['apiKey']
+            _LOGGER.info("Using apiKey: %s", self._api_key)
+        _LOGGER.debug("login -> Finish")
 
-                await self.receiveMessages()
+    async def listen(self):
+        _LOGGER.debug("listen -> Begin")
+        self._running = True
+        while self._running:
+            try:
+                await self.login()
+                async with self.session.ws_connect(
+                    f"wss://bryx911.com/api/2.2/ws?apiKey={self._api_key}",
+                    heartbeat=15
+                ) as ws:
+                    self.ws_client = ws
+                    request = {
+                        "type": 0,
+                        "topic" : "jobs",
+                        "id" : self.message_id,
+                        "params" : {
+                            "fastForwardMode" : "reset"
+                        },
+                        "version" : 0
+                    }
+                    self.message_id = self.message_id + 1
+                    await self.ws_client.send_json(request)
+                    _LOGGER.debug("start -> inital request sent")
 
-        except Exception as error:
-            _LOGGER.exception("Unexpected exception occurred: %s", error)
+                    await self.receiveMessages()
 
-        _LOGGER.debug("start -> Finish")
+            except Exception as error:
+                _LOGGER.exception("Unexpected exception occurred: %s", error)
+
+        _LOGGER.debug("listen -> Finish")
+
+    def close(self):
+        self._running = False
 
     async def ping(self):
         if self.ws_client == None:
@@ -72,7 +103,7 @@ class BryxWebsocket:
             "id" : self.message_id,
             "type" : 8
         }
-        await self.ws_client.send_str(json.dumps(request))
+        await self.ws_client.send_json(request)
     
     async def ack(self, ack_id):
         self.message_id = self.message_id + 1
@@ -85,7 +116,7 @@ class BryxWebsocket:
                 "updateIds": [ack_id]
             }
         }
-        await self.ws_client.send_str(json.dumps(request))
+        await self.ws_client.send_json(request)
 
     async def receiveMessages(self):
         while self.ws_client != None:
@@ -151,12 +182,12 @@ async def async_setup(hass, config):
     return True
 
 async def async_setup_entry(hass: HomeAssistantType, entry: ConfigEntry):
-    websocket = BryxWebsocket(entry.data[CONF_API_KEY])
+    websocket = BryxWebsocket(entry.data[CONF_USER], entry.data[CONF_PASS])
     hass.data[DOMAIN] = {
         'ws': websocket
     }
 
-    hass.loop.create_task(websocket.start())
+    hass.loop.create_task(websocket.listen())
     
     hass.async_create_task(
         hass.config_entries.async_forward_entry_setup(entry, "binary_sensor")

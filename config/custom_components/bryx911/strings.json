@@ -3,9 +3,10 @@
     "config": {
       "step": {
         "user": {
-          "title": "Input API Key",
+          "title": "Input login info",
           "data": {
-            "api_key": "The API Key from an authenticated session"
+            "username": "Username",
+            "password": "Password"
           }
         }
       }
