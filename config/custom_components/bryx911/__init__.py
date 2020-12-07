@@ -155,8 +155,9 @@ class BryxWebsocket:
                     else:
                         job = msg["initialData"]["open"][0]
                         for j in msg["initialData"]["open"]:
-                            jobs[j["id"]] = j
-                except:
+                            self.jobs[j["id"]] = j
+                except Exception as error:
+                    _LOGGER.warn("Unable to get last job: %s", error)
                     job = None
             
             if job != None:
@@ -182,6 +183,7 @@ async def async_setup(hass, config):
     return True
 
 async def async_setup_entry(hass: HomeAssistantType, entry: ConfigEntry):
+    _LOGGER.info("async_setup_entry for user: %s", entry.data[CONF_USER])
     websocket = BryxWebsocket(entry.data[CONF_USER], entry.data[CONF_PASS])
     hass.data[DOMAIN] = {
         'ws': websocket
