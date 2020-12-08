@@ -1,0 +1,6 @@
+- platform: template
+  sensors:
+    spacex_liftoff_time:
+      friendly_name: SpaceX - Liftoff Time
+      value_template: "{{ state_attr('sensor.next_launch_day', 'launch_date_unix') | timestamp_local }}"
+      device_class: timestamp
