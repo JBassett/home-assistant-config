@@ -11,6 +11,7 @@ import uuid
 import requests.exceptions
 from time import sleep
 
+from homeassistant.core import HomeAssistant
 from homeassistant.helpers.typing import HomeAssistantType
 from homeassistant.config_entries import ConfigEntry
 
@@ -201,3 +202,13 @@ async def async_setup_entry(hass: HomeAssistantType, entry: ConfigEntry):
     _LOGGER.debug("setup complete")
     # Return boolean to indicate that initialization was successful.
     return True
+
+async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
+    """Unload a config entry."""
+    _LOGGER.info("async_unload_entry -> Begin for user: %s", entry.data[CONF_USER])
+
+    binary = await hass.config_entries.async_forward_entry_unload(entry, "binary_sensor")
+    sensor = await hass.config_entries.async_forward_entry_unload(entry, "sensor")
+
+    _LOGGER.info("async_unload_entry -> Complete for user: %s", entry.data[CONF_USER])
+    return binary and sensor
