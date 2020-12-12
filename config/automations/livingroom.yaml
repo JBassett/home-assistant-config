@@ -38,3 +38,18 @@
         minutes: 5
   action:
     - service: script.livingroom_off
+
+- id: f4442aab-21d6-4ee1-ac21-a3de30bdee0f
+  alias: 'Livingroom - Fireplace Fan'
+  initial_state: 'on'
+  mode: restart
+  trigger:
+    - platform: state
+      entity_id: switch.fireplace_flame
+      to: 'off'
+  action:
+    - delay:
+        minutes: 10
+    - service: switch.turn_off
+      data:
+        entity_id: switch.fireplace_fan
