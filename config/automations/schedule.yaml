@@ -3,7 +3,7 @@
   initial_state: 'on'
   trigger:
     - platform: time
-      at: '06:30:00'
+      at: '07:15:00'
   condition:
     - condition: state
       entity_id: sensor.home_status
