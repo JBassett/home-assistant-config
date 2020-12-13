@@ -11,7 +11,7 @@
   action:
     - service: light.turn_on
       data:
-        entity_id: light.office_lamp_zigbee
+        entity_id: light.office_lamp
         brightness: 90
         rgb_color: [ 255, 0, 0 ]
     - service: switch.turn_on
@@ -33,7 +33,7 @@
   action:
     - service: light.turn_off
       data:
-        entity_id: light.office_lamp_zigbee
+        entity_id: light.office_lamp
     - service: switch.turn_off
       data:
         entity_id: switch.office_outlet

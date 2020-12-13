@@ -20,7 +20,7 @@
         entity_id: automation.weston_fan_control
     - service: light.turn_on
       data:
-        entity_id: light.weston_lamp_zigbee
+        entity_id: light.weston_lamp
         brightness: 90
         rgb_color: [255, 0, 0]
 
@@ -68,7 +68,7 @@
         entity_id: fan.weston_fan
     - service: light.turn_off
       data:
-        entity_id: light.weston_lamp_zigbee
+        entity_id: light.weston_lamp
 
 - id: d1007417-f48d-4f5c-a06e-8d712a2ef51a
   alias: Weston - Fan Control
@@ -115,4 +115,4 @@
         entity_id: fan.weston_fan
     - service: light.turn_off
       data:
-        entity_id: light.weston_lamp_zigbee
+        entity_id: light.weston_lamp
