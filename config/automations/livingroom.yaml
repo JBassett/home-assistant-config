@@ -50,6 +50,12 @@
   action:
     - delay:
         minutes: 10
-    - service: switch.turn_off
-      data:
-        entity_id: switch.fireplace_fan
+    - choose:
+      - conditions:
+          - condition: state
+            entity_id: switch.fireplace_flame
+            state: 'off'
+        sequence:          
+          - service: switch.turn_off
+            data:
+              entity_id: switch.fireplace_fan
