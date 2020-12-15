@@ -35,7 +35,8 @@ class BryxSensor(Entity):
         self.ws.remove_callback(self.async_write_ha_state)
 
     def has_job(self) -> bool:
-        return self.ws.last_job_update.get('disposition', 'closed') != 'closed'
+        latest = self.ws.latest
+        return latest is not None and latest.get("open", True)
 
 class CurrentJobSynopsis(BryxSensor):
     
@@ -49,7 +50,7 @@ class CurrentJobSynopsis(BryxSensor):
     def state(self):
         """Return the state of the sensor."""
         if self.has_job():
-            return self.ws.last_job_update.get('synopsis')
+            return self.ws.latest.get('synopsis')
         return None
 
 class CurrentJobAddress(BryxSensor):
@@ -62,18 +63,18 @@ class CurrentJobAddress(BryxSensor):
     
     @property
     def device_state_attributes(self):
-        lj = self.ws.last_job_update
-        if self.has_job() and lj.get('centroid') is not None:
+        lj = self.ws.latest
+        if self.has_job() and lj.get("gps") is not None:
             return {
-                "gps": lj['centroid'].get('coordinates')
+                "gps": lj.get("gps")
             }
         return {}
 
     @property
     def state(self):
-        lj = self.ws.last_job_update
-        if self.has_job() and lj.get('address') is not None:
-            return lj['address'].get('original')
+        lj = self.ws.latest
+        if self.has_job():
+            return lj.get("address")
         return None
 
 class CurrentJobType(BryxSensor):
@@ -83,22 +84,12 @@ class CurrentJobType(BryxSensor):
     def __init__(self, ws):
         self.entity_id = "sensor.bryx_current_job_type"
         self.ws = ws
-    
-    @property
-    def device_state_attributes(self):
-        """Return the state attributes of the device."""
-        if self.has_job() and self.ws.last_job_update.get('type') is not None:
-            return {
-                "code": self.ws.last_job_update['type'].get('code'),
-                "section": self.ws.last_job_update['type'].get('section')
-            }
-        return {}
 
     @property
     def state(self):
         """Return the state of the sensor."""
         if self.has_job():
-            return self.ws.last_job_update.get('type', {}).get('description')
+            return self.ws.latest.get('type')
         return None
 
 class LatestJobTime(BryxSensor):
@@ -111,11 +102,18 @@ class LatestJobTime(BryxSensor):
     
     @property
     def device_state_attributes(self):
+        latest = self.ws.latest
+        if latest is None or latest.get("start") is None:
+            return None
+
         return {
-            "timestamp": self.ws.last_job_update.get('ts')
+            "timestamp": latest["start"].timestamp()
         }
 
     @property
     def state(self):
-        ts = self.ws.last_job_update.get('ts')
-        return None if ts is None else datetime.fromtimestamp(ts).isoformat()
+        latest = self.ws.latest
+        if latest is None or latest.get("start") is None:
+            return None
+
+        return latest["start"].isoformat()

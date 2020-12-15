@@ -28,6 +28,10 @@ class BryxConnection(BinarySensorEntity):
         self.ws = ws
 
     @property
+    def unique_id(self):
+        return f"{self.entity_id}"
+
+    @property
     def is_on(self):
         return self.ws.ws_client != None and not self.ws.ws_client.closed
     
@@ -50,8 +54,12 @@ class BryxOpenJob(BinarySensorEntity):
         self.ws = ws
 
     @property
+    def unique_id(self):
+        return f"{self.entity_id}"
+
+    @property
     def is_on(self):
-        return len(self.ws.jobs.keys()) > 0
+        return self.ws.latest is not None and self.ws.latest.get("open", False)
 
     async def async_added_to_hass(self):
         _LOGGER.debug("BryxOpenJob -> added")

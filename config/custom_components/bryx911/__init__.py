@@ -10,6 +10,10 @@ import uuid
 
 import requests.exceptions
 from time import sleep
+from datetime import (
+    datetime,
+    timedelta
+)
 
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.typing import HomeAssistantType
@@ -35,12 +39,13 @@ class BryxWebsocket:
         self._password = password
         self._api_key = None
         self._device_id = str(uuid.uuid1())
+        self._callbacks = set()
+        self._watched_job_id = None
 
         self.session = aiohttp.ClientSession()
         self.ws_client = None
-        self._callbacks = set()
         self.message_id = 0
-        self.last_job_update = {}
+        self.latest = None
         self.jobs = {}
     
     async def login(self):
@@ -149,27 +154,63 @@ class BryxWebsocket:
                 _LOGGER.info("Got push: %s", msg)
                 job = msg["data"].get("job")
                 await self.ack(msg["data"].get("id"))
+                await self.watch_job(job.get("id"))
             elif msg.get("type") == TYPE_INITAL_JOBS:
                 try:
                     if not msg["initialData"]["open"]:
                         job = msg["initialData"]["closed"][0]
                     else:
                         job = msg["initialData"]["open"][0]
-                        for j in msg["initialData"]["open"]:
-                            self.jobs[j["id"]] = j
+
+                    for j in msg["initialData"]["open"]:
+                        self.update_job(j)
+
+                    for j in msg["initialData"]["closed"]:
+                        self.update_job(j)
+                        
                 except Exception as error:
                     _LOGGER.warn("Unable to get last job: %s", error)
                     job = None
             
-            if job != None:
-                self.last_job_update = job
-                
-                if job["disposition"] != "closed":
-                    self.jobs[job["id"]] = job
-                elif job["id"] in self.jobs:
-                    del self.jobs[job["id"]]
+            self.update_job(job)
         else:
             _LOGGER.debug("Got message: %s", msg)
+
+    def update_job(self, job_update):
+        if job_update is None and job_update.has_key("id"):
+            _LOGGER.warn("Trying to add a None job!")
+            return
+
+        job_id = job_update["id"]
+        job = self.jobs.get(job_id, {})
+
+        job["id"] = job_id
+
+        if job.get("start") is None:
+            job["start"] = datetime.fromtimestamp(job_update.get("ts"))
+
+        if job.get("end") is None:
+            job["end"] = job["start"] + timedelta(hours=1)
+        
+        job["open"] = job_update.get("disposition") != "closed"
+
+        if job.get("address") is None:
+            job["address"] = job_update.get("address", {}).get("original")
+
+        if job.get("gps") is None or len(job.get("gps")) != 2:
+            job["gps"] = job_update.get("centroid", {}).get("coordinates")
+
+        if job.get("synopsis") is None:
+            job["synopsis"] = job_update.get("synopsis")
+        
+        if job.get("type") is None:
+            job["type"] = job_update.get("type", {}).get("description")
+
+        self.jobs[job_id] = job
+        
+        if self.latest is None or self.latest.get("start") < job.get("start"):
+            _LOGGER.debug(f"New Latest Job: {job}")
+            self.latest = job
 
     def register_callback(self, callback):
         """Register callback, called when job changes state."""
@@ -198,6 +239,9 @@ async def async_setup_entry(hass: HomeAssistantType, entry: ConfigEntry):
     hass.async_create_task(
         hass.config_entries.async_forward_entry_setup(entry, "sensor")
     )
+    hass.async_create_task(
+        hass.config_entries.async_forward_entry_setup(entry, "calendar")
+    )
 
     _LOGGER.debug("setup complete")
     # Return boolean to indicate that initialization was successful.
@@ -209,6 +253,7 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
 
     binary = await hass.config_entries.async_forward_entry_unload(entry, "binary_sensor")
     sensor = await hass.config_entries.async_forward_entry_unload(entry, "sensor")
+    calendar = await hass.config_entries.async_forward_entry_unload(entry, "calendar")
 
     _LOGGER.info("async_unload_entry -> Complete for user: %s", entry.data[CONF_USER])
-    return binary and sensor
+    return binary and sensor and calendar
