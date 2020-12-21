@@ -6,7 +6,8 @@
           "title": "Input login info",
           "data": {
             "username": "Username",
-            "password": "Password"
+            "password": "Password",
+            "device_id": "Device Id"
           }
         }
       }

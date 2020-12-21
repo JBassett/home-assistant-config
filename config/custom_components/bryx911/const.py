@@ -11,3 +11,4 @@ TYPE_JOB_SUB = 0
 CONF_API_KEY = 'api_key'
 CONF_USER = 'username'
 CONF_PASS = 'password'
+CONF_DEVICE_ID = 'device_id'

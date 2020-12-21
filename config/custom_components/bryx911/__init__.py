@@ -25,7 +25,8 @@ from .const import (
     TYPE_ACK,
     TYPE_INITAL_JOBS,
     CONF_USER,
-    CONF_PASS
+    CONF_PASS,
+    CONF_DEVICE_ID
 )
 
 _LOGGER = logging.getLogger(__package__)
@@ -33,18 +34,18 @@ _LOGGER = logging.getLogger(__package__)
 # https://github.com/jjlawren/python-plexwebsocket/blob/master/plexwebsocket.py
 # https://docs.aiohttp.org/en/stable/client_quickstart.html#websockets
 class BryxWebsocket:
-    def __init__(self, username, password):
+    def __init__(self, username, password, device_id):
         self._running = False
         self._username = username
         self._password = password
         self._api_key = None
-        self._device_id = str(uuid.uuid1())
+        self._device_id = device_id
         self._callbacks = set()
         self._watched_job_id = None
 
         self.session = aiohttp.ClientSession()
         self.ws_client = None
-        self.message_id = 0
+        self._message_id = 0
         self.latest = None
         self.jobs = {}
     
@@ -86,7 +87,6 @@ class BryxWebsocket:
                         },
                         "version" : 0
                     }
-                    self.message_id = self.message_id + 1
                     await self.ws_client.send_json(request)
                     _LOGGER.debug("start -> inital request sent")
 
@@ -100,11 +100,17 @@ class BryxWebsocket:
     def close(self):
         self._running = False
 
+    @property
+    def message_id(self):
+        self._message_id = self._message_id + 1
+        if(self._message_id > 100000):
+            self._message_id = 0
+        return self._message_id
+
     async def ping(self):
         if self.ws_client == None:
             _LOGGER.error("Trying to ping a dead websocket!")
             return
-        self.message_id = self.message_id + 1
         request = {
             "id" : self.message_id,
             "type" : 8
@@ -112,7 +118,6 @@ class BryxWebsocket:
         await self.ws_client.send_json(request)
     
     async def ack(self, ack_id):
-        self.message_id = self.message_id + 1
         request = {
             "id": self.message_id,
             "type": TYPE_ACK,
@@ -131,7 +136,7 @@ class BryxWebsocket:
                 try:
                     await self.handleMessage(message)
                 except:
-                    _LOGGER.warn("Issue handling message! %s", sys.exc_info()[0])
+                    _LOGGER.warn("Issue handling message! %s \nMessage: %s", sys.exc_info()[0], message.data)
 
             elif message.type == aiohttp.WSMsgType.CLOSED:
                 _LOGGER.warning("AIOHTTP websocket connection closed")
@@ -226,7 +231,7 @@ async def async_setup(hass, config):
 
 async def async_setup_entry(hass: HomeAssistantType, entry: ConfigEntry):
     _LOGGER.info("async_setup_entry for user: %s", entry.data[CONF_USER])
-    websocket = BryxWebsocket(entry.data[CONF_USER], entry.data[CONF_PASS])
+    websocket = BryxWebsocket(entry.data[CONF_USER], entry.data[CONF_PASS], entry.data[CONF_DEVICE_ID])
     hass.data[DOMAIN] = {
         'ws': websocket
     }
