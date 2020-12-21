@@ -159,7 +159,6 @@ class BryxWebsocket:
                 _LOGGER.info("Got push: %s", msg)
                 job = msg["data"].get("job")
                 await self.ack(msg["data"].get("id"))
-                await self.watch_job(job.get("id"))
             elif msg.get("type") == TYPE_INITAL_JOBS:
                 try:
                     if not msg["initialData"]["open"]:
@@ -182,7 +181,7 @@ class BryxWebsocket:
             _LOGGER.debug("Got message: %s", msg)
 
     def update_job(self, job_update):
-        if job_update is None and job_update.has_key("id"):
+        if job_update is None or not job_update.has_key("id"):
             _LOGGER.warn("Trying to add a None job!")
             return
 
