@@ -181,7 +181,7 @@ class BryxWebsocket:
             _LOGGER.debug("Got message: %s", msg)
 
     def update_job(self, job_update):
-        if job_update is None or not job_update.has_key("id"):
+        if job_update is None:
             _LOGGER.warn("Trying to add a None job!")
             return
 
