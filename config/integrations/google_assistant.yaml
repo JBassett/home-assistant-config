@@ -1,9 +1,7 @@
 google_assistant: 
   project_id: !secret google_assistant_project_id
   # api_key: !secret google_assistant_api_key
-  service_account: 
-    private_key: !secret google_assistant_private_key
-    client_email: !secret google_assistant_client_email
+  service_account: !include ../google-service-account.json
   secure_devices_pin: !secret google_assistant_pin
   report_state: true
   exposed_domains:
