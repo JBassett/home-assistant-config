@@ -1,0 +1,74 @@
+esphome:
+  name: garage
+  platform: ESP8266
+  board: esp01_1m
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_pass
+  manual_ip:
+    static_ip: !secret garage_ip
+    gateway: !secret gateway
+    subnet: !secret subnet
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Garage Fallback Hotspot"
+    password: !secret wifi_pass
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  password: !secret api_pass
+
+ota:
+  password: !secret ota_pass
+
+web_server:
+  port: 80
+
+switch:
+  - platform: gpio
+    internal: true
+    pin: 
+      number: GPIO4
+      inverted: yes
+    restore_mode: ALWAYS_OFF
+    id: garage_door_relay
+
+binary_sensor:
+  - platform: gpio
+    id: garage_door_sensor
+    internal: true
+    pin: 
+      number: GPIO12
+      mode: INPUT_PULLUP
+    device_class: garage_door
+    filters:
+      - delayed_on_off: 20ms
+
+cover:
+  - platform: template
+    name: "Garage Door"
+    lambda: |-
+      if (id(garage_door_sensor).state) {
+        return COVER_OPEN;
+      } else {
+        return COVER_CLOSED;
+      }
+    open_action:
+      - switch.turn_on: garage_door_relay
+      - delay: 1s
+      - switch.turn_off: garage_door_relay
+    close_action:
+      - switch.turn_on: garage_door_relay
+      - delay: 1s
+      - switch.turn_off: garage_door_relay
+    stop_action:
+      - switch.turn_on: garage_door_relay
+      - delay: 1s
+      - switch.turn_off: garage_door_relay

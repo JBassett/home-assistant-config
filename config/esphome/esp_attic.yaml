@@ -1,7 +1,7 @@
 esphome:
-  name: esp_attic
+  name: attic
   platform: ESP8266
-  board: nodemcuv2
+  board: esp01_1m
 
 wifi:
   ssid: !secret wifi_ssid
