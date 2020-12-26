@@ -1,8 +1,0 @@
-fire_call:
-  sequence:
-    - service: light.turn_on
-      data:
-        entity_id:
-          - light.kitchen_down
-          - light.kitchen_up
-        rgb_color: [255, 0, 0]

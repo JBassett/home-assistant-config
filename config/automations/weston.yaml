@@ -99,20 +99,3 @@
           {% else %}
             high
           {% endif%}
-
-- id: bf581eb5-e533-48fe-a374-20be26d49b48
-  alias: Weston - Left the Building
-  initial_state: 'on'
-  trigger:
-    - platform: state
-      entity_id: sensor.home_status
-      to: 'Unoccupied'
-      for:  
-        minutes: 5
-  action:
-    - service: fan.turn_off
-      data:
-        entity_id: fan.weston_fan
-    - service: light.turn_off
-      data:
-        entity_id: light.weston_lamp

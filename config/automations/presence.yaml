@@ -1,0 +1,23 @@
+- id: 84becc1b-9fee-454b-a599-2c9cea937d01
+  alias: 'Presence - Hello'
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: sensor.home_status
+      from: 'Unoccupied'
+      to: 'Occupied'
+  condition: []
+  action:
+    - service: script.hello
+
+- id: e3047785-679d-41f5-83d1-2b0d2b311f16
+  alias: 'Presence - Goodbye'
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: sensor.home_status
+      from: 'Occupied'
+      to: 'Unoccupied'
+  condition: []
+  action:
+    - service: script.goodbye

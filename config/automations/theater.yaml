@@ -11,14 +11,15 @@
       state:  'on'
   action:
     - service: switch.turn_off
-      entity_id:
-        - switch.living_room_corner
-        - switch.living_room_stairs
-    - service: light.turn_on
-      entity_id:
-        - light.kitchen_up
-        - light.kitchen_down
       data:
+        entity_id:
+          - switch.living_room_corner
+          - switch.living_room_stairs
+    - service: light.turn_on
+      data:
+        entity_id:
+          - light.kitchen_up
+          - light.kitchen_down
         rgb_color: [255, 255, 145]
         brightness_pct: 25
 
@@ -35,7 +36,15 @@
       state:  'on'
   action:
     - service: switch.turn_on
-      entity_id:
-        - switch.living_room_corner
-        - switch.living_room_stairs
-    - service: script.kitchen_on
+      data:
+        entity_id:
+          - switch.living_room_corner
+          - switch.living_room_stairs
+
+    - service: light.turn_on
+      data:
+        entity_id:
+          - light.kitchen_up
+          - light.kitchen_down
+        brightness: 183
+        rgb_color: [255, 255, 145]

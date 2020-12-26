@@ -1,0 +1,62 @@
+- id: 0429efd9-4d5d-496b-ab29-fc9c50bf564e
+  alias: Dark - True
+  trigger:
+    - platform: state
+      entity_id: input_boolean.dark_outside
+      from: 'off'
+      to: 'on'
+  condition: 
+    - condition: state
+      entity_id: input_boolean.sleeping
+      state: 'off'
+  action:
+    - choose:
+      - conditions:
+        - condition: state
+          entity_id: sensor.home_status
+          state:  'Occupied'
+        - condition: not
+          conditions:  
+            - condition: state
+              entity_id: media_player.plex_living_room_tv
+              state: playing
+        sequence:        
+          - service: switch.turn_on
+            data:
+              entity_id:
+                - switch.living_room_corner
+                - switch.living_room_stairs
+          - service: light.turn_on
+            data:
+              entity_id:
+                - light.kitchen_up
+                - light.kitchen_down
+              brightness: 183
+              rgb_color: [255, 255, 145]
+    - service: switch.turn_on
+      data:
+        entity_id:
+          - switch.driveway_light
+          - switch.porch_light
+
+- id: 9a78d5fe-bdb9-4b47-87af-67ccb7dd6efd
+  alias: Dark - False
+  trigger:
+    - platform: state
+      entity_id: input_boolean.dark_outside
+      from: 'on'
+      to: 'off'
+  condition: []
+  action:
+    - service: switch.turn_off
+      data:
+        entity_id:
+          - switch.living_room_corner
+          - switch.living_room_stairs
+          - switch.driveway_light
+          - switch.porch_light
+    - service: light.turn_off
+      data:
+        entity_id:
+          - light.kitchen_up
+          - light.kitchen_down

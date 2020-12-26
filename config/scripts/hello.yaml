@@ -1,0 +1,25 @@
+hello:
+  alias: hello
+  sequence:
+    - choose:
+      - conditions:
+          - condition: state
+            entity_id: input_boolean.dark_outside
+            state: 'on'
+        sequence:
+######################## Living Room ####################
+          - service: switch.turn_on
+            data:
+              entity_id:
+                - switch.living_room_corner
+                - switch.living_room_stairs
+                - switch.fireplace_flame # We have an automation to turn fan off later.
+
+######################## Kitchen ####################
+          - service: light.turn_on
+            data:
+              entity_id:
+                - light.kitchen_down
+                - light.kitchen_up
+              brightness: 183
+              rgb_color: [255, 255, 145]

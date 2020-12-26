@@ -1,0 +1,52 @@
+goodbye:
+  alias: goodbye
+  sequence:
+######################## Garge Door #####################
+    - service: cover.close_cover
+      data:
+        entity_id: cover.garage_door_opener
+
+######################## TV #############################
+    - service: media_player.media_stop
+      data:
+        entity_id: media_player.plex_living_room_tv
+    - service: media_player.turn_off
+      data:
+        entity_id: media_player.living_room_tv
+
+######################## Living Room ####################
+    - service: switch.turn_off
+      data:
+        entity_id:
+          - switch.living_room_corner
+          - switch.living_room_stairs
+          - switch.fireplace_flame # We have an automation to turn fan off later.
+
+######################## Kitchen ####################
+    - service: light.turn_off
+      data:
+        entity_id:
+          - light.kitchen_down
+          - light.kitchen_up
+
+######################## Office ####################
+    - service: switch.turn_off
+      data:
+        entity_id:
+          - switch.office_outlet
+    - service: light.turn_off
+      data:
+        entity_id:
+          - light.office_lamp
+
+######################## Bedrooms ####################
+    - service: fan.turn_off
+      data:
+        entity_id:
+          - fan.master_fan
+          - fan.harrison_fan
+          - fan.weston_fan
+    - service: light.turn_off
+      data:
+        entity_id:
+          - light.weston_lamp

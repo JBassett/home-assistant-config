@@ -91,17 +91,3 @@
           {% else %}
             high
           {% endif%}
-
-- id: e688ff91-671f-426a-a63b-28e507e35706
-  alias: Harrison - Left the Building
-  initial_state: 'on'
-  trigger:
-    - platform: state
-      entity_id: sensor.home_status
-      to: 'Unoccupied'
-      for:  
-        minutes: 5
-  action:
-    - service: fan.turn_off
-      data:
-        entity_id: fan.harrison_fan

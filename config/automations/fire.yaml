@@ -7,7 +7,10 @@
       entity_id: binary_sensor.bryx_open_job
       from: 'off'
       to: 'on'
-  condition: []
+  condition:
+    - condition: state
+      entity_id: sensor.home_status
+      state: 'Occupied'
   action:
     - service: tts.google_translate_say
       data:
@@ -17,3 +20,10 @@
           - media_player.master_bedroom_speaker
         cache: false
         message: "Alert: {{ states('sensor.bryx_current_job_type') }} {{ states('sensor.bryx_current_job_synopsis') }} at {{ states('sensor.bryx_current_job_address') }}"
+    - service: light.turn_on
+      data:
+        entity_id:
+          - light.kitchen_up
+          - light.kitchen_down
+        brightness: 255
+        rgb_color: [255, 0, 0]
