@@ -22,7 +22,7 @@ jobs:
           cat secrets.yaml
       - name: Generate google-service-account.json
         run: |
-          echo {\"private_key\":\"1\",\"client_email\":\"2\"} > ./config/google-service-account.json
+          echo {\"private_key\":\"1\"\,\"client_email\":\"2\"} > ./config/google-service-account.json
       - name: Home Assistant Version
         uses: "docker://homeassistant/home-assistant:stable"
         with:
@@ -47,7 +47,7 @@ jobs:
           cat secrets.yaml
       - name: Generate google-service-account.json
         run: |
-          echo {\"private_key\":\"1\",\"client_email\":\"2\"} > ./config/google-service-account.json
+          echo {\"private_key\":\"1\"\,\"client_email\":\"2\"} > ./config/google-service-account.json
       - name: Home Assistant Version
         uses: "docker://homeassistant/home-assistant:beta"
         with:
@@ -72,7 +72,7 @@ jobs:
           cat secrets.yaml
       - name: Generate google-service-account.json
         run: |
-          echo {\"private_key\":\"1\",\"client_email\":\"2\"} > ./config/google-service-account.json
+          echo {\"private_key\":\"1\"\,\"client_email\":\"2\"} > ./config/google-service-account.json
       - name: Home Assistant Version
         uses: "docker://homeassistant/home-assistant:dev"
         with:
