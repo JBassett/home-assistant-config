@@ -5,6 +5,7 @@ goodnight:
     - service: cover.close_cover
       data:
         entity_id: cover.garage_door_opener
+
 ######################## TV #############################
     - service: media_player.media_stop
       data:
@@ -12,18 +13,30 @@ goodnight:
     - service: media_player.turn_off
       data:
         entity_id: media_player.living_room_tv
-######################## Cache Cleanup ##################
-    - service: tts.clear_cache
 
-    - service: script.kitchen_off
-    - service: script.livingroom_off
-    - service: script.outside_off
-    
     - service: switch.turn_off
       data:
-        entity_id: switch.motion_detection
+        entity_id:
+          - switch.living_room_corner
+          - switch.living_room_stairs
+          - switch.fireplace_flame
+
+    - service: light.turn_off
+      data:
+        entity_id:
+          - light.kitchen_up
+          - light.kitchen_down
+
+    - service: switch.turn_off
+      data:
+        entity_id:
+          - switch.driveway_light
+          - switch.porch_light
 
 ####################### Set Sleeping #####################
     - service: input_boolean.turn_on
       data:
         entity_id: input_boolean.sleeping
+
+######################## Cache Cleanup ##################
+    - service: tts.clear_cache
