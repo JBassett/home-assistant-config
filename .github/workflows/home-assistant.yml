@@ -44,7 +44,7 @@ jobs:
           cat secrets.yaml
       - name: Generate google-service-account.json
         run: |
-          echo {\"private_key\":\"1\",\"client_email\":\"2\"} > google-service-account.json.test
+          echo {\"private_key\":\"1\",\"client_email\":\"2\"} > google-service-account.json
       - name: Home Assistant Version
         uses: "docker://homeassistant/home-assistant:beta"
         with:
