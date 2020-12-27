@@ -7,7 +7,7 @@
       entity_id: sensor.home_status
       to: 'Unoccupied'
       for:
-        minutues: 5
+        minutes: 5
   condition:
     - condition: state
       entity_id: cover.garage_door_opener
