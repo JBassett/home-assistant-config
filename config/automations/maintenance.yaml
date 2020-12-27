@@ -49,6 +49,19 @@
         data:
           tag: HACS
 
+- id: 41b69fce-9657-4d1f-9ab9-6c72caf45eb0
+  alias: Maintenance - Resync Google Assistant
+  trigger:
+    - platform: time
+      at: "12:15:00"
+    - platform: homeassistant
+      event: start
+  condition: []
+  action:
+    - service: google_assistant.request_sync
+      data:
+        agent_user_id: !secret userid_justin
+
 # TODO: Nightly Snapshots
 
 # TODO: Pre Upgrade Snapshot
