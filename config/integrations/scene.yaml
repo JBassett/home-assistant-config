@@ -1,1 +1,1 @@
-scene: !include ../scene.yaml
+scene: !include ../scenes.yaml

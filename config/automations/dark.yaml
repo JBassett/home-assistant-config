@@ -26,13 +26,11 @@
               entity_id:
                 - switch.living_room_corner
                 - switch.living_room_stairs
-          - service: light.turn_on
+          - service: scene.turn_on
             data:
-              entity_id:
-                - light.kitchen_up
-                - light.kitchen_down
-              brightness: 183
-              rgb_color: [255, 255, 145]
+              entity_id: 
+                - scene.kitchen_default
+              transition: 60
     - service: switch.turn_on
       data:
         entity_id:
@@ -55,8 +53,8 @@
           - switch.living_room_stairs
           - switch.driveway_light
           - switch.porch_light
-    - service: light.turn_off
+    - service: scene.turn_on
       data:
-        entity_id:
-          - light.kitchen_up
-          - light.kitchen_down
+        entity_id: 
+          - scene.kitchen_off
+        transition: 60

@@ -1,7 +1,7 @@
 - id: 3801c24c-e453-48f8-abc0-90b67f6b7d18
   alias: Fire - Open Job
   description: ''
-  mode: single
+  mode: restart
   trigger:
     - platform: state
       entity_id: binary_sensor.bryx_open_job
@@ -20,10 +20,24 @@
           - media_player.master_bedroom_speaker
         cache: false
         message: "Alert: {{ states('sensor.bryx_current_job_type') }} {{ states('sensor.bryx_current_job_synopsis') }} at {{ states('sensor.bryx_current_job_address') }}"
-    - service: light.turn_on
+    - service: scene.turn_on
+      data:
+        entity_id: 
+          - scene.kitchen_fire_call
+          - scene.office_fire_call
+        transition: 10
+    - wait_for_trigger:
+      - platform: state
+        entity_id: binary_sensor.bryx_open_job
+        from: 'on'
+        to: 'off'
+    - service: scene.turn_on
+      data:
+        entity_id: 
+          - scene.kitchen_default
+        transition: 10
+    - service: scene.turn_on
       data:
         entity_id:
-          - light.kitchen_up
-          - light.kitchen_down
-        brightness: 255
-        rgb_color: [255, 0, 0]
+          - scene.office_off
+        transition: 10
