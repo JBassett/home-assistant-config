@@ -13,7 +13,6 @@ hello:
               entity_id:
                 - switch.living_room_corner
                 - switch.living_room_stairs
-                - switch.fireplace_flame # We have an automation to turn fan off later.
 
 ######################## Kitchen ####################
           - service: light.turn_on
