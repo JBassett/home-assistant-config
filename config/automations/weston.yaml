@@ -21,7 +21,7 @@
     - service: light.turn_on
       data:
         entity_id: light.weston_lamp
-        brightness: 90
+        brightness: 3
         rgb_color: [255, 0, 0]
 
 - id: 9d684000-821b-49c3-9770-3fa876b6effb
@@ -34,6 +34,8 @@
     - platform: state
       entity_id: media_player.westons_room_speaker
       from: 'playing'
+      for:
+        seconds: 10
   condition:
     - condition: state
       entity_id: input_boolean.weston_nap
@@ -44,6 +46,17 @@
         entity_id: media_player.westons_room_speaker
         media_content_id: !secret ocean_sounds_url
         media_content_type: 'music'
+    # - service: media_player.play_media
+    #   data:
+    #     entity_id: media_player.westons_room_speaker
+    #     media_content_type: MUSIC
+    #     media_content_id: >-
+    #       plex://{ 
+    #         "library_name": "Music", 
+    #         "artist_name": "Raffi",
+    #         "shuffle": "1"
+    #       }
+
 
 - id: 8ab6d2cd-32fa-494f-a0e8-271dda57fa04
   alias: Weston - Wakup

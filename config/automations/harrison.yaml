@@ -29,6 +29,8 @@
     - platform: state
       entity_id: media_player.harrisons_room_speaker
       from: 'playing'
+      for:
+        seconds: 10
   condition:
     - condition: state
       entity_id: input_boolean.harrison_nap
