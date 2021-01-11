@@ -1,0 +1,51 @@
+- id: 3c9f3ad4-042c-41db-a305-d4e9c6af4984
+  alias: NFL - Monitor Game
+  mode: restart
+  trigger:
+    - platform: state
+      entity_id: sensor.bills_game_status
+      to: 'Pregame'
+    - platform: state
+      entity_id: sensor.bills_game_status
+      to: 'In Progress'
+  condition:
+  action:
+    - repeat:
+        while: "{{ not is_state('sensor.bills_game_status', 'Final')}}"
+        sequence:
+          - service: homeassistant.update_entity
+            data:
+              entity_id: sensor.bills_game_status
+          - delay:
+              seconds: 15
+- id: 5e4e71eb-df88-47c3-8aa6-20f3bf4255f6
+  alias: NFL - Bills Score
+  mode: single
+  trigger:
+    - platform: state
+      entity_id: sensor.bills_score
+  condition:
+  action:
+    - service: media_player.play_media
+      data:
+        entity_id: media_player.kitchen_display
+        media_content_id: !secret bills_shout
+        media_content_type: 'music'
+    - service: light.turn_on
+      data:
+        entity_id: 
+          - light.kitchen_up
+          - light.kitchen_down
+        effect: Touchdown
+    - wait_for_trigger:
+        - platform: state
+          entity_id: media_player.kitchen_display
+          from: 'playing'
+          to: 'idle'
+      timeout:
+        minutes: 2
+    - service: scene.turn_on
+      data:
+        entity_id: scene.kitchen_default
+    - delay:
+        minutes: 2
