@@ -47,7 +47,7 @@ light:
           transition_length: 4s
           update_interval: 5s
       - strobe:
-          name: In Alarm
+          name: Touchdown
           colors:
             - state: True
               brightness: 100%
