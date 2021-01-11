@@ -3,8 +3,8 @@
   mode: restart
   trigger:
     - platform: state
-      entity_id: sensor.bills_game_status
-      to: 'Pregame'
+      entity_id: calendar.buffalo_bills
+      to: 'on'
     - platform: state
       entity_id: sensor.bills_game_status
       to: 'In Progress'
@@ -17,14 +17,18 @@
             data:
               entity_id: sensor.bills_game_status
           - delay:
-              seconds: 15
+              seconds: 10
 - id: 5e4e71eb-df88-47c3-8aa6-20f3bf4255f6
   alias: NFL - Bills Score
   mode: single
   trigger:
-    - platform: state
+    - platform: numeric_state
       entity_id: sensor.bills_score
+      above: 0
   condition:
+    - condition: state
+      entity_id: sensor.bills_game_status
+      state: 'In Progress'
   action:
     - service: media_player.play_media
       data:

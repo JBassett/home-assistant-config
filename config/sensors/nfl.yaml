@@ -3,8 +3,11 @@
   resource: http://static.nfl.com/liveupdate/scorestrip/postseason/ss.xml
   name: bills_game_status
   value_template: >
-    {% for game in value_json.ss.gms.g %}
-      {% if game['@h'] == 'BUF' or game['@v'] == 'BUF' %}
+    {% for game in value_json.ss.gms.g 
+      | sort(attribute="@gsis",reverse=true) 
+      if game['@h'] == 'BUF' or game['@v'] == 'BUF' 
+    %}
+      {% if loop.first %}
         {% if game['@q'] == 'P' %}
           Pregame
         {% elif game['@q'] == '1' or game['@q'] == '2' or game['@q'] == '3' or game['@q'] == '4' or game['@q'] == 'O' or game['@q'] == 'H' %}
@@ -27,10 +30,14 @@
     bills_score:
       friendly_name: Bills Score
       value_template: >
-        {% for game in states.sensor.bills_game_status.attributes['ss']['gms']['g'] %}
-          {% if game['@h'] == 'BUF' %}
-            {{ game['@hs'] }}
-          {% elif game['@v'] == 'BUF' %}
-            {{ game['@vs'] }}
+        {% for game in states.sensor.bills_game_status.attributes['ss']['gms']['g'] 
+          | sort(attribute="@gsis",reverse=true) 
+          if game['@h'] == 'BUF' or game['@v'] == 'BUF' %}
+          {% if loop.first %}
+            {% if game['@h'] == 'BUF' %}
+              {{ game['@hs'] }}
+            {% else %}
+              {{ game['@vs'] }}
+            {% endif %}
           {% endif %}
         {% endfor %}
