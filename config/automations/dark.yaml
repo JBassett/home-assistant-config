@@ -5,10 +5,17 @@
       entity_id: input_boolean.dark_outside
       from: 'off'
       to: 'on'
+    - platform: state
+      entity_id: input_boolean.sleeping
+      from: 'on'
+      to: 'off'
   condition: 
     - condition: state
       entity_id: input_boolean.sleeping
       state: 'off'
+    - condition: state
+      entity_id: input_boolean.dark_outside
+      state: 'on'
   action:
     - choose:
       - conditions:
