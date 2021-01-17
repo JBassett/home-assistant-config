@@ -1,23 +1,55 @@
 - id: 3c9f3ad4-042c-41db-a305-d4e9c6af4984
-  alias: NFL - Monitor Game
-  mode: restart
+  alias: NFL - Monitor Game Day
+  mode: queued
   trigger:
     - platform: state
       entity_id: calendar.buffalo_bills
-      to: 'on'
     - platform: state
       entity_id: sensor.bills_game_status
-      to: 'In Progress'
+    - platform: state
+      entity_id: sensor.bills_quarter
+    - platform: state
+      entity_id: sensor.bills_score
   condition:
   action:
-    - repeat:
-        while: "{{ not is_state('sensor.bills_game_status', 'Final')}}"
+    - choose:
+      - conditions:
+          - condition: or
+            conditions:
+              - condition: state
+                entity_id: calendar.buffalo_bills
+                state: 'on'
+              - condition: state
+                entity_id: sensor.bills_game_status
+                state: 'In Progress'
         sequence:
-          - service: homeassistant.update_entity
+          - service: automation.turn_on
             data:
-              entity_id: sensor.bills_game_status
-          - delay:
-              seconds: 10
+              entity_id: automation.nfl_monitor_game_fast
+      default:
+          - service: automation.turn_off
+            data:
+              entity_id: automation.nfl_monitor_game_fast
+
+- id: b33a0908-385b-4ce6-b96d-6d18afd851bd
+  alias: NFL - Monitor Game Fast
+  trigger:
+    - platform: time_pattern
+      seconds: "/2"
+  condition:
+    - condition: or
+      conditions:
+        - condition: state
+          entity_id: sensor.bills_game_status
+          state: 'In Progress'
+        - condition: state
+          entity_id: calendar.buffalo_bills
+          state: 'on'
+  action:
+    - service: homeassistant.update_entity
+      data:
+        entity_id: sensor.bills_game_status
+
 - id: 5e4e71eb-df88-47c3-8aa6-20f3bf4255f6
   alias: NFL - Bills Score
   mode: single

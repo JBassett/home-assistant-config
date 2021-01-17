@@ -32,12 +32,34 @@
       value_template: >
         {% for game in states.sensor.bills_game_status.attributes['ss']['gms']['g'] 
           | sort(attribute="@gsis",reverse=true) 
-          if game['@h'] == 'BUF' or game['@v'] == 'BUF' %}
+          if game['@h'] == 'BUF' or game['@v'] == 'BUF' 
+        %}
           {% if loop.first %}
             {% if game['@h'] == 'BUF' %}
               {{ game['@hs'] }}
             {% else %}
               {{ game['@vs'] }}
             {% endif %}
+          {% endif %}
+        {% endfor %}
+    bills_quarter:
+      friendly_name: Bills Quarter
+      value_template: >
+        {% for game in states.sensor.bills_game_status.attributes['ss']['gms']['g'] 
+          | sort(attribute="@gsis",reverse=true) 
+          if game['@h'] == 'BUF' or game['@v'] == 'BUF' 
+        %}
+          {% if loop.first %}
+            {% if game['@q'] == 'P' or game['@q'] == 'S' %}
+              0 
+            {% elif game['@q'] == 'F' or game['@q'] == 'FO' %}
+              -1
+            {% elif game['@q'] == 'H' %}
+              2          
+            {% elif game['@q'] == 'O' %}
+              5          
+            {% else %}
+              {{ game['@q'] }}
+            {% endif %}            
           {% endif %}
         {% endfor %}
