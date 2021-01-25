@@ -56,11 +56,13 @@
   trigger:
     - platform: numeric_state
       entity_id: sensor.bills_score
-      above: 0
   condition:
     - condition: state
       entity_id: sensor.bills_game_status
       state: 'In Progress'
+    - condition: numeric_state
+      entity_id: sensor.bills_score
+      above: 0
   action:
     - service: media_player.play_media
       data:
