@@ -47,8 +47,8 @@ switch:
       inverted: yes
     restore_mode: ALWAYS_OFF
   - platform: gpio
-    id: fireplace_disable
-    name: "Fireplace - Disable"
+    id: fireplace_enabled
+    name: "Fireplace - Enabled"
     pin: GPIO14
     restore_mode: ALWAYS_OFF
 
@@ -62,7 +62,7 @@ binary_sensor:
     on_state:
       if:
         condition:
-          switch.is_off: fireplace_disable
+          switch.is_on: fireplace_enabled
         then:
           - switch.toggle: fireplace_flame
   - platform: gpio
@@ -74,6 +74,6 @@ binary_sensor:
     on_state:
       if:
         condition:
-          switch.is_off: fireplace_disable
+          switch.is_on: fireplace_enabled
         then:
           - switch.toggle: fireplace_fan
