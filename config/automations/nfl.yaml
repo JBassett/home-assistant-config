@@ -54,7 +54,7 @@
   alias: NFL - Bills Score
   mode: single
   trigger:
-    - platform: numeric_state
+    - platform: state
       entity_id: sensor.bills_score
   condition:
     - condition: state
