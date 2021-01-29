@@ -62,6 +62,26 @@
       data:
         agent_user_id: !secret userid_justin
 
-# TODO: Nightly Snapshots
-
-# TODO: Pre Upgrade Snapshot
+- id: c80dcad1-3364-4c87-81a4-fecb1a438a3e
+  alias: Maintenance - Internet Speeds Slow
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.speedtest_download
+      below: 150
+  action:
+    - delay:
+        minutes: 5
+    - service: speedtestdotnet.speedtest
+    - wait_for_trigger:
+      - platform: state
+        entity_id: sensor.speedtest_download
+    - choose:
+      - conditions:
+          - condition: numeric_state
+            entity_id: sensor.speedtest_download
+            below: 150
+        sequence:
+          - service: notify.mobile_app_pixel_4a
+            data:
+              title: Slow Internet
+              message: "Your internet speed is only {{ states('sensor.speedtest_download') }} Mbit/s"
