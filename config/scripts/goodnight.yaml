@@ -30,8 +30,8 @@ goodnight:
     - service: switch.turn_off
       data:
         entity_id:
-          - switch.driveway_light
-          - switch.porch_light
+          - switch.driveway_lights
+          - switch.porch_lights
 
 ####################### Set Sleeping #####################
     - service: input_boolean.turn_on

@@ -41,8 +41,8 @@
     - service: switch.turn_on
       data:
         entity_id:
-          - switch.driveway_light
-          - switch.porch_light
+          - switch.driveway_lights
+          - switch.porch_lights
 
 - id: 9a78d5fe-bdb9-4b47-87af-67ccb7dd6efd
   alias: Dark - False
@@ -58,8 +58,8 @@
         entity_id:
           - switch.living_room_corner
           - switch.living_room_stairs
-          - switch.driveway_light
-          - switch.porch_light
+          - switch.driveway_lights
+          - switch.porch_lights
     - service: scene.turn_on
       data:
         entity_id: 

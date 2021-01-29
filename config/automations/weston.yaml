@@ -78,7 +78,7 @@
         entity_id: media_player.westons_room_speaker
     - service: fan.turn_off
       data:
-        entity_id: fan.weston_fan
+        entity_id: fan.weston
     - service: light.turn_off
       data:
         entity_id: light.weston_lamp
@@ -100,7 +100,7 @@
   action:
     - service: fan.set_speed
       data:
-        entity_id: fan.weston_fan
+        entity_id: fan.weston
         speed: >
           {%set diff=states('sensor.weston_temperature')|float - state_attr('climate.family_room', 'current_temperature')|float%}
           {% if diff < 2 %}

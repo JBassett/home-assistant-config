@@ -43,9 +43,9 @@ goodbye:
     - service: fan.turn_off
       data:
         entity_id:
-          - fan.master_fan
-          - fan.harrison_fan
-          - fan.weston_fan
+          - fan.master
+          - fan.harrison
+          - fan.weston
     - service: light.turn_off
       data:
         entity_id:

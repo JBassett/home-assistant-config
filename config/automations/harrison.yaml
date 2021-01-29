@@ -62,7 +62,7 @@
         entity_id: media_player.harrisons_room_speaker
     - service: fan.turn_off
       data:
-        entity_id: fan.harrison_fan
+        entity_id: fan.harrison
 
 - id: 8880f282-3b23-48ad-b9d8-34c83abb535c
   alias: Harrison - Fan Control
@@ -81,7 +81,7 @@
   action:
     - service: fan.set_speed
       data:
-        entity_id: fan.harrison_fan
+        entity_id: fan.harrison
         speed: >
           {%set diff=states('sensor.harrison_temperature')|float - state_attr('climate.family_room', 'current_temperature')|float%}
           {% if diff < 2 %}
