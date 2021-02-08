@@ -16,5 +16,4 @@
       friendly_name: 'Daily useage of energy'
       unit_of_measurement: 'kWh'
       value_template: >-
-        {{states('sensor.solar_daily_energy')|float + states('sensor.house_daily_net_energy')|float}}
-
+        {{(states('sensor.solar_daily_energy')|float + states('sensor.house_daily_net_energy')|float)|round(2)}}
