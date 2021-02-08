@@ -11,6 +11,14 @@
     - condition: state
       entity_id: sensor.home_status
       state: Occupied
+    - condition: not
+      conditions:    
+      - condition: time
+        after: '08:00:00'
+        before: '17:00:00'
+        weekday:
+          - tue
+          - thu
   action:
     - service: input_boolean.turn_on
       data:
