@@ -1,0 +1,6 @@
+- platform: scrape
+  name: WCF Scanner Stream
+  resource: https://www.broadcastify.com/webPlayer/13501
+  select: audio
+  attribute: src
+  scan_interval: 600
