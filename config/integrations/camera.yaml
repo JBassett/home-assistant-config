@@ -9,23 +9,44 @@ camera:
     username: !secret cam_user
     password: !secret cam_pass
     still_image_url: !secret cam_living_pic_url
-    # stream_source: !secret cam_living_url
 
   - platform: generic
-    name: Weston's Room
+    name: Living Room Stream
+    verify_ssl: false
+    username: !secret cam_user
+    password: !secret cam_pass
+    still_image_url: !secret cam_living_pic_url
+    stream_source: !secret cam_living_url
+
+  - platform: generic
+    name: Weston
     verify_ssl: false
     username: !secret cam_user
     password: !secret cam_pass
     still_image_url: !secret cam_weston_pic_url
-    # stream_source: !secret cam_weston_url
     
   - platform: generic
-    name: Harrison's Room
+    name: Weston Stream
+    verify_ssl: false
+    username: !secret cam_user
+    password: !secret cam_pass
+    still_image_url: !secret cam_weston_pic_url
+    stream_source: !secret cam_weston_url
+
+  - platform: generic
+    name: Harrison
     verify_ssl: false
     username: !secret cam_user
     password: !secret cam_pass
     still_image_url: !secret cam_harrison_pic_url
-    # stream_source: !secret cam_harrison_url
+
+  - platform: generic
+    name: Harrison Stream
+    verify_ssl: false
+    username: !secret cam_user
+    password: !secret cam_pass
+    still_image_url: !secret cam_harrison_pic_url
+    stream_source: !secret cam_harrison_url
 
   - platform: generic
     name: Garage
@@ -33,7 +54,14 @@ camera:
     username: !secret cam_user
     password: !secret cam_pass
     still_image_url: !secret cam_garage_pic_url
-    # stream_source: !secret cam_garage_url
+
+  - platform: generic
+    name: Garage Stream
+    verify_ssl: false
+    username: !secret cam_user
+    password: !secret cam_pass
+    still_image_url: !secret cam_garage_pic_url
+    stream_source: !secret cam_garage_url
 
   - platform: generic
     name: Driveway
@@ -41,7 +69,14 @@ camera:
     username: !secret cam_user
     password: !secret cam_pass
     still_image_url: !secret cam_driveway_pic_url
-    # stream_source: !secret cam_driveway_url
+
+  - platform: generic
+    name: Driveway Stream
+    verify_ssl: false
+    username: !secret cam_user
+    password: !secret cam_pass
+    still_image_url: !secret cam_driveway_pic_url
+    stream_source: !secret cam_driveway_url
 
   - platform: generic
     name: Front Door
@@ -57,4 +92,12 @@ camera:
     username: !secret cam_user
     password: !secret cam_pass
     still_image_url: !secret cam_backyard_pic_url
-    # stream_source: !secret cam_backyard_url
+
+  - platform: generic
+    name: Backyard Stream
+    verify_ssl: false
+    username: !secret cam_user
+    password: !secret cam_pass
+    still_image_url: !secret cam_backyard_pic_url
+    stream_source: !secret cam_backyard_url
+  
