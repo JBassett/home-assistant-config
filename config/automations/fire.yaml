@@ -24,20 +24,28 @@
       data:
         entity_id: 
           - scene.kitchen_fire_call
-          - scene.office_fire_call
         transition: 10
+    - delay:
+        seconds: 15
+    - service: media_player.play_media
+      data:
+        entity_id: 
+          - media_player.office_speaker
+          - media_player.kitchen_display
+        media_content_id: "{{sensor.wcf_scanner_stream}}"
+        media_content_type: music
     - wait_for_trigger:
       - platform: state
         entity_id: binary_sensor.bryx_open_job
         from: 'on'
         to: 'off'
+    - service: media_player.media_stop
+      data:
+        entity_id: 
+          - media_player.office_speaker
+          - media_player.kitchen_display
     - service: scene.turn_on
       data:
         entity_id: 
           - scene.kitchen_default
-        transition: 10
-    - service: scene.turn_on
-      data:
-        entity_id:
-          - scene.office_off
         transition: 10
