@@ -1,8 +1,6 @@
 person.justin:
   entity_picture: /local/avatars/Justin.jpg
-
 person.shannon:
   entity_picture: /local/avatars/Shannon.jpg
-
-device_tracker.bolt:
+device_tracker.bolt_2:
   entity_picture: /local/avatars/Bolt.jpg
