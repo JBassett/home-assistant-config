@@ -1,4 +1,5 @@
 import logging
+import datetime
 
 from .const import DOMAIN
 
@@ -7,7 +8,10 @@ from homeassistant.const import (
     ATTR_BATTERY_CHARGING
 )
 
-from homeassistant.components.binary_sensor import BinarySensorEntity
+from homeassistant.components.binary_sensor import (
+    DEVICE_CLASS_CONNECTIVITY,
+    BinarySensorEntity
+)
 from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.restore_state import RestoreEntity
 
@@ -21,7 +25,8 @@ async def async_setup_entry(hass, entry, async_add_entities):
     autopi = hass.data[DOMAIN]['autopi']
 
     async_add_entities([
-        ChargingBinarySensor(autopi)
+        ChargingBinarySensor(autopi),
+        ConnectionBinarySensor(autopi)
         ])
     _LOGGER.debug("async_setup_entry -> Complete")
 
@@ -71,3 +76,17 @@ class ChargingBinarySensor(AutopiBinarySensor):
         if self.autopi.latest and 'is_charging' in self.autopi.latest:
             return self.autopi.latest['is_charging']
         return self._last_state == STATE_ON
+
+class ConnectionBinarySensor(AutopiBinarySensor):
+    should_poll = True
+    name = "Bolt - Connected"
+    entity_id = "binary_sensor.bolt_connected"
+    device_class = DEVICE_CLASS_CONNECTIVITY
+
+    def __init__(self, autopi):
+        self.autopi = autopi
+    
+    @property
+    def is_on(self):
+        """Return the state of the binary sensor."""
+        return (datetime.datetime.utcnow() - self.autopi.update_time) < datetime.timedelta(seconds = 30)
