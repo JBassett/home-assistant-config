@@ -24,6 +24,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
 
     async_add_entities([
         StateOfChargeSensor(autopi),
+        SpeedSensor(autopi),
         BatteryTempSensor(autopi),
         ExternalTempSensor(autopi),
         PiVoltageSensor(autopi),
@@ -80,6 +81,22 @@ class StateOfChargeSensor(AutopiSensor):
         """Return the state of the sensor."""
         if self.autopi.latest and self.autopi.latest['soc'] != -1:
             return self.autopi.latest['soc']
+        return self._last_state
+
+class SpeedSensor(AutopiSensor):
+    
+    name = "Bolt - Speed"
+    entity_id = "sensor.bolt_speed"
+    unit_of_measurement = "mph"
+
+    def __init__(self, autopi):
+        self.autopi = autopi
+    
+    @property
+    def state(self):
+        """Return the state of the sensor."""
+        if self.autopi.latest and 'speed' in self.autopi.latest:
+            return round(self.autopi.latest['speed'] / 1.609344)
         return self._last_state
 
 class BatteryTempSensor(AutopiSensor):
