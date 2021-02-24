@@ -7,7 +7,8 @@ from homeassistant.const import (
     DEVICE_CLASS_TEMPERATURE,
     DEVICE_CLASS_POWER,
     DEVICE_CLASS_CURRENT,
-    DEVICE_CLASS_VOLTAGE
+    DEVICE_CLASS_VOLTAGE,
+    DEVICE_CLASS_ENERGY
 )
 
 from homeassistant.helpers.entity import Entity
@@ -31,7 +32,13 @@ async def async_setup_entry(hass, entry, async_add_entities):
         ShifterSensor(autopi),
         PowerSensor(autopi),
         VoltageSensor(autopi),
-        CurrentSensor(autopi)
+        CurrentSensor(autopi),
+        BatteryCapacitySensor(autopi),
+        BatteryCoolantSpeedSensor(autopi),
+        BatteryCoolantTempSensor(autopi),
+        BatteryHeaterPowerSensor(autopi),
+        CabinAcPowerSensor(autopi),
+        CabinHeaterPowerSensor(autopi)
         ])
     _LOGGER.debug("async_setup_entry -> Complete")
 
@@ -232,4 +239,110 @@ class CurrentSensor(AutopiSensor):
         """Return the state of the sensor."""
         if self.autopi.latest and 'current' in self.autopi.latest:
             self._last_state = self.autopi.latest['current']
+        return self._last_state
+
+class BatteryCapacitySensor(AutopiSensor):
+    
+    name = "Bolt - Battery Capacity"
+    entity_id = "sensor.bolt_battery_capacity"
+    device_class = DEVICE_CLASS_ENERGY
+    unit_of_measurement = "kWh"
+
+    def __init__(self, autopi):
+        self.autopi = autopi
+    
+    @property
+    def state(self):
+        """Return the state of the sensor."""
+        if self.autopi.latest and 'battery_capacity' in self.autopi.latest:
+            self._last_state = self.autopi.latest['battery_capacity']
+        return self._last_state
+
+class BatteryCoolantSpeedSensor(AutopiSensor):
+    
+    name = "Bolt - Battery Coolant Speed"
+    entity_id = "sensor.bolt_battery_coolant_speed"
+    unit_of_measurement = "rpm"
+
+    def __init__(self, autopi):
+        self.autopi = autopi
+    
+    @property
+    def state(self):
+        """Return the state of the sensor."""
+        if self.autopi.latest and 'battery_coolant_speed' in self.autopi.latest:
+            self._last_state = self.autopi.latest['battery_coolant_speed']
+        return self._last_state
+
+class BatteryCoolantTempSensor(AutopiSensor):
+    
+    name = "Bolt - Battery Coolant Temp"
+    entity_id = "sensor.bolt_battery_coolant_temp"
+    device_class = DEVICE_CLASS_TEMPERATURE
+    unit_of_measurement = "°C"
+
+    def __init__(self, autopi):
+        self.autopi = autopi
+    
+    async def async_added_to_hass(self):
+        await AutopiSensor.async_added_to_hass(self)
+        if self._last_state:
+            self._last_state = round((float(self._last_state) - 32 ) * (5/9), 2)
+    
+    @property
+    def state(self):
+        """Return the state of the sensor."""
+        if self.autopi.latest and 'battery_coolant_temp' in self.autopi.latest:
+            self._last_state = self.autopi.latest['battery_coolant_temp']
+        return self._last_state
+
+class BatteryHeaterPowerSensor(AutopiSensor):
+    
+    name = "Bolt - Battery Heater Power"
+    entity_id = "sensor.bolt_battery_heater_power"
+    device_class = DEVICE_CLASS_POWER
+    unit_of_measurement = "W"
+
+    def __init__(self, autopi):
+        self.autopi = autopi
+    
+    @property
+    def state(self):
+        """Return the state of the sensor."""
+        if self.autopi.latest and 'battery_heater_power' in self.autopi.latest:
+            self._last_state = self.autopi.latest['battery_heater_power']
+        return self._last_state
+
+class CabinAcPowerSensor(AutopiSensor):
+    
+    name = "Bolt - Cabin AC Power"
+    entity_id = "sensor.bolt_cabin_ac_power"
+    device_class = DEVICE_CLASS_POWER
+    unit_of_measurement = "W"
+
+    def __init__(self, autopi):
+        self.autopi = autopi
+    
+    @property
+    def state(self):
+        """Return the state of the sensor."""
+        if self.autopi.latest and 'cabin_ac_power' in self.autopi.latest:
+            self._last_state = self.autopi.latest['cabin_ac_power']
+        return self._last_state
+
+class CabinHeaterPowerSensor(AutopiSensor):
+    
+    name = "Bolt - Cabin Heater Power"
+    entity_id = "sensor.bolt_cabin_heater_power"
+    device_class = DEVICE_CLASS_POWER
+    unit_of_measurement = "W"
+
+    def __init__(self, autopi):
+        self.autopi = autopi
+    
+    @property
+    def state(self):
+        """Return the state of the sensor."""
+        if self.autopi.latest and 'cabin_heater_power' in self.autopi.latest:
+            self._last_state = self.autopi.latest['cabin_heater_power']
         return self._last_state
