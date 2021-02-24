@@ -79,8 +79,8 @@ class StateOfChargeSensor(AutopiSensor):
     @property
     def state(self):
         """Return the state of the sensor."""
-        if self.autopi.latest and self.autopi.latest['soc'] != -1:
-            return self.autopi.latest['soc']
+        if self.autopi.latest and 'soc' in self.autopi.latest:
+            self._last_state = self.autopi.latest['soc']
         return self._last_state
 
 class SpeedSensor(AutopiSensor):
@@ -96,7 +96,7 @@ class SpeedSensor(AutopiSensor):
     def state(self):
         """Return the state of the sensor."""
         if self.autopi.latest and 'speed' in self.autopi.latest:
-            return round(self.autopi.latest['speed'] / 1.609344)
+            self._last_state = round(self.autopi.latest['speed'] / 1.609344)
         return self._last_state
 
 class BatteryTempSensor(AutopiSensor):
@@ -109,14 +109,17 @@ class BatteryTempSensor(AutopiSensor):
     def __init__(self, autopi):
         self.autopi = autopi
     
+    async def async_added_to_hass(self):
+        await AutopiSensor.async_added_to_hass(self)
+        if self._last_state:
+            self._last_state = round((float(self._last_state) - 32 ) * (5/9), 2)
+
     @property
     def state(self):
         """Return the state of the sensor."""
-        if self.autopi.latest and self.autopi.latest['battery_temp'] != -100:
-            return self.autopi.latest['battery_temp']
-        elif self._last_state:
-            return round((float(self._last_state) - 32 ) * (5/9), 2)
-        return None
+        if self.autopi.latest and 'battery_temp' in self.autopi.latest:
+            self._last_state = self.autopi.latest['battery_temp']
+        return self._last_state
 
 class ExternalTempSensor(AutopiSensor):
     
@@ -128,14 +131,17 @@ class ExternalTempSensor(AutopiSensor):
     def __init__(self, autopi):
         self.autopi = autopi
     
+    async def async_added_to_hass(self):
+        await AutopiSensor.async_added_to_hass(self)
+        if self._last_state:
+            self._last_state = round((float(self._last_state) - 32 ) * (5/9), 2)
+
     @property
     def state(self):
         """Return the state of the sensor."""
-        if self.autopi.latest and self.autopi.latest['external_temp'] != -100:
-            return self.autopi.latest['external_temp']
-        elif self._last_state:
-            return round((float(self._last_state) - 32 ) * (5/9), 2)
-        return None
+        if self.autopi.latest and 'external_temp' in self.autopi.latest:
+            self._last_state = self.autopi.latest['external_temp']
+        return self._last_state
 
 class PiVoltageSensor(AutopiSensor):
     
@@ -150,8 +156,8 @@ class PiVoltageSensor(AutopiSensor):
     @property
     def state(self):
         """Return the state of the sensor."""
-        if self.autopi.latest and self.autopi.latest['pi_voltage'] != -1:
-            return self.autopi.latest['pi_voltage']
+        if self.autopi.latest and 'pi_voltage' in self.autopi.latest:
+            self._last_state = self.autopi.latest['pi_voltage']
         return self._last_state
 
 class ShifterSensor(AutopiSensor):
@@ -173,8 +179,8 @@ class ShifterSensor(AutopiSensor):
     @property
     def state(self):
         """Return the state of the sensor."""
-        if self.autopi.latest:
-            return self.shifter_pos.get(self.autopi.latest['shifter'], "Unknown")
+        if self.autopi.latest and 'shifter' in self.autopi.latest:
+            self._last_state = self.shifter_pos.get(self.autopi.latest['shifter'], "Unknown")
         return self._last_state
 
 class PowerSensor(AutopiSensor):
@@ -190,8 +196,8 @@ class PowerSensor(AutopiSensor):
     @property
     def state(self):
         """Return the state of the sensor."""
-        if self.autopi.latest and self.autopi.latest['power'] != -1:
-            return self.autopi.latest['power']
+        if self.autopi.latest and 'power' in self.autopi.latest:
+            self._last_state = self.autopi.latest['power']
         return self._last_state
 
 class VoltageSensor(AutopiSensor):
@@ -207,8 +213,8 @@ class VoltageSensor(AutopiSensor):
     @property
     def state(self):
         """Return the state of the sensor."""
-        if self.autopi.latest and self.autopi.latest['voltage'] != -1:
-            return self.autopi.latest['voltage']
+        if self.autopi.latest and 'voltage' in self.autopi.latest:
+            self._last_state = self.autopi.latest['voltage']
         return self._last_state
 
 class CurrentSensor(AutopiSensor):
@@ -224,6 +230,6 @@ class CurrentSensor(AutopiSensor):
     @property
     def state(self):
         """Return the state of the sensor."""
-        if self.autopi.latest and self.autopi.latest['current'] != -1:
-            return self.autopi.latest['current']
+        if self.autopi.latest and 'current' in self.autopi.latest:
+            self._last_state = self.autopi.latest['current']
         return self._last_state

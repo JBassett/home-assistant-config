@@ -5,6 +5,7 @@ from .const import DOMAIN
 
 from homeassistant.const import (
     STATE_ON,
+    STATE_OFF,
     ATTR_BATTERY_CHARGING
 )
 
@@ -74,7 +75,7 @@ class ChargingBinarySensor(AutopiBinarySensor):
     def is_on(self):
         """Return the state of the binary sensor."""
         if self.autopi.latest and 'is_charging' in self.autopi.latest:
-            return self.autopi.latest['is_charging']
+            self._last_state = STATE_ON if self.autopi.latest['is_charging'] else STATE_OFF
         return self._last_state == STATE_ON
 
 class ConnectionBinarySensor(AutopiBinarySensor):

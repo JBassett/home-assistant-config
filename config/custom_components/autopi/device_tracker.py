@@ -50,6 +50,8 @@ class DeviceTrackerSensor(RestoreEntity, TrackerEntity):
         state = await self.async_get_last_state()
         if state:
             self._last_state_attr = state.attributes
+            self._last_lat = state.attributes.get('latitude')
+            self._last_lon = state.attributes.get('longitude')
 
     async def async_will_remove_from_hass(self):
         self.autopi.remove_callback(self.async_write_ha_state)
@@ -66,7 +68,6 @@ class DeviceTrackerSensor(RestoreEntity, TrackerEntity):
             "manufacturer": "Chevrolet",
             "model": "Bolt",
             "device_name": "BoltyMcBoltface",
-            "name": "BoltyMcBoltface",
             "sw_version": "2017",
         }
 
@@ -83,15 +84,15 @@ class DeviceTrackerSensor(RestoreEntity, TrackerEntity):
     def latitude(self):
         """Return latitude value of the device."""
         if self.autopi.latest and 'lat' in self.autopi.latest:
-            return self.autopi.latest['lat']
-        return self._last_state_attr.get('latitude')
+            self._last_lat = self.autopi.latest['lat']
+        return self._last_lat
 
     @property
     def longitude(self):
         """Return longitude value of the device."""
         if self.autopi.latest and 'lon' in self.autopi.latest:
-            return self.autopi.latest['lon']
-        return self._last_state_attr.get('longitude')
+            self._last_lon = self.autopi.latest['lon']
+        return self._last_lon
 
     @property
     def source_type(self):
