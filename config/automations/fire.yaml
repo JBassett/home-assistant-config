@@ -32,7 +32,7 @@
         entity_id: 
           - media_player.office_speaker
           - media_player.kitchen_display
-        media_content_id: "{{sensor.wcf_scanner_stream}}"
+        media_content_id: "{{states('sensor.wcf_scanner_stream')}}"
         media_content_type: music
     - wait_for_trigger:
       - platform: state
