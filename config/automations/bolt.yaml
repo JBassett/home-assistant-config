@@ -27,6 +27,8 @@
       data:
         message: Bolt is currently at {{ states.sensor.bolt_soc.state }}%
         title: Don't Forget to Charge
+        data:
+          group: Bolt
     - service: tts.google_translate_say
       entity_id: 
         - media_player.kitchen_display
@@ -51,5 +53,7 @@
         title: "Driving Mode"
         message: "Open Bolt Dashboard"
         data:
+          tag: Bolt Driving Mode
+          group: Bolt
           sticky: true
           clickAction: '/lovelace/bolt'
