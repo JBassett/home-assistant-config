@@ -2,10 +2,9 @@
   alias: 'SpaceX - Next Launch Time Updated'
   initial_state: 'on'
   trigger:
-    - platform: numeric_state
+    - platform: state
       entity_id: sensor.next_launch_day
       attribute: launch_date_unix
-      above: 946684800 # January 1, 2000
     - platform: homeassistant
       event: start
   action:
