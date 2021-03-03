@@ -26,11 +26,6 @@
     - service: automation.trigger
       data:
         entity_id: automation.weston_fan_control
-    - service: light.turn_on
-      data:
-        entity_id: light.weston_lamp
-        brightness: 3
-        rgb_color: [255, 0, 0]
 
 - id: 9d684000-821b-49c3-9770-3fa876b6effb
   alias: Weston - Keep Sleeping
@@ -49,6 +44,11 @@
       entity_id: input_boolean.weston_nap
       state: 'on'
   action:
+    - service: light.turn_on
+      data:
+        entity_id: light.weston_lamp
+        brightness: 3
+        rgb_color: [255, 0, 0]
     - service: media_player.play_media
       data:
         entity_id: media_player.westons_room_speaker
