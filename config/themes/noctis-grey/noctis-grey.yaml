@@ -22,7 +22,7 @@ noctis-grey:
   disabled-text-color: '#626569'
 
   # Main Colors
-  app-header-background-color: 'var(--background-color)'
+  app-header-background-color: '#212121'
   accent-color: '#1A89F5'
   accent-medium-color: 'var(--accent-color)'
   primary-color: 'var(--accent-color)'
