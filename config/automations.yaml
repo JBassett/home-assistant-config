@@ -1,0 +1,25 @@
+- id: '1618360194429'
+  alias: Master - Sleeping
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: input_boolean.sleeping
+    to: 'on'
+  condition:
+  - condition: state
+    entity_id: sensor.home_status
+    state: Occupied
+  action:
+  - repeat:
+      until:
+      - condition: state
+        entity_id: input_boolean.sleeping
+        state: 'off'
+      sequence:
+      - service: media_player.play_media
+        target:
+          entity_id: media_player.master_bedroom_speaker
+        data:
+          media_content_id: https://storage.googleapis.com/relaxation-sounds/country_night_3600.mp3
+          media_content_type: music
+  mode: single
