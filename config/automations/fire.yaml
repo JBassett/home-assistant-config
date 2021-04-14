@@ -39,6 +39,8 @@
         entity_id: binary_sensor.bryx_open_job
         from: 'on'
         to: 'off'
+        for:
+          minutes: 5
     - service: media_player.media_stop
       data:
         entity_id: 
