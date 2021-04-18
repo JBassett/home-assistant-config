@@ -5,10 +5,15 @@
   - platform: state
     entity_id: input_boolean.sleeping
     to: 'on'
+  - platform: homeassistant
+    event: start
   condition:
   - condition: state
     entity_id: sensor.home_status
     state: Occupied
+  - condition: state
+    entity_id: input_boolean.sleeping
+    state: 'on'
   action:
   - repeat:
       until:
@@ -22,4 +27,19 @@
         data:
           media_content_id: https://storage.googleapis.com/relaxation-sounds/country_night_3600.mp3
           media_content_type: music
+      - delay:
+          hours: 0
+          minutes: 0
+          seconds: 10
+          milliseconds: 0
+      - wait_for_trigger:
+        - platform: state
+          entity_id: media_player.master_bedroom_speaker
+          from: playing
+          for: 0:00:10
+        - platform: state
+          entity_id: input_boolean.sleeping
+  - service: media_player.turn_off
+    target:
+      entity_id: media_player.master_bedroom_speaker
   mode: single
