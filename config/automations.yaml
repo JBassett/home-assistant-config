@@ -43,3 +43,15 @@
     target:
       entity_id: media_player.master_bedroom_speaker
   mode: single
+- id: f4442aab-21d6-4ee1-ac21-a3de30bdee0f
+  alias: Fireplace - Fan Auto Off
+  trigger:
+  - platform: state
+    entity_id: switch.fireplace_flame
+    to: 'off'
+    for: 00:10:00:000
+  action:
+  - service: switch.turn_off
+    target:
+      entity_id: switch.fireplace_fan
+  mode: single
