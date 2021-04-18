@@ -1,6 +1,5 @@
 - id: ee48101c-720f-4d4d-84c4-796f3a3eb424
   alias: Weston - Sleep
-  initial_state: 'on'
   trigger:
     # Start times
     - platform: time
@@ -29,7 +28,6 @@
 
 - id: 9d684000-821b-49c3-9770-3fa876b6effb
   alias: Weston - Keep Sleeping
-  initial_state: 'on'
   trigger:
     - platform: state
       entity_id: input_boolean.weston_nap
@@ -68,7 +66,6 @@
 
 - id: 8ab6d2cd-32fa-494f-a0e8-271dda57fa04
   alias: Weston - Wakup
-  initial_state: 'on'
   trigger:
     - platform: state
       entity_id: input_boolean.weston_nap
@@ -93,7 +90,6 @@
 
 - id: d1007417-f48d-4f5c-a06e-8d712a2ef51a
   alias: Weston - Fan Control
-  initial_state: 'on'
   trigger:
     # This doesn't update too much, should be safe
     - platform: state

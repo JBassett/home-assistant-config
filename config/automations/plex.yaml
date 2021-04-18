@@ -1,6 +1,5 @@
 - id: 5a876f15-8e89-4933-9b0f-f40c45881a36
   alias: 'Plex - Movie Downloaded'
-  initial_state: 'on'
   trigger:
     - platform: event
       event_type: PLEX_EVENT
@@ -24,7 +23,6 @@
 
 - id: aab1c07c-d1b3-4164-aeeb-52b4a92f7835
   alias: 'Plex - New TV Episode'
-  initial_state: 'on'
   trigger:
   - platform: event
     event_type: PLEX_EVENT
@@ -48,7 +46,6 @@
 
 - id: 88ecff53-91aa-4851-9e80-22997499db11
   alias: 'Plex - New Music Album'
-  initial_state: 'on'
   trigger:
   - platform: event
     event_type: PLEX_EVENT

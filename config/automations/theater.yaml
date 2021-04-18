@@ -1,6 +1,5 @@
 - id: ab41d20f-5788-413c-8f5a-93ad5a92b6e3
   alias: 'Theater - Starting Media'
-  initial_state: 'on'
   trigger:
     - platform: state
       entity_id: media_player.plex_living_room_tv
@@ -28,7 +27,6 @@
 
 - id: b218303e-bbd7-405b-842a-9b1909ff848b
   alias: 'Theater - Stopping Media'
-  initial_state: 'on'
   trigger:
     - platform: state
       entity_id: media_player.plex_living_room_tv

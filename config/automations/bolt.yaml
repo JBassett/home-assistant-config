@@ -1,6 +1,5 @@
 - id: 6cf596d9-0cff-40ee-90fc-71aa64dddff2
   alias: Bolt - Plug Me In
-  initial_state: 'on'
   trigger:
     - platform: state
       entity_id: device_tracker.bolt_2
@@ -37,23 +36,3 @@
       data:
         cache: false
         message: "The bolt isn't charging and is only at {{ states.sensor.bolt_soc.state | round }} percent."
-
-- id: 5d9e3d02-1462-4c6e-b758-b216642994e1
-  alias: Bolt - Notification to Dashboard
-  trigger:
-    - platform: state
-      entity_id: sensor.bolt_shifter
-      from: Park
-      for:
-        seconds: 30
-  condition:
-  action:
-    - service: notify.mobile_app_pixel_4a
-      data:
-        title: "Driving Mode"
-        message: "Open Bolt Dashboard"
-        data:
-          tag: Bolt Driving Mode
-          group: Bolt
-          sticky: true
-          clickAction: '/lovelace/bolt'

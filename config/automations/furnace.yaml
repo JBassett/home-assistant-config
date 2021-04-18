@@ -1,6 +1,5 @@
 - id: 30424b67-a4c9-4da2-a1c3-1cf63f48ada3
   alias: Furnace - AC Frozen
-  initial_state: 'on'
   trigger:
     platform: state
     entity_id: sensor.family_room_thermostat_hvac_state
@@ -22,7 +21,6 @@
 
 - id: cd89cab1-5e0a-4b74-bd3f-59c7f11c64af
   alias: Furnace - Away Mode
-  initial_state: 'on'
   trigger:
     - platform: state
       entity_id: sensor.home_status
@@ -36,7 +34,6 @@
 
 - id: dff2efb3-c16c-46d9-9f8f-56e920ea1a06
   alias: Furnace - Home Mode
-  initial_state: 'on'
   trigger:
     - platform: state
       entity_id: sensor.home_status

@@ -1,6 +1,5 @@
 - alias: 'Garage Door - Left Open Notification'
   id: f2e584e1-3c07-4da2-ac24-99ada3fd659f
-  initial_state: 'on'
   mode: restart
   trigger:
     - platform: state
@@ -33,7 +32,6 @@
 
 - alias: 'Garage Door - Opened/Closed not home'
   id: 52340028-d645-4654-9c06-ee4158ef027b
-  initial_state: 'on'
   mode: restart
   trigger:
     - entity_id: cover.garage_door_opener

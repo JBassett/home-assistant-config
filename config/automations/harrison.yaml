@@ -1,6 +1,5 @@
 - id: 8c854893-f82c-4fe5-9d37-d3d6f36f89b1
   alias: Harrison - Sleep
-  initial_state: 'on'
   trigger:
     # Start times
     - platform: time
@@ -29,7 +28,6 @@
 
 - id: 65b05a5e-aa84-4ee7-8758-27927054b049
   alias: Harrison - Keep Sleeping
-  initial_state: 'on'
   trigger:
     - platform: state
       entity_id: input_boolean.harrison_nap
@@ -52,7 +50,6 @@
 
 - id: 71ff4a11-7a4d-4f49-9d8e-de8b024feaa6
   alias: Harrison - Wakup
-  initial_state: 'on'
   trigger:
     - platform: state
       entity_id: input_boolean.harrison_nap
@@ -74,7 +71,6 @@
 
 - id: 8880f282-3b23-48ad-b9d8-34c83abb535c
   alias: Harrison - Fan Control
-  initial_state: 'on'
   trigger:
     # This doesn't update too much, should be safe
     - platform: state

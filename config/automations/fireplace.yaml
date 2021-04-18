@@ -1,6 +1,5 @@
 - id: f4442aab-21d6-4ee1-ac21-a3de30bdee0f
   alias: 'Fireplace - Fan'
-  initial_state: 'on'
   mode: restart
   trigger:
     - platform: state

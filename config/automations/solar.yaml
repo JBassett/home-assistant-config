@@ -1,6 +1,5 @@
 - id: bb6ed2ee-4122-4f8d-afc6-cad61dedfec9
   alias: Solar - Dark Outside
-  initial_state: 'on'
   trigger:
     - platform: numeric_state
       entity_id: sensor.solar_raw_total_power
@@ -14,7 +13,6 @@
 
 - id: 441c26de-4081-463f-8625-1ec0035e0846
   alias: Solar - Bright Outside
-  initial_state: 'on'
   trigger:
     - platform: numeric_state
       entity_id: sensor.solar_raw_total_power
