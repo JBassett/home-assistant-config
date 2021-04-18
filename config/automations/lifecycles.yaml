@@ -1,9 +1,0 @@
-- id: 235eb500-8440-4c1a-a459-0d0663a0a612
-  alias: 'Lifecycles - Set theme at startup'
-  trigger:
-    - platform: homeassistant
-      event: start
-  action:
-    service: frontend.set_theme
-    data:
-      name: noctis-grey
