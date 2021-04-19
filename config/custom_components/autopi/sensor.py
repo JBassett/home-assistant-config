@@ -8,7 +8,8 @@ from homeassistant.const import (
     DEVICE_CLASS_POWER,
     DEVICE_CLASS_CURRENT,
     DEVICE_CLASS_VOLTAGE,
-    DEVICE_CLASS_ENERGY
+    DEVICE_CLASS_ENERGY,
+    DEVICE_CLASS_SIGNAL_STRENGTH
 )
 
 from homeassistant.helpers.entity import Entity
@@ -38,7 +39,8 @@ async def async_setup_entry(hass, entry, async_add_entities):
         BatteryCoolantTempSensor(autopi),
         BatteryHeaterPowerSensor(autopi),
         CabinAcPowerSensor(autopi),
-        CabinHeaterPowerSensor(autopi)
+        CabinHeaterPowerSensor(autopi),
+        Rssi(autopi)
         ])
     _LOGGER.debug("async_setup_entry -> Complete")
 
@@ -345,4 +347,21 @@ class CabinHeaterPowerSensor(AutopiSensor):
         """Return the state of the sensor."""
         if self.autopi.latest and 'cabin_heater_power' in self.autopi.latest:
             self._last_state = self.autopi.latest['cabin_heater_power']
+        return self._last_state
+
+class Rssi(AutopiSensor):
+    
+    name = "Bolt - RSSI"
+    entity_id = "sensor.bolt_rssi"
+    device_class = DEVICE_CLASS_SIGNAL_STRENGTH
+    unit_of_measurement = "dBm"
+
+    def __init__(self, autopi):
+        self.autopi = autopi
+    
+    @property
+    def state(self):
+        """Return the state of the sensor."""
+        if self.autopi.latest and 'rssi' in self.autopi.latest:
+            self._last_state = self.autopi.latest['rssi']
         return self._last_state
