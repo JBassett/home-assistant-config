@@ -4,7 +4,7 @@ hello:
     - choose:
       - conditions:
           - condition: state
-            entity_id: input_boolean.dark_outside
+            entity_id: binary_sensor.dark_outside
             state: 'on'
         sequence:
 ######################## Living Room ####################

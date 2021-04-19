@@ -1,0 +1,6 @@
+- platform: template
+  sensors:
+    dark_outside:
+      friendly_name: "Dark Outside"
+      value_template: >-
+        {{ state_attr('sun.sun', 'elevation')|float < 3 }}

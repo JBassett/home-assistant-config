@@ -6,7 +6,7 @@
       to: playing
   condition:
     - condition: state
-      entity_id: input_boolean.dark_outside
+      entity_id: binary_sensor.dark_outside
       state:  'on'
   action:
     - service: switch.turn_off
@@ -35,7 +35,7 @@
         seconds: 5
   condition:
     - condition: state
-      entity_id: input_boolean.dark_outside
+      entity_id: binary_sensor.dark_outside
       state:  'on'
   action:
     - service: switch.turn_on

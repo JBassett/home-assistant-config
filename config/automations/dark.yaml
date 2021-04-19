@@ -2,7 +2,7 @@
   alias: Dark - True
   trigger:
     - platform: state
-      entity_id: input_boolean.dark_outside
+      entity_id: binary_sensor.dark_outside
       from: 'off'
       to: 'on'
     - platform: state
@@ -14,7 +14,7 @@
       entity_id: input_boolean.sleeping
       state: 'off'
     - condition: state
-      entity_id: input_boolean.dark_outside
+      entity_id: binary_sensor.dark_outside
       state: 'on'
   action:
     - choose:
@@ -48,7 +48,7 @@
   alias: Dark - False
   trigger:
     - platform: state
-      entity_id: input_boolean.dark_outside
+      entity_id: binary_sensor.dark_outside
       from: 'on'
       to: 'off'
   condition: []
