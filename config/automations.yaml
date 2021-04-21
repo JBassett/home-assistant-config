@@ -49,9 +49,27 @@
   - platform: state
     entity_id: switch.fireplace_flame
     to: 'off'
-    for: 00:10:00:000
+    for: 00:05:00
   action:
   - service: switch.turn_off
     target:
       entity_id: switch.fireplace_fan
   mode: single
+- id: 80b144d9-d108-4f29-a7cd-01c730e7b8ea
+  alias: 'Schedule - Wake Up'
+  trigger:
+    - platform: time
+      at: '07:15:00'
+  condition:
+    - condition: state
+      entity_id: sensor.home_status
+      state: 'Occupied'
+  action:
+    - service: script.goodmorning
+- id: 775bbb47-3e20-4c6f-bf19-b2c8d232490b
+  alias: 'Schedule - Bedtime'
+  trigger:
+    - platform: time
+      at: '01:30:00'
+  action:
+    - service: script.goodnight
