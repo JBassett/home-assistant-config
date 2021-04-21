@@ -73,3 +73,891 @@
       at: '01:30:00'
   action:
     - service: script.goodnight
+- id: 6cf596d9-0cff-40ee-90fc-71aa64dddff2
+  alias: Bolt - Plug Me In
+  trigger:
+    - platform: state
+      entity_id: device_tracker.bolt_2
+      to: "home"
+      for: 
+        minutes: 10
+    - platform: time
+      at: "21:00:00"
+    - platform: state
+      entity_id: input_boolean.sleeping
+      to: 'on'
+  condition:
+    - condition: state
+      entity_id: device_tracker.bolt_2
+      state: home
+    - condition: numeric_state
+      entity_id: sensor.bolt_soc
+      below: 40
+    - condition: state
+      entity_id: binary_sensor.bolt_charging
+      state: 'off'
+  action:
+    - service: notify.mobile_app_pixel_4a
+      data:
+        message: Bolt is currently at {{ states.sensor.bolt_soc.state }}%
+        title: Don't Forget to Charge
+        data:
+          group: Bolt
+    - service: tts.google_translate_say
+      entity_id: 
+        - media_player.kitchen_display
+        - media_player.office_speaker
+        - media_player.master_bedroom_speaker
+      data:
+        cache: false
+        message: "The bolt isn't charging and is only at {{ states.sensor.bolt_soc.state | round }} percent."
+- id: 0429efd9-4d5d-496b-ab29-fc9c50bf564e
+  alias: Dark - True
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.dark_outside
+      from: 'off'
+      to: 'on'
+    - platform: state
+      entity_id: input_boolean.sleeping
+      from: 'on'
+      to: 'off'
+  condition: 
+    - condition: state
+      entity_id: input_boolean.sleeping
+      state: 'off'
+    - condition: state
+      entity_id: binary_sensor.dark_outside
+      state: 'on'
+  action:
+    - choose:
+      - conditions:
+        - condition: state
+          entity_id: sensor.home_status
+          state:  'Occupied'
+        - condition: not
+          conditions:  
+            - condition: state
+              entity_id: media_player.plex_living_room_tv
+              state: playing
+        sequence:        
+          - service: switch.turn_on
+            data:
+              entity_id:
+                - switch.living_room_corner
+                - switch.living_room_stairs
+          - service: scene.turn_on
+            data:
+              entity_id: 
+                - scene.kitchen_default
+              transition: 60
+    - service: switch.turn_on
+      data:
+        entity_id:
+          - switch.driveway_lights
+          - switch.porch_lights
+
+- id: 9a78d5fe-bdb9-4b47-87af-67ccb7dd6efd
+  alias: Dark - False
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.dark_outside
+      from: 'on'
+      to: 'off'
+  condition: []
+  action:
+    - service: switch.turn_off
+      data:
+        entity_id:
+          - switch.living_room_corner
+          - switch.living_room_stairs
+          - switch.driveway_lights
+          - switch.porch_lights
+    - service: scene.turn_on
+      data:
+        entity_id: 
+          - scene.kitchen_off
+        transition: 60
+- id: 3801c24c-e453-48f8-abc0-90b67f6b7d18
+  alias: Fire - Open Job
+  description: ''
+  mode: restart
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.bryx_open_job
+      from: 'off'
+      to: 'on'
+  condition:
+    - condition: state
+      entity_id: sensor.home_status
+      state: 'Occupied'
+  action:
+    - service: tts.google_translate_say
+      data:
+        entity_id:
+          - media_player.kitchen_display
+          - media_player.office_speaker
+          - media_player.master_bedroom_speaker
+        cache: false
+        message: "Alert: {{ states('sensor.bryx_current_job_type') }} {{ states('sensor.bryx_current_job_synopsis') }} at {{ states('sensor.bryx_current_job_address') }}"
+    - service: scene.turn_on
+      data:
+        entity_id: 
+          - scene.kitchen_fire_call
+        transition: 10
+    - delay:
+        seconds: 15
+    - service: media_player.play_media
+      data:
+        entity_id: 
+          - media_player.office_speaker
+          - media_player.kitchen_display
+        media_content_id: "{{states('sensor.wcf_scanner_stream')}}"
+        media_content_type: music
+    - wait_for_trigger:
+      - platform: state
+        entity_id: binary_sensor.bryx_open_job
+        from: 'on'
+        to: 'off'
+        for:
+          minutes: 5
+    - service: media_player.media_stop
+      data:
+        entity_id: 
+          - media_player.office_speaker
+          - media_player.kitchen_display
+    - service: scene.turn_on
+      data:
+        entity_id: 
+          - scene.kitchen_default
+        transition: 10
+- id: 30424b67-a4c9-4da2-a1c3-1cf63f48ada3
+  alias: Furnace - AC Frozen
+  trigger:
+    platform: state
+    entity_id: sensor.family_room_thermostat_hvac_state
+    from: 'off'
+    to: 'cooling'
+    for:
+      hours: 4
+  action:
+    - service: tts.google_translate_say
+      entity_id: media_player.office_speaker
+      data:
+        message: 'Just a heads up, I think the AC might be frozen.'
+    - service: notify.mobile_app_pixel_4a
+      data:
+        title: 'Possible AC Issue'
+        message: 'The AC has been running for 2 hours non stop.'
+        data:
+          channel: Critical
+
+- id: cd89cab1-5e0a-4b74-bd3f-59c7f11c64af
+  alias: Furnace - Away Mode
+  trigger:
+    - platform: state
+      entity_id: sensor.home_status
+      to: 'Unoccupied'
+      for:  
+        minutes: 5
+  action:
+    - service: nest.set_away_mode
+      data:
+        away_mode: away
+
+- id: dff2efb3-c16c-46d9-9f8f-56e920ea1a06
+  alias: Furnace - Home Mode
+  trigger:
+    - platform: state
+      entity_id: sensor.home_status
+      to: 'Occupied'
+  action:
+    - service: nest.set_away_mode
+      data:
+        away_mode: home
+- alias: 'Garage Door - Left Open Notification'
+  id: f2e584e1-3c07-4da2-ac24-99ada3fd659f
+  mode: restart
+  trigger:
+    - platform: state
+      entity_id: sensor.home_status
+      to: 'Unoccupied'
+      for:
+        minutes: 5
+  condition:
+    - condition: state
+      entity_id: cover.garage_door_opener
+      state: open
+  action:
+    - service: notify.mobile_app_pixel_4a
+      data:
+        message: Looks like the garage was left open!! {{ now().strftime("%H:%M") }}
+        title: Garage left open!
+        data:
+          actions:
+          - action: close_garage
+            title: Close Door
+    - wait_for_trigger:
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: close_garage
+    
+    - service: cover.close_cover
+      data:
+        entity_id: cover.garage_door_opener
+
+- alias: 'Garage Door - Opened/Closed not home'
+  id: 52340028-d645-4654-9c06-ee4158ef027b
+  mode: restart
+  trigger:
+    - entity_id: cover.garage_door_opener
+      platform: state
+  condition:
+    - condition: state
+      entity_id: sensor.home_status
+      state: Unoccupied
+  action:
+    - service: notify.mobile_app_pixel_4a
+      data:
+        title: 'Garage Door: {{ states(''cover.garage_door_opener'') }}'
+        message: Garage is now {{ states('cover.garage_door_opener') }} at {{ now().strftime("%H:%M") }}
+        data:
+          actions:
+            - action: close_garage
+              title: Close Door
+    - wait_for_trigger:
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: close_garage
+    
+    - service: cover.close_cover
+      data:
+        entity_id: cover.garage_door_opener
+- id: 8c854893-f82c-4fe5-9d37-d3d6f36f89b1
+  alias: Harrison - Sleep
+  trigger:
+    # Start times
+    - platform: time
+      at: 
+        - '11:45:00'
+        - '18:30:00'
+  condition:
+    - condition: state
+      entity_id: sensor.home_status
+      state: Occupied
+    - condition: not
+      conditions:    
+      - condition: time
+        after: '08:00:00'
+        before: '17:00:00'
+        weekday:
+          - tue
+          - thu
+  action:
+    - service: input_boolean.turn_on
+      data:
+        entity_id: input_boolean.harrison_nap
+    - service: automation.trigger
+      data:
+        entity_id: automation.harrison_fan_control
+
+- id: 65b05a5e-aa84-4ee7-8758-27927054b049
+  alias: Harrison - Keep Sleeping
+  trigger:
+    - platform: state
+      entity_id: input_boolean.harrison_nap
+      to: 'on'
+    - platform: state
+      entity_id: media_player.harrisons_room_speaker
+      from: 'playing'
+      for:
+        seconds: 10
+  condition:
+    - condition: state
+      entity_id: input_boolean.harrison_nap
+      state: 'on'
+  action:
+    - service: media_player.play_media
+      data:
+        entity_id: media_player.harrisons_room_speaker
+        media_content_id: !secret ocean_sounds_url
+        media_content_type: 'music'
+
+- id: 71ff4a11-7a4d-4f49-9d8e-de8b024feaa6
+  alias: Harrison - Wakup
+  trigger:
+    - platform: state
+      entity_id: input_boolean.harrison_nap
+      to: 'off'
+    - platform: time
+      at: '16:00:00'
+    - platform: time
+      at: '08:30:00'
+  action:
+    - service: input_boolean.turn_off
+      data:
+        entity_id: input_boolean.harrison_nap
+    - service: media_player.turn_off
+      data:
+        entity_id: media_player.harrisons_room_speaker
+    - service: fan.turn_off
+      data:
+        entity_id: fan.harrison
+
+- id: 8880f282-3b23-48ad-b9d8-34c83abb535c
+  alias: Harrison - Fan Control
+  trigger:
+    # This doesn't update too much, should be safe
+    - platform: state
+      entity_id: sensor.harrison_temperature
+  condition:
+    - condition: state
+      entity_id: input_boolean.harrison_nap
+      state: 'on'
+    - condition: state
+      entity_id: sensor.family_room_thermostat_operation_mode
+      state: 'cool'
+  action:
+    - service: fan.set_speed
+      data:
+        entity_id: fan.harrison
+        speed: >
+          {%set diff=states('sensor.harrison_temperature')|float - state_attr('climate.family_room', 'current_temperature')|float%}
+          {% if diff < 2 %}
+            off
+          {% elif diff < 4 %}
+            low
+          {% elif diff < 6 %}
+            medium
+          {% else %}
+            high
+          {% endif%}
+- id: a212fb84-d631-4227-a434-54df8801b915
+  alias: Maintenance - HA Update Notification
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.updater
+      from: 'off'
+      to: 'on'
+  action:
+    - service: notify.mobile_app_pixel_4a
+      data:
+        title: 'New Home Assistant Release'
+        message: "Home Assistant  {{ state_attr('binary_sensor.updater', 'newest_version') }}  is now available."
+        data:
+          channel: Updates
+
+- id: 35d10f53-5a94-468c-bce2-152c2903bda3
+  alias: Maintenance - HACS Update Notification
+  trigger:
+    - platform: state
+      entity_id: sensor.hacs
+  condition:
+    - condition: numeric_state
+      entity_id: sensor.hacs
+      above: 0
+  action:
+    - service: notify.mobile_app_pixel_4a
+      data:
+        title: 'New HACS Componenet Release'
+        message: >-
+          Updates ready for: 
+          {% for repo in states.sensor.hacs.attributes.repositories -%} 
+            {{repo.display_name}}{%- if not loop.last %}, {% endif -%}
+          {%- endfor %}
+        data:
+          channel: Updates
+          tag: HACS
+
+- id: 315d8975-7f69-4348-b191-31ec1608d3d8
+  alias: Maintenance - HACS Clear Update Notification
+  trigger:
+    - platform: state
+      entity_id: sensor.hacs
+      to: "0"
+  condition: []
+  action:
+    - service: notify.mobile_app_pixel_4a
+      data:
+        message: clear_notification
+        data:
+          tag: HACS
+
+- id: 41b69fce-9657-4d1f-9ab9-6c72caf45eb0
+  alias: Maintenance - Resync Google Assistant
+  trigger:
+    - platform: time
+      at: "12:15:00"
+    - platform: homeassistant
+      event: start
+  condition: []
+  action:
+    - service: google_assistant.request_sync
+      data:
+        agent_user_id: !secret userid_justin
+
+- id: c80dcad1-3364-4c87-81a4-fecb1a438a3e
+  alias: Maintenance - Internet Speeds Slow
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.speedtest_download
+      below: 150
+  action:
+    - delay:
+        minutes: 5
+    - service: speedtestdotnet.speedtest
+    - wait_for_trigger:
+      - platform: state
+        entity_id: sensor.speedtest_download
+    - choose:
+      - conditions:
+          - condition: numeric_state
+            entity_id: sensor.speedtest_download
+            below: 150
+        sequence:
+          - service: notify.mobile_app_pixel_4a
+            data:
+              title: Slow Internet
+              message: "Your internet speed is only {{ states('sensor.speedtest_download') }} Mbit/s"
+- id: 3c9f3ad4-042c-41db-a305-d4e9c6af4984
+  alias: NFL - Monitor Game Day
+  mode: queued
+  trigger:
+    - platform: state
+      entity_id: calendar.buffalo_bills
+    - platform: state
+      entity_id: sensor.bills_game_status
+    - platform: state
+      entity_id: sensor.bills_quarter
+    - platform: state
+      entity_id: sensor.bills_score
+  condition:
+  action:
+    - choose:
+      - conditions:
+          - condition: or
+            conditions:
+              - condition: state
+                entity_id: calendar.buffalo_bills
+                state: 'on'
+              - condition: state
+                entity_id: sensor.bills_game_status
+                state: 'In Progress'
+        sequence:
+          - service: automation.turn_on
+            data:
+              entity_id: automation.nfl_monitor_game_fast
+      default:
+          - service: automation.turn_off
+            data:
+              entity_id: automation.nfl_monitor_game_fast
+
+- id: b33a0908-385b-4ce6-b96d-6d18afd851bd
+  alias: NFL - Monitor Game Fast
+  trigger:
+    - platform: time_pattern
+      seconds: "/2"
+  condition:
+    - condition: or
+      conditions:
+        - condition: state
+          entity_id: sensor.bills_game_status
+          state: 'In Progress'
+        - condition: state
+          entity_id: calendar.buffalo_bills
+          state: 'on'
+  action:
+    - service: homeassistant.update_entity
+      data:
+        entity_id: sensor.bills_game_status
+
+- id: 5e4e71eb-df88-47c3-8aa6-20f3bf4255f6
+  alias: NFL - Bills Score
+  mode: single
+  trigger:
+    - platform: state
+      entity_id: sensor.bills_score
+  condition:
+    - condition: state
+      entity_id: sensor.bills_game_status
+      state: 'In Progress'
+    - condition: numeric_state
+      entity_id: sensor.bills_score
+      above: 0
+  action:
+    - service: media_player.play_media
+      data:
+        entity_id: media_player.kitchen_display
+        media_content_id: !secret bills_shout
+        media_content_type: 'music'
+    - service: light.turn_on
+      data:
+        entity_id: 
+          - light.kitchen_up
+          - light.kitchen_down
+        effect: Touchdown
+    - wait_for_trigger:
+        - platform: state
+          entity_id: media_player.kitchen_display
+          from: 'playing'
+          to: 'idle'
+      timeout:
+        minutes: 2
+    - service: scene.turn_on
+      data:
+        entity_id: scene.kitchen_default
+    - delay:
+        minutes: 2
+- id: a0afc6fd-d728-4af8-bb3a-cb4744c071bd
+  alias: Office - Turn On
+  description: ''
+  mode: single
+  trigger:
+    - platform: state
+      entity_id: switch.gaming_pc
+      from: 'off'
+      to: 'on'
+  condition: []
+  action:
+    - service: light.turn_on
+      data:
+        entity_id: light.office_lamp
+        brightness: 90
+        rgb_color: [ 255, 0, 0 ]
+    - service: switch.turn_on
+      data:
+        entity_id: switch.office_outlet
+
+- id: fb33725a-b344-4fa7-bdde-c05364c4a6ad
+  alias: Office - Turn Off
+  description: ''
+  mode: single
+  trigger:
+    - platform: state
+      entity_id: switch.gaming_pc
+      for:
+        minutes: 5
+      from: 'on'
+      to: 'off'
+  condition: []
+  action:
+    - service: light.turn_off
+      data:
+        entity_id: light.office_lamp
+    - service: switch.turn_off
+      data:
+        entity_id: switch.office_outlet
+- id: 5a876f15-8e89-4933-9b0f-f40c45881a36
+  alias: 'Plex - Movie Downloaded'
+  trigger:
+    - platform: event
+      event_type: PLEX_EVENT
+      event_data:
+        status: GRABBED
+        type: movie
+  condition:
+    - condition: time
+      after: '07:00:00'
+      before: '23:00:00'
+    # Make sure we aren't already watching something on the home
+    - condition: state
+      entity_id: media_player.kitchen_display
+      state: 'off'
+  action:
+  - service: tts.google_translate_say
+    entity_id: media_player.kitchen_display
+    data:
+      cache: false
+      message: "Get the popcorn ready, I just downloaded {{ trigger.event.data['Metadata']['title'] }}."
+
+- id: aab1c07c-d1b3-4164-aeeb-52b4a92f7835
+  alias: 'Plex - New TV Episode'
+  trigger:
+  - platform: event
+    event_type: PLEX_EVENT
+    event_data:
+      status: GRABBED
+      type: episode
+  condition:
+    - condition: time
+      after: '07:00:00'
+      before: '23:00:00'
+    # Make sure we aren't already watching something on the home
+    - condition: state
+      entity_id: media_player.kitchen_display
+      state: 'off'
+  action:
+  - service: tts.google_translate_say
+    entity_id: media_player.kitchen_display
+    data:
+      cache: false
+      message: "Good news, I downloaded a new episode of {{ trigger.event.data['Metadata']['grandparentTitle'] }}."
+
+- id: 88ecff53-91aa-4851-9e80-22997499db11
+  alias: 'Plex - New Music Album'
+  trigger:
+  - platform: event
+    event_type: PLEX_EVENT
+    event_data:
+      status: GRABBED
+      type: track
+  condition:
+    - condition: time
+      after: '07:00:00'
+      before: '23:00:00'
+    # Make sure we aren't already watching something on the home
+    - condition: state
+      entity_id: media_player.kitchen_display
+      state: 'off'
+  action:
+  - service: tts.google_translate_say
+    entity_id: media_player.kitchen_display
+    data:
+      cache: false
+      message: "Music to my ears, {{ trigger.event.data['album'] }} by {{ trigger.event.data['artist'] }} is ready for a listen."
+- id: 84becc1b-9fee-454b-a599-2c9cea937d01
+  alias: 'Presence - Hello'
+  trigger:
+    - platform: state
+      entity_id: sensor.home_status
+      from: 'Unoccupied'
+      to: 'Occupied'
+  condition: []
+  action:
+    - service: script.hello
+
+- id: e3047785-679d-41f5-83d1-2b0d2b311f16
+  alias: 'Presence - Goodbye'
+  trigger:
+    - platform: state
+      entity_id: sensor.home_status
+      from: 'Occupied'
+      to: 'Unoccupied'
+  condition: []
+  action:
+    - service: script.goodbye
+- id: 52c69177-2d5d-4c19-9df8-af7730a44478
+  alias: 'SpaceX - Next Launch Time Updated'
+  trigger:
+    - platform: state
+      entity_id: sensor.next_launch_day
+      attribute: launch_date_unix
+    - platform: homeassistant
+      event: start
+  action:
+    # 30 minutes before
+    - service: input_datetime.set_datetime
+      data:
+        entity_id: input_datetime.spacex_notification_push_time
+        timestamp: "{{ state_attr('sensor.next_launch_day', 'launch_date_unix') - 1800 }}"
+    # 5 minutes before
+    - service: input_datetime.set_datetime
+      data:
+        entity_id: input_datetime.spacex_notification_tts_time
+        timestamp: "{{ state_attr('sensor.next_launch_day', 'launch_date_unix') - 300 }}"
+
+- id: c43a47e8-ce29-4ac0-b6ff-cbc35f13acb9
+  alias: 'SpaceX - Push Notification'
+  trigger:
+    - platform: time
+      at: input_datetime.spacex_notification_push_time
+  action:
+    - service: notify.mobile_app_pixel_4a
+      data:
+        message: SpaceX will be launching at {{ state_attr('sensor.next_launch_day', 'launch_date_unix') | int | timestamp_local }}
+        title: SpaceX Launch Soon
+        data:
+          clickAction: "{{ state_attr('sensor.next_launch_mission', 'video_link') }}"
+
+- id: 20c8c7d2-fdb3-443d-89f6-6ad2d7449b12
+  alias: 'SpaceX - TTS'
+  trigger:
+    - platform: time
+      at: input_datetime.spacex_notification_tts_time
+  action:
+    - service: tts.google_translate_say
+      entity_id: 
+        - media_player.office_speaker
+        - media_player.kitchen_display
+      data:
+        message: 'SpaceX will be launching in 5 minutes!'
+
+    - service: notify.mobile_app_pixel_4a
+      data:
+        message: SpaceX final countdown!
+        title: SpaceX Launch Imminent
+        data:
+          clickAction: "{{ state_attr('sensor.next_launch_mission', 'video_link') }}"
+- id: ab41d20f-5788-413c-8f5a-93ad5a92b6e3
+  alias: 'Theater - Starting Media'
+  trigger:
+    - platform: state
+      entity_id: media_player.plex_living_room_tv
+      to: playing
+  condition:
+    - condition: state
+      entity_id: binary_sensor.dark_outside
+      state:  'on'
+  action:
+    - service: switch.turn_off
+      data:
+        entity_id:
+          - switch.living_room_corner
+          - switch.living_room_stairs
+    - choose:
+      - conditions: "{{ (state_attr('media_player.plex_living_room_tv', 'media_content_type')) == 'movie' }}"
+        sequence:
+          - service: light.turn_on
+            data:
+              entity_id:
+                - light.kitchen_up
+                - light.kitchen_down
+              rgb_color: [255, 255, 145]
+              brightness_pct: 25
+
+- id: b218303e-bbd7-405b-842a-9b1909ff848b
+  alias: 'Theater - Stopping Media'
+  trigger:
+    - platform: state
+      entity_id: media_player.plex_living_room_tv
+      from: playing
+      for:
+        seconds: 5
+  condition:
+    - condition: state
+      entity_id: binary_sensor.dark_outside
+      state:  'on'
+  action:
+    - service: switch.turn_on
+      data:
+        entity_id:
+          - switch.living_room_corner
+          - switch.living_room_stairs
+
+    - service: light.turn_on
+      data:
+        entity_id:
+          - light.kitchen_up
+          - light.kitchen_down
+        brightness: 183
+        rgb_color: [255, 255, 145]
+- id: ee48101c-720f-4d4d-84c4-796f3a3eb424
+  alias: Weston - Sleep
+  trigger:
+    # Start times
+    - platform: time
+      at: 
+        - '11:45:00'
+        - '19:15:00'
+  condition:
+    - condition: state
+      entity_id: sensor.home_status
+      state: Occupied
+    - condition: not
+      conditions:    
+      - condition: time
+        after: '08:00:00'
+        before: '17:00:00'
+        weekday:
+          - tue
+          - thu
+  action:
+    - service: input_boolean.turn_on
+      data:
+        entity_id: input_boolean.weston_nap
+    - service: automation.trigger
+      data:
+        entity_id: automation.weston_fan_control
+
+- id: 9d684000-821b-49c3-9770-3fa876b6effb
+  alias: Weston - Keep Sleeping
+  trigger:
+    - platform: state
+      entity_id: input_boolean.weston_nap
+      to: 'on'
+    - platform: state
+      entity_id: media_player.westons_room_speaker
+      from: 'playing'
+      for:
+        seconds: 10
+  condition:
+    - condition: state
+      entity_id: input_boolean.weston_nap
+      state: 'on'
+  action:
+    - service: light.turn_on
+      data:
+        entity_id: light.weston_lamp
+        brightness: 3
+        rgb_color: [255, 0, 0]
+    - service: media_player.play_media
+      data:
+        entity_id: media_player.westons_room_speaker
+        media_content_id: !secret ocean_sounds_url
+        media_content_type: 'music'
+    # - service: media_player.play_media
+    #   data:
+    #     entity_id: media_player.westons_room_speaker
+    #     media_content_type: MUSIC
+    #     media_content_id: >-
+    #       plex://{ 
+    #         "library_name": "Music", 
+    #         "artist_name": "Raffi",
+    #         "shuffle": "1"
+    #       }
+
+
+- id: 8ab6d2cd-32fa-494f-a0e8-271dda57fa04
+  alias: Weston - Wakup
+  trigger:
+    - platform: state
+      entity_id: input_boolean.weston_nap
+      to: 'off'
+    - platform: time
+      at: '16:00:00'
+    - platform: time
+      at: '08:30:00'
+  action:
+    - service: input_boolean.turn_off
+      data:
+        entity_id: input_boolean.weston_nap
+    - service: media_player.turn_off
+      data:
+        entity_id: media_player.westons_room_speaker
+    - service: fan.turn_off
+      data:
+        entity_id: fan.weston
+    - service: light.turn_off
+      data:
+        entity_id: light.weston_lamp
+
+- id: d1007417-f48d-4f5c-a06e-8d712a2ef51a
+  alias: Weston - Fan Control
+  trigger:
+    # This doesn't update too much, should be safe
+    - platform: state
+      entity_id: sensor.weston_temperature
+  condition:
+    - condition: state
+      entity_id: input_boolean.weston_nap
+      state: 'on'
+    - condition: state
+      entity_id: sensor.family_room_thermostat_operation_mode
+      state: 'cool'
+  action:
+    - service: fan.set_speed
+      data:
+        entity_id: fan.weston
+        speed: >
+          {%set diff=states('sensor.weston_temperature')|float - state_attr('climate.family_room', 'current_temperature')|float%}
+          {% if diff < 2 %}
+            off
+          {% elif diff < 4 %}
+            low
+          {% elif diff < 6 %}
+            medium
+          {% else %}
+            high
+          {% endif%}
