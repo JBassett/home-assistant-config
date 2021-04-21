@@ -42,7 +42,8 @@ deps
 /config/www/snapshots
 /config/www/custom-lovelace
 /config/www/upcoming-media-card-images
-/config/www/nfl
+
+/config/media
 
 #Z-Wave
 openzwave

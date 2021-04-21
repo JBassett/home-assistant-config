@@ -13,6 +13,10 @@ homeassistant:
 
   auth_providers:
    - type: homeassistant
+  
+  media_dirs:
+    cache: /config/media
+    cameras: /media/cameras
 
   packages: !include_dir_named integrations
   
