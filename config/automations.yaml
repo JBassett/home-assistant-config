@@ -79,8 +79,7 @@
   - platform: state
     entity_id: device_tracker.bolt_2
     to: home
-    for:
-      minutes: 10
+    for: 0:10:00
   - platform: time
     at: '21:00:00'
   - platform: state
@@ -92,7 +91,7 @@
     state: home
   - condition: numeric_state
     entity_id: sensor.bolt_soc
-    below: 40
+    below: '40'
   - condition: state
     entity_id: binary_sensor.bolt_charging
     state: 'off'
@@ -112,6 +111,7 @@
       cache: false
       message: The bolt isn't charging and is only at {{ states.sensor.bolt_soc.state
         | round }} percent.
+  mode: single
 - id: 0429efd9-4d5d-496b-ab29-fc9c50bf564e
   alias: Dark - True
   trigger:
@@ -399,25 +399,6 @@
   - service: fan.turn_off
     data:
       entity_id: fan.harrison
-- id: 8880f282-3b23-48ad-b9d8-34c83abb535c
-  alias: Harrison - Fan Control
-  trigger:
-  - platform: state
-    entity_id: sensor.harrison_temperature
-  condition:
-  - condition: state
-    entity_id: input_boolean.harrison_nap
-    state: 'on'
-  - condition: state
-    entity_id: sensor.family_room_thermostat_operation_mode
-    state: cool
-  action:
-  - service: fan.set_speed
-    data:
-      entity_id: fan.harrison
-      speed: "{%set diff=states('sensor.harrison_temperature')|float - state_attr('climate.family_room',\
-        \ 'current_temperature')|float%} {% if diff < 2 %}\n  off\n{% elif diff <\
-        \ 4 %}\n  low\n{% elif diff < 6 %}\n  medium\n{% else %}\n  high\n{% endif%}\n"
 - id: a212fb84-d631-4227-a434-54df8801b915
   alias: Maintenance - HA Update Notification
   trigger:
@@ -784,8 +765,10 @@
       - switch.living_room_corner
       - switch.living_room_stairs
   - choose:
-    - conditions: '{{ (state_attr(''media_player.plex_living_room_tv'', ''media_content_type''))
-        == ''movie'' }}'
+    - conditions:
+      - condition: template
+        value_template: '{{ (state_attr(''media_player.plex_living_room_tv'', ''media_content_type''))
+          == ''movie'' }}'
       sequence:
       - service: light.turn_on
         data:
@@ -797,14 +780,14 @@
           - 255
           - 145
           brightness_pct: 25
+  mode: single
 - id: b218303e-bbd7-405b-842a-9b1909ff848b
   alias: Theater - Stopping Media
   trigger:
   - platform: state
     entity_id: media_player.plex_living_room_tv
     from: playing
-    for:
-      seconds: 5
+    for: 0:00:03
   condition:
   - condition: state
     entity_id: binary_sensor.dark_outside
@@ -825,6 +808,7 @@
       - 255
       - 255
       - 145
+  mode: single
 - id: ee48101c-720f-4d4d-84c4-796f3a3eb424
   alias: Weston - Sleep
   trigger:
@@ -903,22 +887,3 @@
   - service: light.turn_off
     data:
       entity_id: light.weston_lamp
-- id: d1007417-f48d-4f5c-a06e-8d712a2ef51a
-  alias: Weston - Fan Control
-  trigger:
-  - platform: state
-    entity_id: sensor.weston_temperature
-  condition:
-  - condition: state
-    entity_id: input_boolean.weston_nap
-    state: 'on'
-  - condition: state
-    entity_id: sensor.family_room_thermostat_operation_mode
-    state: cool
-  action:
-  - service: fan.set_speed
-    data:
-      entity_id: fan.weston
-      speed: "{%set diff=states('sensor.weston_temperature')|float - state_attr('climate.family_room',\
-        \ 'current_temperature')|float%} {% if diff < 2 %}\n  off\n{% elif diff <\
-        \ 4 %}\n  low\n{% elif diff < 6 %}\n  medium\n{% else %}\n  high\n{% endif%}\n"
