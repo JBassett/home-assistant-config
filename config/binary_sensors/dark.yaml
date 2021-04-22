@@ -3,4 +3,8 @@
     dark_outside:
       friendly_name: "Dark Outside"
       value_template: >-
-        {{ state_attr('sun.sun', 'elevation')|float < 3 }}
+        {{ 
+          (state_attr('sun.sun', 'rising') and state_attr('sun.sun', 'elevation')|float < 1)
+          or
+          (not state_attr('sun.sun', 'rising') and state_attr('sun.sun', 'elevation')|float < 33)
+        }}
