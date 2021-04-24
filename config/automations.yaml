@@ -7,6 +7,8 @@
     to: 'on'
   - platform: homeassistant
     event: start
+  - platform: event
+    event_type: automation_reloaded
   condition:
   - condition: state
     entity_id: sensor.home_status
@@ -59,13 +61,11 @@
   alias: Schedule - Wake Up
   trigger:
   - platform: time
-    at: 07:15:00
-  condition:
-  - condition: state
-    entity_id: sensor.home_status
-    state: Occupied
+    at: 07:30:00
+  condition: []
   action:
   - service: script.goodmorning
+  mode: single
 - id: 775bbb47-3e20-4c6f-bf19-b2c8d232490b
   alias: Schedule - Bedtime
   trigger:
@@ -73,6 +73,7 @@
     at: 01:30:00
   action:
   - service: script.goodnight
+  mode: single
 - id: 6cf596d9-0cff-40ee-90fc-71aa64dddff2
   alias: Bolt - Plug Me In
   trigger:
@@ -181,7 +182,6 @@
 - id: 3801c24c-e453-48f8-abc0-90b67f6b7d18
   alias: Fire - Open Job
   description: ''
-  mode: restart
   trigger:
   - platform: state
     entity_id: binary_sensor.bryx_open_job
@@ -220,18 +220,13 @@
       entity_id: binary_sensor.bryx_open_job
       from: 'on'
       to: 'off'
-      for:
-        minutes: 5
+      for: 0:05:00
   - service: media_player.media_stop
     data:
       entity_id:
       - media_player.office_speaker
       - media_player.kitchen_display
-  - service: scene.turn_on
-    data:
-      entity_id:
-      - scene.kitchen_default
-      transition: 10
+  mode: restart
 - id: 30424b67-a4c9-4da2-a1c3-1cf63f48ada3
   alias: Furnace - AC Frozen
   trigger:
@@ -572,7 +567,6 @@
 - id: a0afc6fd-d728-4af8-bb3a-cb4744c071bd
   alias: Office - Turn On
   description: ''
-  mode: single
   trigger:
   - platform: state
     entity_id: switch.gaming_pc
@@ -582,34 +576,37 @@
   action:
   - service: light.turn_on
     data:
-      entity_id: light.office_lamp
       brightness: 90
       rgb_color:
       - 255
       - 0
       - 0
-  - service: switch.turn_on
-    data:
-      entity_id: switch.office_outlet
+      transition: 20
+    target:
+      entity_id: light.office_lamp
+  mode: single
 - id: fb33725a-b344-4fa7-bdde-c05364c4a6ad
   alias: Office - Turn Off
   description: ''
-  mode: single
   trigger:
   - platform: state
     entity_id: switch.gaming_pc
-    for:
-      minutes: 5
     from: 'on'
     to: 'off'
+  - platform: state
+    entity_id: input_boolean.sleeping
+    to: 'on'
   condition: []
   action:
   - service: light.turn_off
     data:
+      transition: 20
+    target:
       entity_id: light.office_lamp
   - service: switch.turn_off
     data:
       entity_id: switch.office_outlet
+  mode: single
 - id: 5a876f15-8e89-4933-9b0f-f40c45881a36
   alias: Plex - Movie Downloaded
   trigger:
@@ -683,9 +680,21 @@
     entity_id: sensor.home_status
     from: Unoccupied
     to: Occupied
-  condition: []
+  condition:
+  - condition: state
+    entity_id: binary_sensor.dark_outside
+    state: 'on'
+  - condition: not
+    conditions:
+    - condition: state
+      entity_id: input_boolean.sleeping
+      state: 'on'
   action:
-  - service: script.hello
+  - scene: scene.kitchen_default
+  - service: switch.turn_on
+    target:
+      area_id: 55df309dbd39451faef1412557a7d222
+  mode: single
 - id: e3047785-679d-41f5-83d1-2b0d2b311f16
   alias: Presence - Goodbye
   trigger:
@@ -695,7 +704,22 @@
     to: Unoccupied
   condition: []
   action:
-  - service: script.goodbye
+  - service: cover.close_cover
+    target:
+      entity_id: cover.garage_door_opener
+  - service: media_player.media_stop
+    target:
+      entity_id: media_player.plex_living_room_tv
+  - service: homeassistant.turn_off
+    target:
+      area_id:
+      - 0113da8fc45b44939ddbd466712be425
+      - 55db04442f6e4b8bb24192bfdacfe989
+      - cc252b70ae4745539da280dbb3c14a4e
+      - 55df309dbd39451faef1412557a7d222
+      - 2ee21d377fa74491b8224f0796835756
+      - c22ca4f889a641c3bd2aa795ad81dd7c
+  mode: single
 - id: 52c69177-2d5d-4c19-9df8-af7730a44478
   alias: SpaceX - Next Launch Time Updated
   trigger:
@@ -887,3 +911,218 @@
   - service: light.turn_off
     data:
       entity_id: light.weston_lamp
+- id: '1619140975621'
+  alias: Living Room - Turn On
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: input_boolean.sleeping
+    to: 'off'
+  - platform: state
+    entity_id: binary_sensor.dark_outside
+    to: 'on'
+  - platform: homeassistant
+    event: start
+  - platform: state
+    entity_id: media_player.plex_living_room_tv
+    from: playing
+    for: 0:00:03
+  condition:
+  - condition: state
+    entity_id: input_boolean.sleeping
+    state: 'off'
+  - condition: state
+    entity_id: binary_sensor.dark_outside
+    state: 'on'
+  - condition: not
+    conditions:
+    - condition: state
+      entity_id: media_player.plex_living_room_tv
+      state: playing
+  action:
+  - service: switch.turn_on
+    target:
+      device_id:
+      - 7c727713b4c10847856049e1838a1049
+      - dbcf0119cffc243fc7c525d3fc7eeedc
+  mode: single
+- id: '1619141559477'
+  alias: Living Room - Turn Off
+  description: ''
+  trigger:
+  - platform: homeassistant
+    event: start
+  - platform: state
+    entity_id: input_boolean.sleeping
+    to: 'on'
+  - platform: state
+    entity_id: binary_sensor.dark_outside
+    to: 'off'
+  - platform: state
+    entity_id: media_player.plex_living_room_tv
+    to: playing
+  condition:
+  - condition: or
+    conditions:
+    - condition: state
+      entity_id: input_boolean.sleeping
+      state: 'on'
+    - condition: state
+      entity_id: media_player.plex_living_room_tv
+      state: playing
+    - condition: state
+      entity_id: binary_sensor.dark_outside
+      state: 'off'
+  action:
+  - service: switch.turn_off
+    target:
+      device_id:
+      - 7c727713b4c10847856049e1838a1049
+      - dbcf0119cffc243fc7c525d3fc7eeedc
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: input_boolean.sleeping
+        state: 'on'
+      sequence:
+      - service: homeassistant.turn_off
+        target:
+          area_id: 55df309dbd39451faef1412557a7d222
+    default: []
+  mode: single
+- id: '1619142165820'
+  alias: Outside - Turn On
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: input_boolean.sleeping
+    to: 'off'
+  - platform: state
+    entity_id: binary_sensor.dark_outside
+    to: 'on'
+  - platform: homeassistant
+    event: start
+  condition:
+  - condition: state
+    entity_id: input_boolean.sleeping
+    state: 'off'
+  - condition: state
+    entity_id: binary_sensor.dark_outside
+    state: 'on'
+  action:
+  - service: switch.turn_on
+    target:
+      area_id: c8266fda6fc64c02a068ff87b9eefccd
+  mode: single
+- id: '1619142330837'
+  alias: Outside - Turn Off
+  description: ''
+  trigger:
+  - platform: homeassistant
+    event: start
+  - platform: state
+    entity_id: input_boolean.sleeping
+    to: 'on'
+  - platform: state
+    entity_id: binary_sensor.dark_outside
+    to: 'off'
+  condition:
+  - condition: or
+    conditions:
+    - condition: state
+      entity_id: input_boolean.sleeping
+      state: 'on'
+    - condition: state
+      entity_id: binary_sensor.dark_outside
+      state: 'off'
+  action:
+  - service: switch.turn_off
+    target:
+      area_id: c8266fda6fc64c02a068ff87b9eefccd
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: input_boolean.sleeping
+        state: 'on'
+      sequence:
+      - device_id: 93d65281b8fc40dd94b56a6adae6e6d6
+        domain: cover
+        entity_id: cover.garage_door_opener
+        type: close
+    default: []
+  mode: single
+- id: '1619142990115'
+  alias: Kitchen - Turn On
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: input_boolean.sleeping
+    to: 'off'
+  - platform: state
+    entity_id: binary_sensor.dark_outside
+    to: 'on'
+  - platform: homeassistant
+    event: start
+  - platform: state
+    entity_id: media_player.plex_living_room_tv
+    from: playing
+    for: 0:00:03
+  - platform: state
+    entity_id: binary_sensor.bryx_open_job
+    from: 'on'
+    to: 'off'
+  condition:
+  - condition: state
+    entity_id: input_boolean.sleeping
+    state: 'off'
+  - condition: state
+    entity_id: binary_sensor.dark_outside
+    state: 'on'
+  action:
+  - scene: scene.kitchen_default
+  mode: single
+- id: '1619143301627'
+  alias: Kitchen - Turn Off
+  description: ''
+  trigger:
+  - platform: homeassistant
+    event: start
+  - platform: state
+    entity_id: input_boolean.sleeping
+    to: 'on'
+  - platform: state
+    entity_id: binary_sensor.dark_outside
+    to: 'off'
+  - platform: state
+    entity_id: media_player.plex_living_room_tv
+    to: playing
+  - platform: state
+    entity_id: binary_sensor.bryx_open_job
+    from: 'on'
+    to: 'off'
+  condition:
+  - condition: or
+    conditions:
+    - condition: state
+      entity_id: input_boolean.sleeping
+      state: 'on'
+    - condition: state
+      entity_id: media_player.plex_living_room_tv
+      state: playing
+  action:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: media_player.plex_living_room_tv
+        state: movie
+        attribute: media_content_type
+      sequence:
+      - scene: scene.kitchen_dim
+    - conditions:
+      - condition: state
+        entity_id: input_boolean.sleeping
+        state: 'on'
+      sequence:
+      - scene: scene.kitchen_off
+    default: []
+  mode: single
