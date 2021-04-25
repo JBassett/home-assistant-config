@@ -9,6 +9,8 @@ on:
 jobs:
   home_assistant_stable:
     runs-on: ubuntu-latest
+    container:
+      image: homeassistant/home-assistant:stable
     steps:
       - name: Getting configuration from GitHub
         uses: actions/checkout@v1
@@ -24,17 +26,21 @@ jobs:
       - name: Generate google-service-account.json
         run: |
           echo {\"private_key\":\"1\"\,\"client_email\":\"2\"} > ./config/google-service-account.json
+      - name: Create fake mount points
+        run: |
+          mkdir -p /config/media
+          mkdir -p /media/cameras
       - name: Home Assistant Version
-        uses: "docker://homeassistant/home-assistant:stable"
-        with:
-          args: python -m homeassistant --version
+       run: |
+          python -m homeassistant --version
       - name: Home Assistant Config Check
-        uses: "docker://homeassistant/home-assistant:stable"
-        with:
-          args: python -m homeassistant --config ./config --script check_config --info all
+        run: |
+          python -m homeassistant --config ./config --script check_config --info all
 
   home_assistant_beta:
     runs-on: ubuntu-latest
+    container:
+      image: homeassistant/home-assistant:stable
     steps:
       - name: Getting configuration from GitHub
         uses: actions/checkout@v1
@@ -50,17 +56,21 @@ jobs:
       - name: Generate google-service-account.json
         run: |
           echo {\"private_key\":\"1\"\,\"client_email\":\"2\"} > ./config/google-service-account.json
+      - name: Create fake mount points
+        run: |
+          mkdir -p /config/media
+          mkdir -p /media/cameras
       - name: Home Assistant Version
-        uses: "docker://homeassistant/home-assistant:beta"
-        with:
-          args: python -m homeassistant --version
+       run: |
+          python -m homeassistant --version
       - name: Home Assistant Config Check
-        uses: "docker://homeassistant/home-assistant:beta"
-        with:
-          args: python -m homeassistant --config ./config --script check_config --info all
+        run: |
+          python -m homeassistant --config ./config --script check_config --info all
 
   home_assistant_dev:
     runs-on: ubuntu-latest
+    container:
+      image: homeassistant/home-assistant:stable
     steps:
       - name: Getting configuration from GitHub
         uses: actions/checkout@v1
@@ -76,11 +86,13 @@ jobs:
       - name: Generate google-service-account.json
         run: |
           echo {\"private_key\":\"1\"\,\"client_email\":\"2\"} > ./config/google-service-account.json
+      - name: Create fake mount points
+        run: |
+          mkdir -p /config/media
+          mkdir -p /media/cameras
       - name: Home Assistant Version
-        uses: "docker://homeassistant/home-assistant:dev"
-        with:
-          args: python -m homeassistant --version
+       run: |
+          python -m homeassistant --version
       - name: Home Assistant Config Check
-        uses: "docker://homeassistant/home-assistant:dev"
-        with:
-          args: python -m homeassistant --config ./config --script check_config --info all
+        run: |
+          python -m homeassistant --config ./config --script check_config --info all
