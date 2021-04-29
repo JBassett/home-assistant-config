@@ -37,7 +37,6 @@ tts
 
 deps
 
-/config/blueprints/automation/homeassistant
 /config/www/avatars
 /config/www/snapshots
 /config/www/custom-lovelace
