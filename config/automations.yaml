@@ -596,6 +596,9 @@
   - platform: state
     entity_id: input_boolean.sleeping
     to: 'on'
+  - platform: state
+    entity_id: sensor.home_status
+    to: Unoccupied
   condition: []
   action:
   - service: light.turn_off
@@ -981,9 +984,14 @@
       - dbcf0119cffc243fc7c525d3fc7eeedc
   - choose:
     - conditions:
-      - condition: state
-        entity_id: input_boolean.sleeping
-        state: 'on'
+      - condition: or
+        conditions:
+        - condition: state
+          entity_id: input_boolean.sleeping
+          state: 'on'
+        - condition: state
+          entity_id: sensor.home_status
+          state: Unoccupied
       sequence:
       - service: homeassistant.turn_off
         target:
@@ -998,8 +1006,8 @@
     entity_id: input_boolean.sleeping
     to: 'off'
   - platform: state
-    entity_id: binary_sensor.dark_outside
-    to: 'on'
+    entity_id: sun.sun
+    to: below_horizon
   - platform: homeassistant
     event: start
   condition:
@@ -1007,8 +1015,8 @@
     entity_id: input_boolean.sleeping
     state: 'off'
   - condition: state
-    entity_id: binary_sensor.dark_outside
-    state: 'on'
+    entity_id: sun.sun
+    state: below_horizon
   action:
   - service: switch.turn_on
     target:
@@ -1023,9 +1031,8 @@
   - platform: state
     entity_id: input_boolean.sleeping
     to: 'on'
-  - platform: state
-    entity_id: binary_sensor.dark_outside
-    to: 'off'
+  - platform: sun
+    event: sunrise
   condition:
   - condition: or
     conditions:
@@ -1033,8 +1040,8 @@
       entity_id: input_boolean.sleeping
       state: 'on'
     - condition: state
-      entity_id: binary_sensor.dark_outside
-      state: 'off'
+      entity_id: sun.sun
+      state: above_horizon
   action:
   - service: switch.turn_off
     target:
@@ -1100,6 +1107,9 @@
     entity_id: binary_sensor.bryx_open_job
     from: 'on'
     to: 'off'
+  - platform: state
+    entity_id: sensor.home_status
+    to: Unoccupied
   condition:
   - condition: or
     conditions:
@@ -1108,7 +1118,13 @@
       state: 'on'
     - condition: state
       entity_id: media_player.plex_living_room_tv
-      state: playing
+      state: movie
+    - condition: state
+      entity_id: sensor.home_status
+      state: Unoccupied
+    - condition: state
+      entity_id: binary_sensor.dark_outside
+      state: 'off'
   action:
   - choose:
     - conditions:
@@ -1118,11 +1134,6 @@
         attribute: media_content_type
       sequence:
       - scene: scene.kitchen_dim
-    - conditions:
-      - condition: state
-        entity_id: input_boolean.sleeping
-        state: 'on'
-      sequence:
-      - scene: scene.kitchen_off
-    default: []
+    default:
+    - scene: scene.kitchen_off
   mode: single

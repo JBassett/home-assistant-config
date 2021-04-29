@@ -4,6 +4,8 @@
       friendly_name: "Dark Outside"
       value_template: >-
         {{ 
+          (states('sensor.hourly_forcast_cloud_coverage')|float > 60)
+          or
           (state_attr('sun.sun', 'rising') and state_attr('sun.sun', 'elevation')|float < 1)
           or
           (not state_attr('sun.sun', 'rising') and state_attr('sun.sun', 'elevation')|float < 33)
