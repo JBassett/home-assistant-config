@@ -67,8 +67,15 @@
           is_state('person.shannon' , 'home') 
           or 
           is_state('input_boolean.guest_mode' , 'on')
-          ) %}
+          ) 
+        %}
           Unoccupied
-        {% else %} 
+        {% elif 
+          (not is_state('person.justin' , 'home') or is_state('input_boolean.justin_sleeping', 'on'))
+          and
+          (not is_state('person.shannon' , 'home') or is_state('input_boolean.shannon_sleeping', 'on'))
+        %}
+          Sleeping
+        {% else %}
           Occupied
         {% endif %}

@@ -2,13 +2,19 @@ goodmorning:
   alias: Goodmorning
   sequence:
   - service: input_boolean.turn_off
-    data:
-      entity_id: input_boolean.sleeping
+    data: {}
+    target:
+      entity_id:
+      - input_boolean.justin_sleeping
+      - input_boolean.shannon_sleeping
   mode: single
 goodnight:
   alias: Goodnight
   sequence:
   - service: input_boolean.turn_on
-    data:
-      entity_id: input_boolean.sleeping
+    data: {}
+    target:
+      entity_id:
+      - input_boolean.justin_sleeping
+      - input_boolean.shannon_sleeping
   mode: single

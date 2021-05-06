@@ -3,24 +3,29 @@
   description: ''
   trigger:
   - platform: state
-    entity_id: input_boolean.sleeping
+    entity_id: binary_sensor.master_sleeping
     to: 'on'
   - platform: homeassistant
     event: start
   - platform: event
     event_type: automation_reloaded
   condition:
+  - condition: or
+    conditions:
+    - condition: state
+      entity_id: sensor.home_status
+      state: Occupied
+    - condition: state
+      entity_id: sensor.home_status
+      state: Sleeping
   - condition: state
-    entity_id: sensor.home_status
-    state: Occupied
-  - condition: state
-    entity_id: input_boolean.sleeping
+    entity_id: binary_sensor.master_sleeping
     state: 'on'
   action:
   - repeat:
       until:
       - condition: state
-        entity_id: input_boolean.sleeping
+        entity_id: binary_sensor.master_sleeping
         state: 'off'
       sequence:
       - service: media_player.play_media
@@ -29,18 +34,14 @@
         data:
           media_content_id: https://storage.googleapis.com/relaxation-sounds/country_night_3600.mp3
           media_content_type: music
-      - delay:
-          hours: 0
-          minutes: 0
-          seconds: 10
-          milliseconds: 0
       - wait_for_trigger:
         - platform: state
           entity_id: media_player.master_bedroom_speaker
           from: playing
           for: 0:00:10
         - platform: state
-          entity_id: input_boolean.sleeping
+          entity_id: binary_sensor.master_sleeping
+          to: 'off'
   - service: media_player.turn_off
     target:
       entity_id: media_player.master_bedroom_speaker
@@ -84,7 +85,7 @@
   - platform: time
     at: '21:00:00'
   - platform: state
-    entity_id: input_boolean.sleeping
+    entity_id: input_boolean.justin_sleeping
     to: 'on'
   condition:
   - condition: state
@@ -113,72 +114,6 @@
       message: The bolt isn't charging and is only at {{ states.sensor.bolt_soc.state
         | round }} percent.
   mode: single
-- id: 0429efd9-4d5d-496b-ab29-fc9c50bf564e
-  alias: Dark - True
-  trigger:
-  - platform: state
-    entity_id: binary_sensor.dark_outside
-    from: 'off'
-    to: 'on'
-  - platform: state
-    entity_id: input_boolean.sleeping
-    from: 'on'
-    to: 'off'
-  condition:
-  - condition: state
-    entity_id: input_boolean.sleeping
-    state: 'off'
-  - condition: state
-    entity_id: binary_sensor.dark_outside
-    state: 'on'
-  action:
-  - choose:
-    - conditions:
-      - condition: state
-        entity_id: sensor.home_status
-        state: Occupied
-      - condition: not
-        conditions:
-        - condition: state
-          entity_id: media_player.plex_living_room_tv
-          state: playing
-      sequence:
-      - service: switch.turn_on
-        data:
-          entity_id:
-          - switch.living_room_corner
-          - switch.living_room_stairs
-      - service: scene.turn_on
-        data:
-          entity_id:
-          - scene.kitchen_default
-          transition: 60
-  - service: switch.turn_on
-    data:
-      entity_id:
-      - switch.driveway_lights
-      - switch.porch_lights
-- id: 9a78d5fe-bdb9-4b47-87af-67ccb7dd6efd
-  alias: Dark - False
-  trigger:
-  - platform: state
-    entity_id: binary_sensor.dark_outside
-    from: 'on'
-    to: 'off'
-  condition: []
-  action:
-  - service: switch.turn_off
-    data:
-      entity_id:
-      - switch.living_room_corner
-      - switch.living_room_stairs
-      - switch.driveway_lights
-      - switch.porch_lights
-  - service: scene.turn_on
-    data:
-      entity_id:
-      - scene.kitchen_off
-      transition: 60
 - id: 3801c24c-e453-48f8-abc0-90b67f6b7d18
   alias: Fire - Open Job
   description: ''
@@ -594,8 +529,8 @@
     from: 'on'
     to: 'off'
   - platform: state
-    entity_id: input_boolean.sleeping
-    to: 'on'
+    entity_id: sensor.home_status
+    to: Sleeping
   - platform: state
     entity_id: sensor.home_status
     to: Unoccupied
@@ -676,53 +611,6 @@
       cache: false
       message: Music to my ears, {{ trigger.event.data['album'] }} by {{ trigger.event.data['artist']
         }} is ready for a listen.
-- id: 84becc1b-9fee-454b-a599-2c9cea937d01
-  alias: Presence - Hello
-  trigger:
-  - platform: state
-    entity_id: sensor.home_status
-    from: Unoccupied
-    to: Occupied
-  condition:
-  - condition: state
-    entity_id: binary_sensor.dark_outside
-    state: 'on'
-  - condition: not
-    conditions:
-    - condition: state
-      entity_id: input_boolean.sleeping
-      state: 'on'
-  action:
-  - scene: scene.kitchen_default
-  - service: switch.turn_on
-    target:
-      area_id: 55df309dbd39451faef1412557a7d222
-  mode: single
-- id: e3047785-679d-41f5-83d1-2b0d2b311f16
-  alias: Presence - Goodbye
-  trigger:
-  - platform: state
-    entity_id: sensor.home_status
-    from: Occupied
-    to: Unoccupied
-  condition: []
-  action:
-  - service: cover.close_cover
-    target:
-      entity_id: cover.garage_door_opener
-  - service: media_player.media_stop
-    target:
-      entity_id: media_player.plex_living_room_tv
-  - service: homeassistant.turn_off
-    target:
-      area_id:
-      - 0113da8fc45b44939ddbd466712be425
-      - 55db04442f6e4b8bb24192bfdacfe989
-      - cc252b70ae4745539da280dbb3c14a4e
-      - 55df309dbd39451faef1412557a7d222
-      - 2ee21d377fa74491b8224f0796835756
-      - c22ca4f889a641c3bd2aa795ad81dd7c
-  mode: single
 - id: 52c69177-2d5d-4c19-9df8-af7730a44478
   alias: SpaceX - Next Launch Time Updated
   trigger:
@@ -775,67 +663,6 @@
       data:
         clickAction: '{{ state_attr(''sensor.next_launch_mission'', ''video_link'')
           }}'
-- id: ab41d20f-5788-413c-8f5a-93ad5a92b6e3
-  alias: Theater - Starting Media
-  trigger:
-  - platform: state
-    entity_id: media_player.plex_living_room_tv
-    to: playing
-  condition:
-  - condition: state
-    entity_id: binary_sensor.dark_outside
-    state: 'on'
-  action:
-  - service: switch.turn_off
-    data:
-      entity_id:
-      - switch.living_room_corner
-      - switch.living_room_stairs
-  - choose:
-    - conditions:
-      - condition: template
-        value_template: '{{ (state_attr(''media_player.plex_living_room_tv'', ''media_content_type''))
-          == ''movie'' }}'
-      sequence:
-      - service: light.turn_on
-        data:
-          entity_id:
-          - light.kitchen_up
-          - light.kitchen_down
-          rgb_color:
-          - 255
-          - 255
-          - 145
-          brightness_pct: 25
-  mode: single
-- id: b218303e-bbd7-405b-842a-9b1909ff848b
-  alias: Theater - Stopping Media
-  trigger:
-  - platform: state
-    entity_id: media_player.plex_living_room_tv
-    from: playing
-    for: 0:00:03
-  condition:
-  - condition: state
-    entity_id: binary_sensor.dark_outside
-    state: 'on'
-  action:
-  - service: switch.turn_on
-    data:
-      entity_id:
-      - switch.living_room_corner
-      - switch.living_room_stairs
-  - service: light.turn_on
-    data:
-      entity_id:
-      - light.kitchen_up
-      - light.kitchen_down
-      brightness: 183
-      rgb_color:
-      - 255
-      - 255
-      - 145
-  mode: single
 - id: ee48101c-720f-4d4d-84c4-796f3a3eb424
   alias: Weston - Sleep
   trigger:
@@ -919,9 +746,6 @@
   description: ''
   trigger:
   - platform: state
-    entity_id: input_boolean.sleeping
-    to: 'off'
-  - platform: state
     entity_id: binary_sensor.dark_outside
     to: 'on'
   - platform: homeassistant
@@ -930,10 +754,10 @@
     entity_id: media_player.plex_living_room_tv
     from: playing
     for: 0:00:03
+  - platform: state
+    entity_id: sensor.home_status
+    to: Occupied
   condition:
-  - condition: state
-    entity_id: input_boolean.sleeping
-    state: 'off'
   - condition: state
     entity_id: binary_sensor.dark_outside
     state: 'on'
@@ -942,6 +766,9 @@
     - condition: state
       entity_id: media_player.plex_living_room_tv
       state: playing
+  - condition: state
+    entity_id: sensor.home_status
+    state: Occupied
   action:
   - service: switch.turn_on
     target:
@@ -956,8 +783,8 @@
   - platform: homeassistant
     event: start
   - platform: state
-    entity_id: input_boolean.sleeping
-    to: 'on'
+    entity_id: sensor.home_status
+    to: Sleeping
   - platform: state
     entity_id: binary_sensor.dark_outside
     to: 'off'
@@ -968,8 +795,8 @@
   - condition: or
     conditions:
     - condition: state
-      entity_id: input_boolean.sleeping
-      state: 'on'
+      entity_id: sensor.home_status
+      state: Sleeping
     - condition: state
       entity_id: media_player.plex_living_room_tv
       state: playing
@@ -987,8 +814,8 @@
       - condition: or
         conditions:
         - condition: state
-          entity_id: input_boolean.sleeping
-          state: 'on'
+          entity_id: sensor.home_status
+          state: Sleeping
         - condition: state
           entity_id: sensor.home_status
           state: Unoccupied
@@ -1003,17 +830,18 @@
   description: ''
   trigger:
   - platform: state
-    entity_id: input_boolean.sleeping
-    to: 'off'
+    entity_id: sensor.home_status
   - platform: state
     entity_id: sun.sun
     to: below_horizon
   - platform: homeassistant
     event: start
   condition:
-  - condition: state
-    entity_id: input_boolean.sleeping
-    state: 'off'
+  - condition: not
+    conditions:
+    - condition: state
+      entity_id: sensor.home_status
+      state: Sleeping
   - condition: state
     entity_id: sun.sun
     state: below_horizon
@@ -1029,16 +857,16 @@
   - platform: homeassistant
     event: start
   - platform: state
-    entity_id: input_boolean.sleeping
-    to: 'on'
-  - platform: sun
-    event: sunrise
+    entity_id: sensor.home_status
+  - platform: state
+    entity_id: sun.sun
+    to: above_horizon
   condition:
   - condition: or
     conditions:
     - condition: state
-      entity_id: input_boolean.sleeping
-      state: 'on'
+      entity_id: sensor.home_status
+      state: Sleeping
     - condition: state
       entity_id: sun.sun
       state: above_horizon
@@ -1049,8 +877,8 @@
   - choose:
     - conditions:
       - condition: state
-        entity_id: input_boolean.sleeping
-        state: 'on'
+        entity_id: sensor.home_status
+        state: Sleeping
       sequence:
       - device_id: 93d65281b8fc40dd94b56a6adae6e6d6
         domain: cover
@@ -1063,8 +891,8 @@
   description: ''
   trigger:
   - platform: state
-    entity_id: input_boolean.sleeping
-    to: 'off'
+    entity_id: sensor.home_status
+    to: Occupied
   - platform: state
     entity_id: binary_sensor.dark_outside
     to: 'on'
@@ -1080,11 +908,11 @@
     to: 'off'
   condition:
   - condition: state
-    entity_id: input_boolean.sleeping
-    state: 'off'
-  - condition: state
     entity_id: binary_sensor.dark_outside
     state: 'on'
+  - condition: state
+    entity_id: sensor.home_status
+    state: Occupied
   action:
   - scene: scene.kitchen_default
   mode: single
@@ -1095,8 +923,8 @@
   - platform: homeassistant
     event: start
   - platform: state
-    entity_id: input_boolean.sleeping
-    to: 'on'
+    entity_id: sensor.home_status
+    to: Sleeping
   - platform: state
     entity_id: binary_sensor.dark_outside
     to: 'off'
@@ -1114,8 +942,8 @@
   - condition: or
     conditions:
     - condition: state
-      entity_id: input_boolean.sleeping
-      state: 'on'
+      entity_id: sensor.home_status
+      state: Sleeping
     - condition: state
       entity_id: media_player.plex_living_room_tv
       state: movie

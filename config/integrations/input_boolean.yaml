@@ -8,6 +8,9 @@ input_boolean:
   harrison_nap:
     name: Harrison Nap
     icon: mdi:alpha-h
-  sleeping:
-    name: Sleeping
-    icon: mdi:sleep
+  justin_sleeping:
+    name: Justin Sleeping
+    icon: mdi:alpha-j
+  shannon_sleeping:
+    name: Shannon Sleeping
+    icon: mdi:alpha-s

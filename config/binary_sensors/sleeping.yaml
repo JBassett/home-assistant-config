@@ -1,0 +1,10 @@
+- platform: template
+  sensors:
+    master_sleeping:
+      friendly_name: "Master Sleeping"
+      value_template: >-
+        {{ 
+          states('input_boolean.justin_sleeping')
+          or
+          states('input_boolean.shannon_sleeping')
+        }}
