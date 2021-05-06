@@ -44,6 +44,8 @@ deps
 
 /config/media
 
+/config/custom_components/sunpower_solar
+
 #Z-Wave
 openzwave
 zwcfg_0xe2a2aae7.xml
