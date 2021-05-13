@@ -61,19 +61,19 @@
     home_status:
       friendly_name: Home status
       value_template: >
-        {% if not(
-          is_state('person.justin' , 'home')
-          or 
-          is_state('person.shannon' , 'home') 
-          or 
-          is_state('input_boolean.guest_mode' , 'on')
-          ) 
-        %}
+        {% set jhome =is_state('person.justin', 'home') %}
+        {% set shome =is_state('person.shannon', 'home') %}
+        {% set ghome =is_state('input_boolean.guest_mode', 'on') %}
+        {% set jsleep =is_state('input_boolean.justin_sleeping', 'on') %}
+        {% set ssleep =is_state('input_boolean.shannon_sleeping', 'on') %}
+        {% if not(jhome or shome or ghome) %}
           Unoccupied
         {% elif 
-          (not is_state('person.justin' , 'home') or is_state('input_boolean.justin_sleeping', 'on'))
+          (not jhome or jsleep)
           and
-          (not is_state('person.shannon' , 'home') or is_state('input_boolean.shannon_sleeping', 'on'))
+          (not shome or ssleep)
+          and
+          (not ghome)
         %}
           Sleeping
         {% else %}
