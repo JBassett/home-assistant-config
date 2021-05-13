@@ -698,26 +698,18 @@
   - platform: state
     entity_id: media_player.westons_room_speaker
     from: playing
-    for:
-      seconds: 10
+    for: 0:00:10
   condition:
   - condition: state
     entity_id: input_boolean.weston_nap
     state: 'on'
   action:
-  - service: light.turn_on
-    data:
-      entity_id: light.weston_lamp
-      brightness: 3
-      rgb_color:
-      - 255
-      - 0
-      - 0
   - service: media_player.play_media
     data:
       entity_id: media_player.westons_room_speaker
       media_content_id: https://storage.googleapis.com/relaxation-sounds/ocean_3600.mp3
       media_content_type: music
+  mode: single
 - id: 8ab6d2cd-32fa-494f-a0e8-271dda57fa04
   alias: Weston - Wakup
   trigger:
