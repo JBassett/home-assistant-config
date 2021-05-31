@@ -1,15 +1,15 @@
 utility_meter:
-  house_daily_net_energy:
-    source: sensor.solar_raw_lifetime_net_energy
+  home_daily_net_energy:
+    source: sensor.home_enegry_lifetime_net
     cycle: daily
     net_consumption: True
-  house_monthly_net_energy:
-    source: sensor.solar_raw_lifetime_net_energy
+  home_monthly_net_energy:
+    source: sensor.home_enegry_lifetime_net
     cycle: monthly
     net_consumption: True
-  solar_daily_energy:
-    source: sensor.solar_raw_lifetime_panel_energy
+  home_daily_energy_production:
+    source: sensor.home_enegry_lifetime_production
     cycle: daily
-  solar_monthly_energy:
-    source: sensor.solar_raw_lifetime_panel_energy
+  home_monthly_energy_production:
+    source: sensor.home_enegry_lifetime_production
     cycle: monthly

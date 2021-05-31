@@ -1,19 +1,7 @@
 - platform: template
   sensors:
-    solar_raw_lifetime_net_energy:
-      friendly_name: 'Lifetime Raw Net Energy'
+    home_daily_usage_energy:
+      friendly_name: 'Daily usage of energy'
       unit_of_measurement: 'kWh'
       value_template: >-
-        {{state_attr('sensor.solar_consumptionmeter_pvs5m644235c', 'net_ltea_3phsum_kwh')}}
-    solar_raw_house_usage:
-      friendly_name: 'Raw Current House Power Usage'
-      unit_of_measurement: 'kW'
-      value_template: >-
-        {% if states('sensor.solar_consumptionmeter_pvs5m644235c') is defined %}
-          {{([states('sensor.solar_raw_total_power')|float + states('sensor.solar_consumptionmeter_pvs5m644235c')|float,0]|max)|round(2)}}
-        {% endif %}
-    solar_daily_house_usage_energy:
-      friendly_name: 'Daily useage of energy'
-      unit_of_measurement: 'kWh'
-      value_template: >-
-        {{(states('sensor.solar_daily_energy')|float + states('sensor.house_daily_net_energy')|float)|round(2)}}
+        {{(states('sensor.home_daily_energy_production')|float + states('sensor.home_daily_net_energy')|float)|round(2)}}
