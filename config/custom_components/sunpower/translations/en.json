@@ -1,0 +1,12 @@
+{
+    "config": {
+        "step": {
+            "user": {
+                "title": "Setup Solar URL",
+                "data": {
+                  "url": "Full URL to data"
+                }
+            }
+        }
+    }
+}
