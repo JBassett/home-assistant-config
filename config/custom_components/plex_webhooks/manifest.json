@@ -1,4 +1,5 @@
 {
+    "version": "1.0.0",
     "domain": "plex_webhooks",
     "name": "Plex Webhooks",
     "documentation": "https://github.com/JBassett/plex_webhooks",
