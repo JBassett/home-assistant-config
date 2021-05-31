@@ -25,6 +25,7 @@ plex.conf
 sabnzbd.conf
 .xbox-token.json
 .google_maps_location_sharing.cookies.*
+rtsp2webrtc_v4_amd64
 
 .cloud/
 
@@ -43,8 +44,6 @@ deps
 /config/www/upcoming-media-card-images
 
 /config/media
-
-/config/custom_components/sunpower_solar
 
 #Z-Wave
 openzwave
