@@ -124,8 +124,8 @@
     to: 'on'
   condition:
   - condition: state
-    entity_id: sensor.home_status
-    state: Occupied
+    entity_id: person.justin
+    state: home
   action:
   - service: tts.google_translate_say
     data:
@@ -939,6 +939,7 @@
     - condition: state
       entity_id: media_player.plex_living_room_tv
       state: movie
+      attribute: media_content_type
     - condition: state
       entity_id: sensor.home_status
       state: Unoccupied
