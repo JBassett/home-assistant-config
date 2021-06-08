@@ -285,9 +285,6 @@
   - service: input_boolean.turn_on
     data:
       entity_id: input_boolean.harrison_nap
-  - service: automation.trigger
-    data:
-      entity_id: automation.harrison_fan_control
 - id: 65b05a5e-aa84-4ee7-8758-27927054b049
   alias: Harrison - Keep Sleeping
   trigger:
@@ -686,9 +683,6 @@
   - service: input_boolean.turn_on
     data:
       entity_id: input_boolean.weston_nap
-  - service: automation.trigger
-    data:
-      entity_id: automation.weston_fan_control
 - id: 9d684000-821b-49c3-9770-3fa876b6effb
   alias: Weston - Keep Sleeping
   trigger:
