@@ -1,15 +1,15 @@
 utility_meter:
   home_daily_net_energy:
-    source: sensor.home_enegry_lifetime_net
+    source: sensor.home_energy_lifetime_net
     cycle: daily
     net_consumption: True
   home_monthly_net_energy:
-    source: sensor.home_enegry_lifetime_net
+    source: sensor.home_energy_lifetime_net
     cycle: monthly
     net_consumption: True
   home_daily_energy_production:
-    source: sensor.home_enegry_lifetime_production
+    source: sensor.home_energy_lifetime_production
     cycle: daily
   home_monthly_energy_production:
-    source: sensor.home_enegry_lifetime_production
+    source: sensor.home_energy_lifetime_production
     cycle: monthly
