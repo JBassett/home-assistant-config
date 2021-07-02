@@ -21,7 +21,7 @@ def get_power(device):
     data_time = datetime.strptime(device["DATATIME"], "%Y,%m,%d,%H,%M,%S")
     time_since_data = datetime.utcnow() - data_time
 
-    return device["p_3phsum_kw"] if  time_since_data < timedelta(minutes=3) else 0
+    return float(device["p_3phsum_kw"]) * 1000 if  time_since_data < timedelta(minutes=3) else 0
 
 async def async_setup(hass, config):
     return True
@@ -84,7 +84,7 @@ class SunpowerSensor(CoordinatorEntity, SensorEntity):
 class PanelPowerSensor(SunpowerSensor):
     name_prefix = "Power"
     device_class = DEVICE_CLASS_POWER
-    unit_of_measurement = "kW"
+    unit_of_measurement = "W"
     state_class="measurement"
 
     def __init__(self, coordinator, device):
@@ -96,9 +96,9 @@ class PanelPowerSensor(SunpowerSensor):
         return get_power(self.coordinator.data[self.device_serial])
         
 class PanelLifetimeEnergySensor(SunpowerSensor):
-    name_prefix = "Lifetime Enery"
+    name_prefix = "Lifetime Energy"
     device_class = DEVICE_CLASS_ENERGY
-    unit_of_measurement = "kWh"
+    unit_of_measurement = "Wh"
     state_class="measurement"
 
     def __init__(self, coordinator, device):
@@ -107,7 +107,7 @@ class PanelLifetimeEnergySensor(SunpowerSensor):
     @property
     def state(self):
         """Return the state of the sensor."""
-        return self.coordinator.data[self.device_serial]["ltea_3phsum_kwh"]
+        return float(self.coordinator.data[self.device_serial]["ltea_3phsum_kwh"]) * 1000
 
 class PanelMpptVoltageSensor(SunpowerSensor):
     name_prefix = "MPPT Voltage"
@@ -182,7 +182,7 @@ class HomeFrequencySensor(SunpowerSensor):
 
 class HomePowerNetSensor(SunpowerSensor):
     device_class = DEVICE_CLASS_POWER
-    unit_of_measurement = "kW"
+    unit_of_measurement = "W"
     state_class="measurement"
 
     def __init__(self, coordinator, device):
@@ -195,11 +195,11 @@ class HomePowerNetSensor(SunpowerSensor):
     @property
     def state(self):
         """Return the state of the sensor."""
-        return self.coordinator.data[self.device_serial]["p_3phsum_kw"]
+        return float(self.coordinator.data[self.device_serial]["p_3phsum_kw"]) * 1000
 
 class HomePowerProductionSensor(SunpowerSensor):
     device_class = DEVICE_CLASS_POWER
-    unit_of_measurement = "kW"
+    unit_of_measurement = "W"
     state_class="measurement"
 
     def __init__(self, coordinator, device):
@@ -217,12 +217,12 @@ class HomePowerProductionSensor(SunpowerSensor):
             device = self.coordinator.data[serial]
             # Depending on device we need to add sensors we care about
             if(device["MODEL"] == "AC_Module_Type_D"):
-                current_power = current_power + float(get_power(device))
+                current_power = float(current_power) + float(get_power(device))
         return current_power
 
 class HomePowerUsageSensor(SunpowerSensor):
     device_class = DEVICE_CLASS_POWER
-    unit_of_measurement = "kW"
+    unit_of_measurement = "W"
     state_class="measurement"
 
     def __init__(self, coordinator, device):
@@ -240,13 +240,13 @@ class HomePowerUsageSensor(SunpowerSensor):
             device = self.coordinator.data[serial]
             # Depending on device we need to add sensors we care about
             if(device["MODEL"] == "AC_Module_Type_D"):
-                current_power_production = current_power_production + float(get_power(device))
+                current_power_production = float(current_power_production) + float(get_power(device))
 
-        return round(current_power_production + float(self.coordinator.data[self.device_serial]["p_3phsum_kw"]), 4)
+        return round(float(current_power_production) + (float(self.coordinator.data[self.device_serial]["p_3phsum_kw"]) * 1000))
 
 class HomeEnergyLifetimeProductionSensor(SunpowerSensor):
     device_class = DEVICE_CLASS_ENERGY
-    unit_of_measurement = "kWh"
+    unit_of_measurement = "Wh"
     state_class="measurement"
 
     def __init__(self, coordinator, device):
@@ -254,7 +254,7 @@ class HomeEnergyLifetimeProductionSensor(SunpowerSensor):
 
     @property
     def name(self):
-        return "Home Enegry Lifetime Production"
+        return "Home Energy Lifetime Production"
     
     @property
     def state(self):
@@ -264,13 +264,13 @@ class HomeEnergyLifetimeProductionSensor(SunpowerSensor):
             device = self.coordinator.data[serial]
             # Depending on device we need to add sensors we care about
             if(device["MODEL"] == "AC_Module_Type_D"):
-                lifetime_energy = lifetime_energy + float(device["ltea_3phsum_kwh"])
+                lifetime_energy = float(lifetime_energy) + float(device["ltea_3phsum_kwh"])
 
-        return lifetime_energy
+        return float(lifetime_energy) * 1000
 
 class HomeEnergyLifetimeNetSensor(SunpowerSensor):
     device_class = DEVICE_CLASS_ENERGY
-    unit_of_measurement = "kWh"
+    unit_of_measurement = "Wh"
     state_class="measurement"
 
     def __init__(self, coordinator, device):
@@ -278,9 +278,9 @@ class HomeEnergyLifetimeNetSensor(SunpowerSensor):
 
     @property
     def name(self):
-        return "Home Enegry Lifetime Net"
+        return "Home Energy Lifetime Net"
     
     @property
     def state(self):
         """Return the state of the sensor."""
-        return self.coordinator.data[self.device_serial]["net_ltea_3phsum_kwh"]
+        return float(self.coordinator.data[self.device_serial]["net_ltea_3phsum_kwh"]) * 1000
