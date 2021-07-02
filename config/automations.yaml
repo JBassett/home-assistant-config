@@ -349,7 +349,7 @@
   condition:
   - condition: numeric_state
     entity_id: sensor.hacs
-    above: 0
+    above: '0'
   action:
   - service: notify.mobile_app_pixel_4a
     data:
@@ -358,8 +358,10 @@
         \ -%} \n  {{repo.display_name}}{%- if not loop.last %}, {% endif -%}\n{%-\
         \ endfor %}"
       data:
+        clickAction: /hacs
         channel: Updates
         tag: HACS
+  mode: single
 - id: 315d8975-7f69-4348-b191-31ec1608d3d8
   alias: Maintenance - HACS Clear Update Notification
   trigger:
