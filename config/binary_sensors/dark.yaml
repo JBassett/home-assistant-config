@@ -4,7 +4,7 @@
       friendly_name: "Dark Outside"
       value_template: >-
         {{ 
-          (states('sensor.home_power_production')|float < 0.75)
+          (states('sensor.home_power_production')|float < 750)
           or
           (state_attr('sun.sun', 'rising') and state_attr('sun.sun', 'elevation')|float < 1)
           or
