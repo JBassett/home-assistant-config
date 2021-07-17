@@ -968,13 +968,7 @@
       minutes: 0
       seconds: 5
       milliseconds: 0
-  condition:
-  - condition: time
-    after: 05:45
-    before: '10:00'
-  - condition: state
-    entity_id: person.justin
-    state: home
+  condition: []
   action:
   - service: input_boolean.turn_off
     target:
@@ -994,10 +988,7 @@
       minutes: 0
       seconds: 5
       milliseconds: 0
-  condition:
-  - condition: time
-    after: 05:45
-    before: '10:00'
+  condition: []
   action:
   - service: input_boolean.turn_off
     target:
