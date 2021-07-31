@@ -24,7 +24,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
     _LOGGER.debug("async_setup_entry -> Start")
     autopi = hass.data[DOMAIN]['autopi']
 
-    async_add_entities([
+    sensors = [
         StateOfChargeSensor(autopi),
         SpeedSensor(autopi),
         BatteryTempSensor(autopi),
@@ -40,8 +40,13 @@ async def async_setup_entry(hass, entry, async_add_entities):
         BatteryHeaterPowerSensor(autopi),
         CabinAcPowerSensor(autopi),
         CabinHeaterPowerSensor(autopi),
-        Rssi(autopi)
-        ])
+        Rssi(autopi),
+        CellVoltageSensor(autopi, 'avg')
+    ]
+    for cell_num in range(1, 97):
+        sensors.append(CellVoltageSensor(autopi, str(cell_num)))
+
+    async_add_entities(sensors)
     _LOGGER.debug("async_setup_entry -> Complete")
 
 class AutopiSensor(RestoreEntity):
@@ -364,4 +369,24 @@ class Rssi(AutopiSensor):
         """Return the state of the sensor."""
         if self.autopi.latest and 'rssi' in self.autopi.latest:
             self._last_state = self.autopi.latest['rssi']
+        return self._last_state
+
+class CellVoltageSensor(AutopiSensor):
+    device_class = DEVICE_CLASS_VOLTAGE
+    unit_of_measurement = "V"
+
+    def __init__(self, autopi, cell_num):
+        self.autopi = autopi
+        self.cell_num = cell_num
+        self.entity_id = f'sensor.bolt_voltage_cell_{self.cell_num}'
+    
+    @property
+    def name(self):
+        return f'Bolt - Voltage Cell {self.cell_num}'
+
+    @property
+    def state(self):
+        """Return the state of the sensor."""
+        if self.autopi.latest and f'cell_voltage_{self.cell_num}' in self.autopi.latest:
+            self._last_state = self.autopi.latest[f'cell_voltage_{self.cell_num}']
         return self._last_state
