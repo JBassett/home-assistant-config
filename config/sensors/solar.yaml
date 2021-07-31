@@ -2,6 +2,12 @@
   sensors:
     home_daily_usage_energy:
       friendly_name: 'Daily usage of energy'
-      unit_of_measurement: 'Wh'
+      unit_of_measurement: 'kWh'
       value_template: >-
         {{(states('sensor.home_daily_energy_production')|float + states('sensor.home_daily_net_energy')|float)|round(2)}}
+    
+    home_energy_lifetime_net_negative:
+      friendly_name: 'Inverted Liftime Net Energy'
+      unit_of_measurement: 'kWh'
+      value_template: >-
+        {{states('sensor.home_energy_lifetime_net')|float * -1}}

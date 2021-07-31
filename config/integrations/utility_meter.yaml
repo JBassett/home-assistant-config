@@ -13,3 +13,9 @@ utility_meter:
   home_monthly_energy_production:
     source: sensor.home_energy_lifetime_production
     cycle: monthly
+  home_daily_grid_usage:
+    source: sensor.home_energy_lifetime_net
+    cycle: daily
+  home_daily_grid_production:
+    source: sensor.home_energy_lifetime_net_negative
+    cycle: daily
