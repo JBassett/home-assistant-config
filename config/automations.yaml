@@ -968,6 +968,10 @@
       minutes: 0
       seconds: 5
       milliseconds: 0
+  - platform: state
+    entity_id: person.justin
+    from: home
+    for: 00:00:30
   condition: []
   action:
   - service: input_boolean.turn_off
