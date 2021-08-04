@@ -1,7 +1,7 @@
 - platform: template
   sensors:
     home_daily_usage_energy:
-      friendly_name: 'Daily usage of energy'
+      friendly_name: 'Daily Home Usage of Energy'
       unit_of_measurement: 'kWh'
       value_template: >-
         {{(states('sensor.home_daily_energy_production')|float + states('sensor.home_daily_net_energy')|float)|round(2)}}

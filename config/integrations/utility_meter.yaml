@@ -1,21 +1,27 @@
 utility_meter:
   home_daily_net_energy:
     source: sensor.home_energy_lifetime_net
+    name: Daily Net Energy
     cycle: daily
     net_consumption: True
   home_monthly_net_energy:
     source: sensor.home_energy_lifetime_net
+    name: Monthly Net Energy
     cycle: monthly
     net_consumption: True
   home_daily_energy_production:
     source: sensor.home_energy_lifetime_production
+    name: Daily Solar Energy Production
     cycle: daily
   home_monthly_energy_production:
     source: sensor.home_energy_lifetime_production
+    name: Monthly Solar Energy Production
     cycle: monthly
   home_daily_grid_usage:
     source: sensor.home_energy_lifetime_net
+    name: Daily Grid Energy Usage
     cycle: daily
   home_daily_grid_production:
     source: sensor.home_energy_lifetime_net_negative
+    name: Daily Grid Energy Production
     cycle: daily
