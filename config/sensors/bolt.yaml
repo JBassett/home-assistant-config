@@ -1,0 +1,16 @@
+- platform: integration
+  source: sensor.bolt_house_power_consumption
+  name: Bolt Home Energy Usage
+  unit: kWh
+
+- platform: template
+  sensors:
+    bolt_house_power_consumption:
+      friendly_name: Bolt - Home Power Usage
+      unit_of_measurement: 'kW'
+      value_template: >
+        {% if states('device_tracker.bolt_2') == 'home' and states('binary_sensor.bolt_charging') == 'on' %}
+          {{ states('sensor.bolt_power')|float * -1 }}
+        {% else %}
+          0
+        {% endif %}
