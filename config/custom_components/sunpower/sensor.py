@@ -242,7 +242,7 @@ class HomePowerUsageSensor(SunpowerSensor):
             if(device["MODEL"] == "AC_Module_Type_D"):
                 current_power_production = float(current_power_production) + float(get_power(device))
 
-        return round(float(current_power_production) + (float(self.coordinator.data[self.device_serial]["p_3phsum_kw"])))
+        return round(float(current_power_production) + (float(self.coordinator.data[self.device_serial]["p_3phsum_kw"])), 4)
 
 class HomeEnergyLifetimeProductionSensor(SunpowerSensor):
     device_class = DEVICE_CLASS_ENERGY
