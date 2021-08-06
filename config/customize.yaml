@@ -4,3 +4,5 @@ person.shannon:
   entity_picture: /local/avatars/Shannon.jpg
 device_tracker.bolt_2:
   entity_picture: /local/avatars/Bolt.jpg
+sensor.furnace_home_energy_usage:
+  device_class: energy
