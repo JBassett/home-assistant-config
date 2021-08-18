@@ -1,0 +1,79 @@
+esphome:
+  name: sonoff-dryer
+  platform: ESP8266
+  board: esp01_1m
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_pass
+  manual_ip:
+    static_ip: !secret sonoff_dryer_ip
+    gateway: !secret gateway
+    subnet: !secret subnet
+
+logger:
+  baud_rate: 0 # (UART logging interferes with cse7766)
+
+# Enable Home Assistant API
+api:
+  password: !secret api_pass
+
+ota:
+  password: !secret ota_pass
+
+web_server:
+  port: 80
+
+time:
+  - platform: sntp
+    id: my_time
+
+# Device Specific Config
+
+uart:
+  rx_pin: RX
+  baud_rate: 4800
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO0
+      mode: INPUT_PULLUP
+      inverted: True
+    name: "Dryer Button"
+    on_press:
+      - switch.toggle: relay
+  - platform: status
+    name: "Dryer Outlet Status"
+
+sensor:
+  - platform: wifi_signal
+    name: "Dryer WiFi Signal"
+    update_interval: 60s
+  - platform: cse7766
+    current:
+      name: "Dryer Current"
+      accuracy_decimals: 1
+    voltage:
+      name: "Dryer Voltage"
+      accuracy_decimals: 1
+    power:
+      id: power
+      name: "Dryer Power"
+      accuracy_decimals: 4
+      filters:
+        # Multiplication factor from W to kW is 0.001
+        - multiply: 0.001
+      unit_of_measurement: kW
+  - platform: total_daily_energy
+    name: "Daily Dryer Energy"
+    power_id: power
+switch:
+  - platform: gpio
+    name: "Dryer Relay"
+    pin: GPIO12
+    id: relay
+    restore_mode: ALWAYS_ON
+
+status_led:
+  pin: GPIO13
