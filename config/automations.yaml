@@ -779,6 +779,9 @@
   - platform: state
     entity_id: media_player.plex_living_room_tv
     to: playing
+  - platform: state
+    entity_id: sensor.home_status
+    to: Unoccupied
   condition:
   - condition: or
     conditions:
@@ -791,6 +794,9 @@
     - condition: state
       entity_id: binary_sensor.dark_outside
       state: 'off'
+    - condition: state
+      entity_id: sensor.home_status
+      state: Unoccupied
   action:
   - service: switch.turn_off
     target:
@@ -861,7 +867,9 @@
   action:
   - service: switch.turn_off
     target:
-      area_id: c8266fda6fc64c02a068ff87b9eefccd
+      entity_id:
+      - switch.porch_lights
+      - switch.driveway_lights
   - choose:
     - conditions:
       - condition: state
@@ -1049,4 +1057,70 @@
   - service: input_boolean.turn_on
     target:
       entity_id: input_boolean.shannon_sleeping
+  mode: single
+- id: '1628709837178'
+  alias: Sonoff - Relay turned off
+  description: I need alerts if the relays turn off...
+  trigger:
+  - platform: state
+    entity_id: switch.server_relay
+    from: 'on'
+    to: 'off'
+  - platform: state
+    entity_id: switch.fridge_relay
+    from: 'on'
+    to: 'off'
+  - platform: state
+    entity_id: switch.garage_fridge_relay
+    from: 'on'
+    to: 'off'
+  condition: []
+  action:
+  - service: notify.mobile_app_pixel_4a
+    data:
+      title: Relay Turned Off
+      message: A relay has been turned off that should never be off!!!
+  - service: tts.google_translate_say
+    data:
+      entity_id: media_player.kitchen_display
+      message: A relay has turned off that should never be off! Panic and fix it!
+  mode: queued
+  max: 10
+- id: '1628780619606'
+  alias: Laundry - Done
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.washer_power
+    below: '0.05'
+    for: '30'
+    id: washer
+  - platform: numeric_state
+    entity_id: sensor.dryer_power
+    below: '0.15'
+    for: '30'
+    id: dryer
+  condition:
+  - condition: state
+    entity_id: sensor.home_status
+    state: Occupied
+  action:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: washer
+      sequence:
+      - service: tts.google_translate_say
+        data:
+          entity_id: media_player.kitchen_display
+          message: Washer is done, go unload it!
+    - conditions:
+      - condition: trigger
+        id: dryer
+      sequence:
+      - service: tts.google_translate_say
+        data:
+          entity_id: media_player.kitchen_display
+          message: Dryer is done, don't let it wrinkle!
+    default: []
   mode: single
