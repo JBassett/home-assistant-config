@@ -14,4 +14,4 @@
         {% set fanOn = states('binary_sensor.family_room_thermostat_fan') == 'on' %}
         {% set acOn = states('sensor.family_room_thermostat_hvac_state') == 'cool' %}
         {% set fudge = (range(0, 10) | random /1000.0 ) %}
-        {{ (fanOn * 0.4) + (acOn * 1) + ((fanOn or acOn) * fudge) }}
+        {{ (fanOn * 0.4) + (acOn * 1.5) + ((fanOn or acOn) * fudge) }}
