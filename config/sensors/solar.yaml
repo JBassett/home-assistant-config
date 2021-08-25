@@ -10,4 +10,6 @@
       friendly_name: 'Inverted Liftime Net Energy'
       unit_of_measurement: 'kWh'
       value_template: >-
-        {{states('sensor.home_energy_lifetime_net')|float * -1}}
+        {% if states('sensor.home_energy_lifetime_net')|float != 0 %}
+          {{states('sensor.home_energy_lifetime_net')|float * -1}}
+        {% endif %}
