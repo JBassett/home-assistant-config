@@ -66,7 +66,7 @@ sensor:
         - multiply: 0.001
       unit_of_measurement: kW
   - platform: total_daily_energy
-    name: "Daily Fridge Energy"
+    name: "Fridge Energy"
     power_id: power
 
 switch:

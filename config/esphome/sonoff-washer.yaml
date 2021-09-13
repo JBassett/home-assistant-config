@@ -45,6 +45,9 @@ binary_sensor:
       - switch.toggle: relay
   - platform: status
     name: "Washer Outlet Status"
+  - platform: template
+    name: "Washer Running"
+    lambda: return id(power).state >= 0.04;
 
 sensor:
   - platform: wifi_signal
@@ -66,7 +69,7 @@ sensor:
         - multiply: 0.001
       unit_of_measurement: kW
   - platform: total_daily_energy
-    name: "Daily Washer Energy"
+    name: "Washer Energy"
     power_id: power
 switch:
   - platform: gpio

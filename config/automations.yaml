@@ -234,12 +234,12 @@
   - service: cover.close_cover
     data:
       entity_id: cover.garage_door_opener
-- alias: Garage Door - Opened/Closed not home
-  id: 52340028-d645-4654-9c06-ee4158ef027b
-  mode: restart
+- id: 52340028-d645-4654-9c06-ee4158ef027b
+  alias: Garage Door - Opened/Closed not home
   trigger:
   - entity_id: cover.garage_door_opener
     platform: state
+    to: opened
   condition:
   - condition: state
     entity_id: sensor.home_status
@@ -262,6 +262,7 @@
   - service: cover.close_cover
     data:
       entity_id: cover.garage_door_opener
+  mode: restart
 - id: 8c854893-f82c-4fe5-9d37-d3d6f36f89b1
   alias: Harrison - Sleep
   trigger:
@@ -1090,37 +1091,34 @@
   alias: Laundry - Done
   description: ''
   trigger:
-  - platform: numeric_state
-    entity_id: sensor.washer_power
-    below: '0.05'
-    for: '30'
+  - platform: state
+    entity_id: binary_sensor.washer_running
     id: washer
-  - platform: numeric_state
-    entity_id: sensor.dryer_power
-    below: '0.15'
-    for: '30'
+    from: 'on'
+    to: 'off'
+  - platform: state
+    entity_id: binary_sensor.dryer_running
     id: dryer
+    from: 'on'
+    to: 'off'
   condition:
   - condition: state
     entity_id: sensor.home_status
     state: Occupied
+  - condition: state
+    entity_id: binary_sensor.washer_running
+    state: 'off'
+  - condition: state
+    entity_id: binary_sensor.dryer_running
+    state: 'off'
   action:
-  - choose:
-    - conditions:
-      - condition: trigger
-        id: washer
-      sequence:
-      - service: tts.google_translate_say
-        data:
-          entity_id: media_player.kitchen_display
-          message: Washer is done, go unload it!
-    - conditions:
-      - condition: trigger
-        id: dryer
-      sequence:
-      - service: tts.google_translate_say
-        data:
-          entity_id: media_player.kitchen_display
-          message: Dryer is done, don't let it wrinkle!
-    default: []
-  mode: single
+  - service: tts.google_translate_say
+    data:
+      entity_id: media_player.kitchen_display
+      message: Laundry is done!  Don't let it wrinkle or turn to mildew!
+  - service: notify.mobile_app_pixel_4a
+    data:
+      title: Laundry
+      message: Laundry is done!
+  mode: queued
+  max: 10
