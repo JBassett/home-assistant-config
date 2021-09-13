@@ -14547,23 +14547,23 @@
         config: {},
         language: {},
         sun: {type: Object},
-        iconSize: {type: Number},
         weather: {type: Object},
         temperature: {type: Object},
         forecastChart: {type: Object},
-        forecastItems: {type: Number}
+        forecastItems: {type: Number},
+        iconSize: {type: Number}
       };
     }
 
     setConfig(config) {
+      this.config = config;
       if (!config.weather) {
         throw new Error('Please, define "weather" entity in the card config');
-      }    this.config = config;
-    }
+      }  }
 
     set hass(hass) {
       this._hass = hass;
-      this.language = this._hass.selectedLanguage || this._hass.language;
+      this.language = hass.selectedLanguage || hass.language;
       this.sun = 'sun.sun' in hass.states ? hass.states['sun.sun'] : null;
       this.weather = this.config.weather in hass.states ? hass.states[this.config.weather] : null;
       this.temperature = this.config.temp in hass.states ? hass.states[this.config.temp].state : null;
@@ -14598,16 +14598,12 @@
       return weatherIcons[condition];
     }
 
-    getWeatherCondition(condition) {
-      return locale[this.language][condition];
-    }
-
     getWindDirIcon(deg) {
       return cardinalDirectionsIcon[parseInt((deg + 22.5) / 45.0)];
     }
 
     getWindDir(deg) {
-      return locale[this.language]['cardinalDirections'][parseInt((deg + 11.25) / 22.5)];
+      return this.ll('cardinalDirections')[parseInt((deg + 11.25) / 22.5)];
     }
 
     firstUpdated() {
@@ -14642,7 +14638,7 @@
       var precipColor = config.precip_color ? config.precip_color : 'rgba(132, 209, 253, 1.0)';
       var tempUnit = this._hass.config.unit_system.temperature;
       var lengthUnit = this._hass.config.unit_system.length;
-      var precipUnit = lengthUnit === 'km' ? locale[language]['uPrecip'][0] : locale[language]['uPrecip'][1];
+      var precipUnit = lengthUnit === 'km' ? this.ll('uPrecip')[0] : this.ll('uPrecip')[1];
       var forecast = weather.attributes.forecast.slice(0, forecastItems);
       if (new Date(forecast[1].datetime) - new Date(forecast[0].datetime) === 36e5)
         var mode = 'hourly';
@@ -14707,7 +14703,7 @@
             categoryPercentage: 1.0,
             datalabels: {
               display: function(context) {
-                return context.dataset.data[context.dataIndex] !== 0 ? 'auto' : false;
+                return context.dataset.data[context.dataIndex] > 0 ? 'auto' : false;
               },
               formatter: function(value, context) {
                 if (context.dataset.data[context.dataIndex] > 9) {
@@ -15008,7 +15004,7 @@
               </div>
             `
           }
-          <span>${this.getWeatherCondition(weather.state)}</span>
+          <span>${this.ll(weather.state)}</span>
         </div>
       </div>
     `;
