@@ -1,28 +1,16 @@
 - platform: rest
   # resource: https://static.nfl.com/liveupdate/scorestrip/ss.xml
-  resource: http://static.nfl.com/liveupdate/scorestrip/postseason/ss.xml
+  # resource: http://static.nfl.com/liveupdate/scorestrip/postseason/ss.xml
+  resource: http://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard
   name: bills_game_status
   value_template: >
-    {% for game in value_json.ss.gms.g 
-      | sort(attribute="@gsis",reverse=true) 
-      if game['@h'] == 'BUF' or game['@v'] == 'BUF' 
-    %}
-      {% if loop.first %}
-        {% if game['@q'] == 'P' %}
-          Pregame
-        {% elif game['@q'] == '1' or game['@q'] == '2' or game['@q'] == '3' or game['@q'] == '4' or game['@q'] == 'O' or game['@q'] == 'H' %}
-          In Progress
-        {% elif game['@q'] == 'FO' %}
-          F(OT)
-        {% elif game['@q'] == 'F' %}
-          Final
-        {% elif game['@q'] == 'S' %}
-          Suspended      
-        {% endif %}        
+    {% for event in value_json.events %}
+      {% if 'BUF' in event.shortName %}
+        {{ event['status']['type']['description'] }}        
       {% endif %}
     {% endfor %}
   json_attributes:
-    - ss
+    - events
   scan_interval: 
     minutes: 5
 - platform: template
@@ -30,36 +18,20 @@
     bills_score:
       friendly_name: Bills Score
       value_template: >
-        {% for game in states.sensor.bills_game_status.attributes['ss']['gms']['g'] 
-          | sort(attribute="@gsis",reverse=true) 
-          if game['@h'] == 'BUF' or game['@v'] == 'BUF' 
-        %}
-          {% if loop.first %}
-            {% if game['@h'] == 'BUF' %}
-              {{ game['@hs'] }}
-            {% else %}
-              {{ game['@vs'] }}
-            {% endif %}
+        {% for event in states.sensor.bills_game_status.attributes['events'] %}
+          {% if 'BUF' in event.shortName %}
+            {% for competitor in event['competitions'][0]['competitors'] %}
+              {% if 'BUF' == competitor['team']['abbreviation'] %}
+                {{competitor['score']}}
+              {% endif %} 
+            {% endfor %}
           {% endif %}
         {% endfor %}
     bills_quarter:
       friendly_name: Bills Quarter
       value_template: >
-        {% for game in states.sensor.bills_game_status.attributes['ss']['gms']['g'] 
-          | sort(attribute="@gsis",reverse=true) 
-          if game['@h'] == 'BUF' or game['@v'] == 'BUF' 
-        %}
-          {% if loop.first %}
-            {% if game['@q'] == 'P' or game['@q'] == 'S' %}
-              0 
-            {% elif game['@q'] == 'F' or game['@q'] == 'FO' %}
-              -1
-            {% elif game['@q'] == 'H' %}
-              2          
-            {% elif game['@q'] == 'O' %}
-              5          
-            {% else %}
-              {{ game['@q'] }}
-            {% endif %}            
+        {% for event in states.sensor.bills_game_status.attributes['events'] %}
+          {% if 'BUF' in event.shortName %}
+            {{ event['status']['period'] }}
           {% endif %}
         {% endfor %}
