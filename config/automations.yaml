@@ -58,15 +58,6 @@
     target:
       entity_id: switch.fireplace_fan
   mode: single
-- id: 80b144d9-d108-4f29-a7cd-01c730e7b8ea
-  alias: Schedule - Wake Up
-  trigger:
-  - platform: time
-    at: 07:30:00
-  condition: []
-  action:
-  - service: script.goodmorning
-  mode: single
 - id: 775bbb47-3e20-4c6f-bf19-b2c8d232490b
   alias: Schedule - Bedtime
   trigger:
@@ -528,12 +519,27 @@
     entity_id: switch.gaming_pc
     from: 'on'
     to: 'off'
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+      milliseconds: 0
   - platform: state
     entity_id: sensor.home_status
     to: Sleeping
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+      milliseconds: 0
   - platform: state
     entity_id: sensor.home_status
     to: Unoccupied
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+      milliseconds: 0
   condition: []
   action:
   - service: light.turn_off
@@ -1019,19 +1025,45 @@
     for:
       hours: 0
       minutes: 0
-      seconds: 5
+      seconds: 0
       milliseconds: 0
   condition:
   - condition: time
     before: 05:30
     after: '21:00'
   - condition: state
-    entity_id: switch.gaming_pc
+    entity_id: input_boolean.justin_sleeping
     state: 'off'
   action:
-  - service: input_boolean.turn_on
-    target:
-      entity_id: input_boolean.justin_sleeping
+  - service: notify.mobile_app_pixel_4a
+    data:
+      title: I think you are sleeping now...
+      message: Are you asleep?
+      data:
+        actions:
+        - action: sleeping
+          title: In Bed
+        - action: not_sleeping
+          title: Still Awake
+  - wait_for_trigger:
+    - platform: event
+      event_type: mobile_app_notification_action
+      event_data:
+        action: sleeping
+    - platform: event
+      event_type: mobile_app_notification_action
+      event_data:
+        action: not_sleeping
+    timeout: '120'
+    continue_on_timeout: true
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{ wait.trigger.event.data.action == "sleeping" }}'
+      sequence:
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.justin_sleeping
   mode: single
 - id: '1625362291482'
   alias: Schedule - Bedtime - Shannon
