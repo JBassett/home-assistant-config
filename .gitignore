@@ -2,7 +2,7 @@
 secrets.yaml
 
 # Log File
-home-assistant.log
+home-assistant.log*
 
 # Known Devices
 known_devices.yaml
