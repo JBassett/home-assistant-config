@@ -47,7 +47,7 @@ binary_sensor:
     name: "Washer Outlet Status"
   - platform: template
     name: "Washer Running"
-    lambda: return id(power).state >= 0.04;
+    lambda: return id(power).state >= 0.02;
 
 sensor:
   - platform: wifi_signal
