@@ -6,9 +6,12 @@
       - None
       - Slow Random Colors
       - Fast Random Colors
-      - In Alarm
+      - Touchdown
       - Strobe - Rainbow
-      brightness: 183
+      supported_color_modes:
+      - rgb
+      color_mode: rgb
+      brightness: 128
       hs_color:
       - 60
       - 43.137
@@ -21,16 +24,20 @@
       - 0.443
       effect: None
       friendly_name: Kitchen Down
-      supported_features: 61
+      icon: mdi:led-strip-variant
+      supported_features: 44
       state: 'on'
     light.kitchen_up:
       effect_list:
       - None
       - Slow Random Colors
       - Fast Random Colors
-      - In Alarm
+      - Touchdown
       - Strobe - Rainbow
-      brightness: 183
+      supported_color_modes:
+      - rgb
+      color_mode: rgb
+      brightness: 128
       hs_color:
       - 60
       - 43.137
@@ -43,7 +50,8 @@
       - 0.443
       effect: None
       friendly_name: Kitchen Up
-      supported_features: 61
+      icon: mdi:led-strip-variant
+      supported_features: 44
       state: 'on'
 - id: '1609092905200'
   name: Kitchen - Fire Call
