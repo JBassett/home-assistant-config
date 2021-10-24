@@ -99,7 +99,7 @@ class PanelLifetimeEnergySensor(SunpowerSensor):
     name_prefix = "Lifetime Energy"
     device_class = DEVICE_CLASS_ENERGY
     unit_of_measurement = "kWh"
-    state_class="measurement"
+    state_class="total_increasing"
 
     def __init__(self, coordinator, device):
         super().__init__(coordinator, device)
@@ -247,7 +247,7 @@ class HomePowerUsageSensor(SunpowerSensor):
 class HomeEnergyLifetimeProductionSensor(SunpowerSensor):
     device_class = DEVICE_CLASS_ENERGY
     unit_of_measurement = "kWh"
-    state_class="measurement"
+    state_class="total_increasing"
 
     def __init__(self, coordinator, device):
         super().__init__(coordinator, device)
@@ -271,7 +271,7 @@ class HomeEnergyLifetimeProductionSensor(SunpowerSensor):
 class HomeEnergyLifetimeNetSensor(SunpowerSensor):
     device_class = DEVICE_CLASS_ENERGY
     unit_of_measurement = "kWh"
-    state_class="measurement"
+    state_class="total"
 
     def __init__(self, coordinator, device):
         super().__init__(coordinator, device)
