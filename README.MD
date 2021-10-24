@@ -43,7 +43,6 @@ My instance of Home Assistant is running as a docker container on my home [Unrai
 * [SABnzbd](https://sabnzbd.org/)
 * [nzbHydra2](https://github.com/theotherp/nzbhydra2)
 * [MariaDB](https://mariadb.org/)
-* [Syncthing](https://syncthing.net/)
 * [VS Code](https://coder.com/)
 
 ### Devices
