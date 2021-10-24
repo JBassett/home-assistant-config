@@ -1,12 +1,12 @@
 # https://github.com/tchellomello/python-amcrest/issues/137#issuecomment-917537131
-# Disabled due to Beta testing something else
-# amcrest:
-#   - host: !secret amcrest_ip
-#     username: !secret amcrest_user
-#     password: !secret amcrest_pass 
-#     name: Front Door
-#     binary_sensors: 
-#       - motion_detected
-#       - online
-#     sensors:
-#       - sdcard
+# https://community.home-assistant.io/t/amcrest-doorbel-ad110-expose-call-button/259088
+amcrest:
+  - host: !secret amcrest_ip
+    username: !secret amcrest_user
+    password: !secret amcrest_pass 
+    name: Front Door
+    binary_sensors: 
+      - motion_detected
+      - online
+    sensors:
+      - sdcard

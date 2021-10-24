@@ -1155,3 +1155,27 @@
       message: Laundry is done!
   mode: queued
   max: 10
+- id: '1635038524793'
+  alias: Front Door - Doorbell
+  description: ''
+  trigger:
+  - platform: event
+    event_type: amcrest
+    event_data:
+      event: CallNoAnswered
+      payload:
+        action: Start
+  condition: []
+  action:
+  - service: tts.google_translate_say
+    data:
+      entity_id:
+      - media_player.kitchen_display
+      - media_player.office_speaker
+      - media_player.master_bedroom_speaker
+      message: Someone is at the front door.
+  - service: notify.mobile_app_pixel_4a
+    data:
+      message: Someone is at the front door.
+      title: Ding Dong
+  mode: single
