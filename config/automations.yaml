@@ -1059,11 +1059,12 @@
   - choose:
     - conditions:
       - condition: template
-        value_template: '{{ wait.trigger.event.data.action == "sleeping" }}'
-      sequence:
-      - service: input_boolean.turn_on
-        target:
-          entity_id: input_boolean.justin_sleeping
+        value_template: '{{ wait.trigger.event.data.action == "not_sleeping" }}'
+      sequence: []
+    default:
+    - service: input_boolean.turn_on
+      target:
+        entity_id: input_boolean.justin_sleeping
   mode: single
 - id: '1625362291482'
   alias: Schedule - Bedtime - Shannon
