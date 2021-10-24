@@ -54,6 +54,7 @@ class AutopiSensor(RestoreEntity):
     _last_state = None
 
     should_poll = False
+    state_class="measurement"
 
     async def async_added_to_hass(self):
         self.autopi.register_callback(self.async_write_ha_state)
