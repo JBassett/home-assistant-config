@@ -14,12 +14,12 @@ goodnight:
   - choose:
     - conditions:
       - condition: state
-        entity_id: person.shannon
+        entity_id: person.justin
         state: home
       sequence:
       - service: input_boolean.turn_on
         target:
-          entity_id: input_boolean.shannon_sleeping
+          entity_id: input_boolean.justin_sleeping
     default: []
   - choose:
     - conditions:
