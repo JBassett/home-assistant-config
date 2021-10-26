@@ -1,7 +1,6 @@
 - platform: integration
   source: sensor.bolt_house_power_consumption
   name: Bolt Home Energy Usage
-  unit: kWh
 
 - platform: template
   sensors:

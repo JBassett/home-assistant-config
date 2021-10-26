@@ -1,7 +1,6 @@
 - platform: integration
   source: sensor.furnace_power_consumption
   name: Furnace Home Energy Usage
-  unit: kWh
   method: left
 
 - platform: template
