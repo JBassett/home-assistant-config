@@ -50,8 +50,6 @@
       arg: /unraid/mnt/disk5
     - type: disk_free
       arg: /unraid/mnt/disk6
-    - type: disk_free
-      arg: /unraid/mnt/disk7
     - type: memory_use_percent
     - type: processor_use
     - type: last_boot
