@@ -258,9 +258,9 @@
   alias: Harrison - Sleep
   trigger:
   - platform: time
-    at:
-    - '11:45:00'
-    - '18:30:00'
+    at: '12:30'
+  - platform: time
+    at: '19:15'
   condition:
   - condition: state
     entity_id: sensor.home_status
@@ -269,7 +269,7 @@
     conditions:
     - condition: time
       after: 08:00:00
-      before: '17:00:00'
+      before: '17:00'
       weekday:
       - tue
       - thu
@@ -677,9 +677,9 @@
   alias: Weston - Sleep
   trigger:
   - platform: time
-    at:
-    - '11:45:00'
-    - '19:15:00'
+    at: '12:30'
+  - platform: time
+    at: '19:15'
   condition:
   - condition: state
     entity_id: sensor.home_status
@@ -688,7 +688,7 @@
     conditions:
     - condition: time
       after: 08:00:00
-      before: '17:00:00'
+      before: '17:00'
       weekday:
       - tue
       - thu
