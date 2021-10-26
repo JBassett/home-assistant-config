@@ -21,7 +21,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
 
 class BryxConnection(BinarySensorEntity):
     name = "Bryx Connected"
-    device_class = DEVICE_CLASS_CONNECTIVITY
+    _attr_device_class = DEVICE_CLASS_CONNECTIVITY
 
     def __init__(self, ws):
         self.entity_id = "binary_sensor.bryx_connection"

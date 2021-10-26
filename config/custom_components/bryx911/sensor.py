@@ -94,7 +94,7 @@ class CurrentJobType(BryxSensor):
 
 class LatestJobTime(BryxSensor):
     name = "Bryx Latest Job Timestamp"
-    device_class = DEVICE_CLASS_TIMESTAMP
+    _attr_device_class = DEVICE_CLASS_TIMESTAMP
 
     def __init__(self, ws):
         self.entity_id = "sensor.bryx_latest_job_time"

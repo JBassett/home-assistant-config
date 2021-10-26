@@ -12,7 +12,12 @@ from homeassistant.const import (
     DEVICE_CLASS_ENERGY
 )
 
-from homeassistant.components.sensor import SensorEntity
+from homeassistant.components.sensor import (
+    STATE_CLASS_MEASUREMENT,
+    STATE_CLASS_TOTAL,
+    STATE_CLASS_TOTAL_INCREASING,
+    SensorEntity
+)
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 _LOGGER = logging.getLogger(__name__)
@@ -83,9 +88,9 @@ class SunpowerSensor(CoordinatorEntity, SensorEntity):
 
 class PanelPowerSensor(SunpowerSensor):
     name_prefix = "Power"
-    device_class = DEVICE_CLASS_POWER
-    unit_of_measurement = "kW"
-    state_class="measurement"
+    _attr_device_class = DEVICE_CLASS_POWER
+    _attr_native_unit_of_measurement = "kW"
+    _attr_state_class = STATE_CLASS_MEASUREMENT
 
     def __init__(self, coordinator, device):
         super().__init__(coordinator, device)
@@ -97,9 +102,9 @@ class PanelPowerSensor(SunpowerSensor):
         
 class PanelLifetimeEnergySensor(SunpowerSensor):
     name_prefix = "Lifetime Energy"
-    device_class = DEVICE_CLASS_ENERGY
-    unit_of_measurement = "kWh"
-    state_class="total_increasing"
+    _attr_device_class = DEVICE_CLASS_ENERGY
+    _attr_native_unit_of_measurement = "kWh"
+    _attr_state_class = STATE_CLASS_TOTAL_INCREASING
 
     def __init__(self, coordinator, device):
         super().__init__(coordinator, device)
@@ -111,9 +116,9 @@ class PanelLifetimeEnergySensor(SunpowerSensor):
 
 class PanelMpptVoltageSensor(SunpowerSensor):
     name_prefix = "MPPT Voltage"
-    device_class = DEVICE_CLASS_VOLTAGE
-    unit_of_measurement = "V"
-    state_class="measurement"
+    _attr_device_class = DEVICE_CLASS_VOLTAGE
+    _attr_native_unit_of_measurement = "V"
+    _attr_state_class = STATE_CLASS_MEASUREMENT
 
     def __init__(self, coordinator, device):
         super().__init__(coordinator, device)
@@ -125,9 +130,9 @@ class PanelMpptVoltageSensor(SunpowerSensor):
 
 class PanelMpptAmperageSensor(SunpowerSensor):
     name_prefix = "MPPT Amperage"
-    device_class = DEVICE_CLASS_CURRENT
-    unit_of_measurement = "A"
-    state_class="measurement"
+    _attr_device_class = DEVICE_CLASS_CURRENT
+    _attr_native_unit_of_measurement = "A"
+    _attr_state_class = STATE_CLASS_MEASUREMENT
 
     def __init__(self, coordinator, device):
         super().__init__(coordinator, device)
@@ -139,8 +144,8 @@ class PanelMpptAmperageSensor(SunpowerSensor):
 
 class PanelFrequencySensor(SunpowerSensor):
     name_prefix = "Frequency"
-    unit_of_measurement = "Hz"
-    state_class="measurement"
+    _attr_native_unit_of_measurement = "Hz"
+    _attr_state_class = STATE_CLASS_MEASUREMENT
 
     def __init__(self, coordinator, device):
         super().__init__(coordinator, device)
@@ -152,21 +157,21 @@ class PanelFrequencySensor(SunpowerSensor):
 
 class PanelTemperatureSensor(SunpowerSensor):
     name_prefix = "Temperature"
-    device_class = DEVICE_CLASS_TEMPERATURE
-    unit_of_measurement = "°C"
-    state_class="measurement"
+    _attr_device_class = DEVICE_CLASS_TEMPERATURE
+    _attr_native_unit_of_measurement = "°C"
+    _attr_state_class = STATE_CLASS_MEASUREMENT
 
     def __init__(self, coordinator, device):
         super().__init__(coordinator, device)
 
     @property
-    def state(self):
+    def native_value(self):
         """Return the state of the sensor."""
         return self.coordinator.data[self.device_serial]["t_htsnk_degc"]
 
 class HomeFrequencySensor(SunpowerSensor):
-    unit_of_measurement = "Hz"
-    state_class="measurement"
+    _attr_native_unit_of_measurement = "Hz"
+    _attr_state_class = STATE_CLASS_MEASUREMENT
 
     def __init__(self, coordinator, device):
         super().__init__(coordinator, device)
@@ -181,9 +186,9 @@ class HomeFrequencySensor(SunpowerSensor):
         return self.coordinator.data[self.device_serial]["freq_hz"]
 
 class HomePowerNetSensor(SunpowerSensor):
-    device_class = DEVICE_CLASS_POWER
-    unit_of_measurement = "kW"
-    state_class="measurement"
+    _attr_device_class = DEVICE_CLASS_POWER
+    _attr_native_unit_of_measurement = "kW"
+    _attr_state_class = STATE_CLASS_MEASUREMENT
 
     def __init__(self, coordinator, device):
         super().__init__(coordinator, device)
@@ -198,9 +203,9 @@ class HomePowerNetSensor(SunpowerSensor):
         return float(self.coordinator.data[self.device_serial]["p_3phsum_kw"])
 
 class HomePowerProductionSensor(SunpowerSensor):
-    device_class = DEVICE_CLASS_POWER
-    unit_of_measurement = "kW"
-    state_class="measurement"
+    _attr_device_class = DEVICE_CLASS_POWER
+    _attr_native_unit_of_measurement = "kW"
+    _attr_state_class = STATE_CLASS_MEASUREMENT
 
     def __init__(self, coordinator, device):
         super().__init__(coordinator, device)
@@ -221,9 +226,9 @@ class HomePowerProductionSensor(SunpowerSensor):
         return current_power
 
 class HomePowerUsageSensor(SunpowerSensor):
-    device_class = DEVICE_CLASS_POWER
-    unit_of_measurement = "kW"
-    state_class="measurement"
+    _attr_device_class = DEVICE_CLASS_POWER
+    _attr_native_unit_of_measurement = "kW"
+    _attr_state_class = STATE_CLASS_MEASUREMENT
 
     def __init__(self, coordinator, device):
         super().__init__(coordinator, device)
@@ -245,9 +250,9 @@ class HomePowerUsageSensor(SunpowerSensor):
         return round(float(current_power_production) + (float(self.coordinator.data[self.device_serial]["p_3phsum_kw"])), 4)
 
 class HomeEnergyLifetimeProductionSensor(SunpowerSensor):
-    device_class = DEVICE_CLASS_ENERGY
-    unit_of_measurement = "kWh"
-    state_class="total_increasing"
+    _attr_device_class = DEVICE_CLASS_ENERGY
+    _attr_native_unit_of_measurement = "kWh"
+    _attr_state_class = STATE_CLASS_TOTAL_INCREASING
 
     def __init__(self, coordinator, device):
         super().__init__(coordinator, device)
@@ -269,9 +274,9 @@ class HomeEnergyLifetimeProductionSensor(SunpowerSensor):
         return float(lifetime_energy)
 
 class HomeEnergyLifetimeNetSensor(SunpowerSensor):
-    device_class = DEVICE_CLASS_ENERGY
-    unit_of_measurement = "kWh"
-    state_class="total"
+    _attr_device_class = DEVICE_CLASS_ENERGY
+    _attr_native_unit_of_measurement = "kWh"
+    _attr_state_class = STATE_CLASS_TOTAL
 
     def __init__(self, coordinator, device):
         super().__init__(coordinator, device)

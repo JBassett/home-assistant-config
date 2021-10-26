@@ -11,7 +11,10 @@ from homeassistant.const import (
     DEVICE_CLASS_ENERGY,
     DEVICE_CLASS_SIGNAL_STRENGTH
 )
-
+from homeassistant.components.sensor import (
+    STATE_CLASS_MEASUREMENT,
+    SensorEntity
+)
 from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.restore_state import RestoreEntity
 
@@ -49,12 +52,12 @@ async def async_setup_entry(hass, entry, async_add_entities):
     async_add_entities(sensors)
     _LOGGER.debug("async_setup_entry -> Complete")
 
-class AutopiSensor(RestoreEntity):
+class AutopiSensor(SensorEntity, RestoreEntity):
 
     _last_state = None
 
-    should_poll = False
-    state_class="measurement"
+    _attr_should_poll = False
+    _attr_state_class = STATE_CLASS_MEASUREMENT
 
     async def async_added_to_hass(self):
         self.autopi.register_callback(self.async_write_ha_state)
@@ -83,10 +86,10 @@ class AutopiSensor(RestoreEntity):
 
 class StateOfChargeSensor(AutopiSensor):
     
-    name = "Bolt - State of Charge"
+    _attr_name = "Bolt - State of Charge"
     entity_id = "sensor.bolt_soc"
-    device_class = DEVICE_CLASS_BATTERY
-    unit_of_measurement = "%"
+    _attr_device_class = DEVICE_CLASS_BATTERY
+    _attr_native_unit_of_measurement = "%"
 
     def __init__(self, autopi):
         self.autopi = autopi
@@ -100,9 +103,9 @@ class StateOfChargeSensor(AutopiSensor):
 
 class SpeedSensor(AutopiSensor):
     
-    name = "Bolt - Speed"
+    _attr_name = "Bolt - Speed"
     entity_id = "sensor.bolt_speed"
-    unit_of_measurement = "mph"
+    _attr_native_unit_of_measurement = "mph"
 
     def __init__(self, autopi):
         self.autopi = autopi
@@ -116,21 +119,16 @@ class SpeedSensor(AutopiSensor):
 
 class BatteryTempSensor(AutopiSensor):
     
-    name = "Bolt - Battery Temperature"
+    _attr_name = "Bolt - Battery Temperature"
     entity_id = "sensor.bolt_battery_temp"
-    device_class = DEVICE_CLASS_TEMPERATURE
-    unit_of_measurement = "°C"
+    _attr_device_class = DEVICE_CLASS_TEMPERATURE
+    _attr_native_unit_of_measurement = "°C"
 
     def __init__(self, autopi):
         self.autopi = autopi
-    
-    async def async_added_to_hass(self):
-        await AutopiSensor.async_added_to_hass(self)
-        if self._last_state:
-            self._last_state = round((float(self._last_state) - 32 ) * (5/9), 2)
 
     @property
-    def state(self):
+    def native_value(self):
         """Return the state of the sensor."""
         if self.autopi.latest and 'battery_temp' in self.autopi.latest:
             self._last_state = self.autopi.latest['battery_temp']
@@ -138,21 +136,16 @@ class BatteryTempSensor(AutopiSensor):
 
 class ExternalTempSensor(AutopiSensor):
     
-    name = "Bolt - External Temperature"
+    _attr_name = "Bolt - External Temperature"
     entity_id = "sensor.bolt_external_temp"
-    device_class = DEVICE_CLASS_TEMPERATURE
-    unit_of_measurement = "°C"
+    _attr_device_class = DEVICE_CLASS_TEMPERATURE
+    _attr_native_unit_of_measurement = "°C"
 
     def __init__(self, autopi):
         self.autopi = autopi
-    
-    async def async_added_to_hass(self):
-        await AutopiSensor.async_added_to_hass(self)
-        if self._last_state:
-            self._last_state = round((float(self._last_state) - 32 ) * (5/9), 2)
 
     @property
-    def state(self):
+    def native_value(self):
         """Return the state of the sensor."""
         if self.autopi.latest and 'external_temp' in self.autopi.latest:
             self._last_state = self.autopi.latest['external_temp']
@@ -160,10 +153,10 @@ class ExternalTempSensor(AutopiSensor):
 
 class PiVoltageSensor(AutopiSensor):
     
-    name = "Bolt - Pi Voltage"
+    _attr_name = "Bolt - Pi Voltage"
     entity_id = "sensor.bolt_pi_voltage"
-    device_class = DEVICE_CLASS_VOLTAGE
-    unit_of_measurement = "V"
+    _attr_device_class = DEVICE_CLASS_VOLTAGE
+    _attr_native_unit_of_measurement = "V"
 
     def __init__(self, autopi):
         self.autopi = autopi
@@ -185,7 +178,7 @@ class ShifterSensor(AutopiSensor):
         8: "Park"
     }
 
-    name = "Bolt - Shifter Position"
+    _attr_name = "Bolt - Shifter Position"
     entity_id = "sensor.bolt_shifter"
 
     def __init__(self, autopi):
@@ -200,10 +193,10 @@ class ShifterSensor(AutopiSensor):
 
 class PowerSensor(AutopiSensor):
     
-    name = "Bolt - Power"
+    _attr_name = "Bolt - Power"
     entity_id = "sensor.bolt_power"
-    device_class = DEVICE_CLASS_POWER
-    unit_of_measurement = "kW"
+    _attr_device_class = DEVICE_CLASS_POWER
+    _attr_native_unit_of_measurement = "kW"
 
     def __init__(self, autopi):
         self.autopi = autopi
@@ -217,10 +210,10 @@ class PowerSensor(AutopiSensor):
 
 class VoltageSensor(AutopiSensor):
     
-    name = "Bolt - Voltage"
+    _attr_name = "Bolt - Voltage"
     entity_id = "sensor.bolt_voltage"
-    device_class = DEVICE_CLASS_VOLTAGE
-    unit_of_measurement = "V"
+    _attr_device_class = DEVICE_CLASS_VOLTAGE
+    _attr_native_unit_of_measurement = "V"
 
     def __init__(self, autopi):
         self.autopi = autopi
@@ -234,10 +227,10 @@ class VoltageSensor(AutopiSensor):
 
 class CurrentSensor(AutopiSensor):
     
-    name = "Bolt - Current"
+    _attr_name = "Bolt - Current"
     entity_id = "sensor.bolt_current"
-    device_class = DEVICE_CLASS_CURRENT
-    unit_of_measurement = "A"
+    _attr_device_class = DEVICE_CLASS_CURRENT
+    _attr_native_unit_of_measurement = "A"
 
     def __init__(self, autopi):
         self.autopi = autopi
@@ -251,10 +244,10 @@ class CurrentSensor(AutopiSensor):
 
 class BatteryCapacitySensor(AutopiSensor):
     
-    name = "Bolt - Battery Capacity"
+    _attr_name = "Bolt - Battery Capacity"
     entity_id = "sensor.bolt_battery_capacity"
-    device_class = DEVICE_CLASS_ENERGY
-    unit_of_measurement = "kWh"
+    _attr_device_class = DEVICE_CLASS_ENERGY
+    _attr_native_unit_of_measurement = "kWh"
 
     def __init__(self, autopi):
         self.autopi = autopi
@@ -268,9 +261,9 @@ class BatteryCapacitySensor(AutopiSensor):
 
 class BatteryCoolantSpeedSensor(AutopiSensor):
     
-    name = "Bolt - Battery Coolant Speed"
+    _attr_name = "Bolt - Battery Coolant Speed"
     entity_id = "sensor.bolt_battery_coolant_speed"
-    unit_of_measurement = "rpm"
+    _attr_native_unit_of_measurement = "rpm"
 
     def __init__(self, autopi):
         self.autopi = autopi
@@ -284,21 +277,16 @@ class BatteryCoolantSpeedSensor(AutopiSensor):
 
 class BatteryCoolantTempSensor(AutopiSensor):
     
-    name = "Bolt - Battery Coolant Temp"
+    _attr_name = "Bolt - Battery Coolant Temp"
     entity_id = "sensor.bolt_battery_coolant_temp"
-    device_class = DEVICE_CLASS_TEMPERATURE
-    unit_of_measurement = "°C"
+    _attr_device_class = DEVICE_CLASS_TEMPERATURE
+    _attr_native_unit_of_measurement = "°C"
 
     def __init__(self, autopi):
         self.autopi = autopi
-    
-    async def async_added_to_hass(self):
-        await AutopiSensor.async_added_to_hass(self)
-        if self._last_state:
-            self._last_state = round((float(self._last_state) - 32 ) * (5/9), 2)
-    
+
     @property
-    def state(self):
+    def native_value(self):
         """Return the state of the sensor."""
         if self.autopi.latest and 'battery_coolant_temp' in self.autopi.latest:
             self._last_state = self.autopi.latest['battery_coolant_temp']
@@ -306,10 +294,10 @@ class BatteryCoolantTempSensor(AutopiSensor):
 
 class BatteryHeaterPowerSensor(AutopiSensor):
     
-    name = "Bolt - Battery Heater Power"
+    _attr_name = "Bolt - Battery Heater Power"
     entity_id = "sensor.bolt_battery_heater_power"
-    device_class = DEVICE_CLASS_POWER
-    unit_of_measurement = "W"
+    _attr_device_class = DEVICE_CLASS_POWER
+    _attr_native_unit_of_measurement = "W"
 
     def __init__(self, autopi):
         self.autopi = autopi
@@ -323,10 +311,10 @@ class BatteryHeaterPowerSensor(AutopiSensor):
 
 class CabinAcPowerSensor(AutopiSensor):
     
-    name = "Bolt - Cabin AC Power"
+    _attr_name = "Bolt - Cabin AC Power"
     entity_id = "sensor.bolt_cabin_ac_power"
-    device_class = DEVICE_CLASS_POWER
-    unit_of_measurement = "W"
+    _attr_device_class = DEVICE_CLASS_POWER
+    _attr_native_unit_of_measurement = "W"
 
     def __init__(self, autopi):
         self.autopi = autopi
@@ -340,10 +328,10 @@ class CabinAcPowerSensor(AutopiSensor):
 
 class CabinHeaterPowerSensor(AutopiSensor):
     
-    name = "Bolt - Cabin Heater Power"
+    _attr_name = "Bolt - Cabin Heater Power"
     entity_id = "sensor.bolt_cabin_heater_power"
-    device_class = DEVICE_CLASS_POWER
-    unit_of_measurement = "W"
+    _attr_device_class = DEVICE_CLASS_POWER
+    _attr_native_unit_of_measurement = "W"
 
     def __init__(self, autopi):
         self.autopi = autopi
@@ -357,10 +345,10 @@ class CabinHeaterPowerSensor(AutopiSensor):
 
 class Rssi(AutopiSensor):
     
-    name = "Bolt - RSSI"
+    _attr_name = "Bolt - RSSI"
     entity_id = "sensor.bolt_rssi"
-    device_class = DEVICE_CLASS_SIGNAL_STRENGTH
-    unit_of_measurement = "dBm"
+    _attr_device_class = DEVICE_CLASS_SIGNAL_STRENGTH
+    _attr_native_unit_of_measurement = "dBm"
 
     def __init__(self, autopi):
         self.autopi = autopi
@@ -373,8 +361,8 @@ class Rssi(AutopiSensor):
         return self._last_state
 
 class CellVoltageSensor(AutopiSensor):
-    device_class = DEVICE_CLASS_VOLTAGE
-    unit_of_measurement = "V"
+    _attr_device_class = DEVICE_CLASS_VOLTAGE
+    _attr_native_unit_of_measurement = "V"
 
     def __init__(self, autopi, cell_num):
         self.autopi = autopi

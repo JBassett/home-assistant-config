@@ -66,7 +66,7 @@ class ChargingBinarySensor(AutopiBinarySensor):
     
     name = "Bolt - Charging"
     entity_id = "binary_sensor.bolt_charging"
-    device_class = ATTR_BATTERY_CHARGING
+    _attr_device_class = ATTR_BATTERY_CHARGING
 
     def __init__(self, autopi):
         self.autopi = autopi
@@ -82,7 +82,7 @@ class ConnectionBinarySensor(AutopiBinarySensor):
     should_poll = True
     name = "Bolt - Connected"
     entity_id = "binary_sensor.bolt_connected"
-    device_class = DEVICE_CLASS_CONNECTIVITY
+    _attr_device_class = DEVICE_CLASS_CONNECTIVITY
 
     def __init__(self, autopi):
         self.autopi = autopi
