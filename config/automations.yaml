@@ -1038,6 +1038,9 @@
   - condition: state
     entity_id: input_boolean.justin_sleeping
     state: 'off'
+  - condition: state
+    entity_id: person.justin
+    state: home
   action:
   - service: notify.mobile_app_pixel_4a
     data:
@@ -1171,6 +1174,10 @@
         action: Start
   condition: []
   action:
+  - service: notify.mobile_app_pixel_4a
+    data:
+      message: Someone is at the front door.
+      title: Ding Dong
   - service: tts.google_translate_say
     data:
       entity_id:
@@ -1178,8 +1185,15 @@
       - media_player.office_speaker
       - media_player.master_bedroom_speaker
       message: Someone is at the front door.
-  - service: notify.mobile_app_pixel_4a
-    data:
-      message: Someone is at the front door.
-      title: Ding Dong
+  - service: input_boolean.turn_on
+    target:
+      entity_id: input_boolean.guest_mode
+  - delay:
+      hours: 0
+      minutes: 10
+      seconds: 0
+      milliseconds: 0
+  - service: input_boolean.turn_off
+    target:
+      entity_id: input_boolean.guest_mode
   mode: single
