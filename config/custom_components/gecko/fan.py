@@ -47,7 +47,8 @@ class GeckoFan(GeckoEntity, FanEntity):
 
     @property
     def preset_modes(self):
-        return self._automation_entity._user_demand["options"]
+        return ['OFF', 'HI']
+        # return self._automation_entity._user_demand["options"]
 
     @property
     def preset_mode(self):
