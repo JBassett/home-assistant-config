@@ -1,0 +1,5 @@
+ombi:
+  host: !secret ombi_host
+  port: !secret ombi_port
+  username: !secret ombi_user
+  password: !secret ombi_pass
