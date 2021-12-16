@@ -58,14 +58,6 @@
     target:
       entity_id: switch.fireplace_fan
   mode: single
-- id: 775bbb47-3e20-4c6f-bf19-b2c8d232490b
-  alias: Schedule - Bedtime
-  trigger:
-  - platform: time
-    at: 01:30:00
-  action:
-  - service: script.goodnight
-  mode: single
 - id: 6cf596d9-0cff-40ee-90fc-71aa64dddff2
   alias: Bolt - Plug Me In
   trigger:
@@ -384,25 +376,13 @@
   trigger:
   - platform: numeric_state
     entity_id: sensor.speedtest_download
-    below: 150
+    below: '150'
   action:
-  - delay:
-      minutes: 5
-  - service: speedtestdotnet.speedtest
-  - wait_for_trigger:
-    - platform: state
-      entity_id: sensor.speedtest_download
-  - choose:
-    - conditions:
-      - condition: numeric_state
-        entity_id: sensor.speedtest_download
-        below: 150
-      sequence:
-      - service: notify.mobile_app_pixel_4a
-        data:
-          title: Slow Internet
-          message: Your internet speed is only {{ states('sensor.speedtest_download')
-            }} Mbit/s
+  - service: notify.mobile_app_pixel_4a
+    data:
+      title: Slow Internet
+      message: Your internet speed is only {{ states('sensor.speedtest_download')
+        }} Mbit/s
 - id: 3c9f3ad4-042c-41db-a305-d4e9c6af4984
   alias: NFL - Monitor Game Day
   trigger:
@@ -482,6 +462,11 @@
       - light.kitchen_up
       - light.kitchen_down
       effect: Touchdown
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 30
+      milliseconds: 0
   - wait_for_trigger:
     - platform: state
       entity_id: media_player.kitchen_display
@@ -1227,4 +1212,68 @@
       entity_id: climate.spa_heater
     data:
       temperature: 90
+  mode: single
+- id: '1638057284928'
+  alias: Spare Outlet - Turn Off
+  description: ''
+  trigger:
+  - platform: homeassistant
+    event: start
+  - platform: state
+    entity_id: sensor.home_status
+  - platform: state
+    entity_id: sun.sun
+    to: above_horizon
+  condition:
+  - condition: or
+    conditions:
+    - condition: state
+      entity_id: sensor.home_status
+      state: Sleeping
+    - condition: state
+      entity_id: sun.sun
+      state: above_horizon
+  action:
+  - service: switch.turn_off
+    target:
+      entity_id: switch.spare_relay
+  mode: single
+- id: '1638057367058'
+  alias: Spare Outlet - Turn On
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: sensor.home_status
+  - platform: state
+    entity_id: sun.sun
+    to: below_horizon
+  - platform: homeassistant
+    event: start
+  condition:
+  - condition: not
+    conditions:
+    - condition: state
+      entity_id: sensor.home_status
+      state: Sleeping
+  - condition: state
+    entity_id: sun.sun
+    state: below_horizon
+  action:
+  - service: switch.turn_on
+    target:
+      entity_id: switch.spare_relay
+  mode: single
+- id: '1638927095238'
+  alias: Plex - Pending Request
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.ombi_pending_requests
+    above: '0'
+  condition: []
+  action:
+  - service: notify.mobile_app_pixel_4a
+    data:
+      title: Pending Plex Request
+      message: Someone has a pending show/movie request!
   mode: single
