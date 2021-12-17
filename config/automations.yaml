@@ -275,21 +275,38 @@
   - platform: state
     entity_id: input_boolean.harrison_nap
     to: 'on'
-  - platform: state
-    entity_id: media_player.harrisons_room_speaker
-    from: playing
-    for:
-      seconds: 10
+  - platform: homeassistant
+    event: start
+  - platform: event
+    event_type: automation_reloaded
   condition:
   - condition: state
     entity_id: input_boolean.harrison_nap
     state: 'on'
   action:
-  - service: media_player.play_media
-    data:
+  - repeat:
+      until:
+      - condition: state
+        entity_id: input_boolean.harrison_nap
+        state: 'off'
+      sequence:
+      - service: media_player.play_media
+        target:
+          entity_id: media_player.harrisons_room_speaker
+        data:
+          media_content_id: https://storage.googleapis.com/relaxation-sounds/ocean_3600.mp3
+          media_content_type: music
+      - wait_for_trigger:
+        - platform: state
+          entity_id: media_player.harrisons_room_speaker
+          from: playing
+          for: 0:00:10
+        - platform: state
+          entity_id: input_boolean.harrison_nap
+          to: 'off'
+  - service: media_player.turn_off
+    target:
       entity_id: media_player.harrisons_room_speaker
-      media_content_id: https://storage.googleapis.com/relaxation-sounds/ocean_3600.mp3
-      media_content_type: music
 - id: 71ff4a11-7a4d-4f49-9d8e-de8b024feaa6
   alias: Harrison - Wakup
   trigger:
@@ -687,20 +704,38 @@
   - platform: state
     entity_id: input_boolean.weston_nap
     to: 'on'
-  - platform: state
-    entity_id: media_player.westons_room_speaker
-    from: playing
-    for: 0:00:10
+  - platform: homeassistant
+    event: start
+  - platform: event
+    event_type: automation_reloaded
   condition:
   - condition: state
     entity_id: input_boolean.weston_nap
     state: 'on'
   action:
-  - service: media_player.play_media
-    data:
+  - repeat:
+      until:
+      - condition: state
+        entity_id: input_boolean.weston_nap
+        state: 'off'
+      sequence:
+      - service: media_player.play_media
+        target:
+          entity_id: media_player.westons_room_speaker
+        data:
+          media_content_id: https://storage.googleapis.com/relaxation-sounds/ocean_3600.mp3
+          media_content_type: music
+      - wait_for_trigger:
+        - platform: state
+          entity_id: media_player.westons_room_speaker
+          from: playing
+          for: 0:00:10
+        - platform: state
+          entity_id: input_boolean.weston_nap
+          to: 'off'
+  - service: media_player.turn_off
+    target:
       entity_id: media_player.westons_room_speaker
-      media_content_id: https://storage.googleapis.com/relaxation-sounds/ocean_3600.mp3
-      media_content_type: music
   mode: single
 - id: 8ab6d2cd-32fa-494f-a0e8-271dda57fa04
   alias: Weston - Wakup
