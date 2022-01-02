@@ -1,0 +1,30 @@
+rest:
+  - resource: http://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard
+    scan_interval: 
+      minutes: 5
+    sensor:
+      - name: bills_game_status
+        value_template: >
+          {% for event in value_json.events %}
+            {% if 'BUF' in event.shortName %}
+              {{ event['status']['type']['description'] }}        
+            {% endif %}
+          {% endfor %}
+      - name: bills_score
+        value_template: >
+          {% for event in value_json.events %}
+            {% if 'BUF' in event.shortName %}
+              {% for competitor in event['competitions'][0]['competitors'] %}
+                {% if 'BUF' == competitor['team']['abbreviation'] %}
+                  {{competitor['score']}}
+                {% endif %} 
+              {% endfor %}
+            {% endif %}
+          {% endfor %}
+      - name: bills_quarter
+        value_template: >
+          {% for event in value_json.events %}
+            {% if 'BUF' in event.shortName %}
+              {{ event['status']['period'] }}
+            {% endif %}
+          {% endfor %}
