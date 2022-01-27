@@ -466,6 +466,8 @@
   - condition: numeric_state
     entity_id: sensor.bills_score
     above: '0'
+  - condition: template
+    value_template: '{{ is_number(trigger.from_state.state) }}'
   action:
   - service: media_player.play_media
     data:
