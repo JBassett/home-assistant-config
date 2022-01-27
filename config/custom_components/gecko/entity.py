@@ -37,14 +37,6 @@ class GeckoEntity(Entity):
         }
 
     @property
-    def device_state_attributes(self):
-        """Return the state attributes."""
-        return {
-            # "time": "**TIME**",  # str(self.coordinator.data.get("time")),
-            # "static": "**STATIC**",  # self.coordinator.data.get("static"),
-        }
-
-    @property
     def should_poll(self) -> bool:
         """Return false as we're a push model!"""
         return False

@@ -62,7 +62,7 @@ class CurrentJobAddress(BryxSensor):
         self.ws = ws
     
     @property
-    def device_state_attributes(self):
+    def extra_state_attributes(self):
         lj = self.ws.latest
         if self.has_job() and lj.get("gps") is not None:
             return {
@@ -101,7 +101,7 @@ class LatestJobTime(BryxSensor):
         self.ws = ws
     
     @property
-    def device_state_attributes(self):
+    def extra_state_attributes(self):
         latest = self.ws.latest
         if latest is None or latest.get("start") is None:
             return None

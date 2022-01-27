@@ -72,7 +72,7 @@ class DeviceTrackerSensor(RestoreEntity, TrackerEntity):
         }
 
     @property
-    def device_state_attributes(self):
+    def extra_state_attributes(self):
         """Return device specific attributes."""
         attrs = {
             "latitude": self.latitude,
