@@ -6,10 +6,6 @@
     - movie
     - show
 
-- platform: personalcapital
-  email: !secret personalCap_user
-  password: !secret personalCap_pass
-
 - platform: radarr
   api_key: !secret radarr_api
   host: !secret radarr_ip
