@@ -508,16 +508,7 @@
     to: 'on'
   condition: []
   action:
-  - service: light.turn_on
-    data:
-      brightness: 90
-      rgb_color:
-      - 255
-      - 0
-      - 0
-      transition: 20
-    target:
-      entity_id: light.office_lamp
+  - scene: scene.office_default
   mode: single
 - id: fb33725a-b344-4fa7-bdde-c05364c4a6ad
   alias: Office - Turn Off
@@ -531,7 +522,6 @@
       hours: 0
       minutes: 5
       seconds: 0
-      milliseconds: 0
   - platform: state
     entity_id: sensor.home_status
     to: Sleeping
@@ -539,7 +529,6 @@
       hours: 0
       minutes: 5
       seconds: 0
-      milliseconds: 0
   - platform: state
     entity_id: sensor.home_status
     to: Unoccupied
@@ -547,17 +536,9 @@
       hours: 0
       minutes: 5
       seconds: 0
-      milliseconds: 0
   condition: []
   action:
-  - service: light.turn_off
-    data:
-      transition: 20
-    target:
-      entity_id: light.office_lamp
-  - service: switch.turn_off
-    data:
-      entity_id: switch.office_outlet
+  - scene: scene.office_off
   mode: single
 - id: 5a876f15-8e89-4933-9b0f-f40c45881a36
   alias: Plex - Movie Downloaded
@@ -1313,4 +1294,29 @@
     data:
       title: Pending Plex Request
       message: Someone has a pending show/movie request!
+  mode: single
+- id: '1645498691814'
+  alias: Pixel 4a - High Accuracy Mode
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: sensor.pixel_4a_bluetooth_connection
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{ ''90:E8:68:45:27:9E'' in state_attr(''sensor.pixel_4a_bluetooth_connection'',
+          ''connected_paired_devices'') and   ''A0:6F:AA:92:C0:74'' in state_attr(''sensor.pixel_4a_bluetooth_connection'',
+          ''connected_paired_devices'') }}'
+      sequence:
+      - service: notify.mobile_app_pixel_4a
+        data:
+          message: command_high_accuracy_mode
+          title: turn_on
+    default:
+    - service: notify.mobile_app_pixel_4a
+      data:
+        message: command_high_accuracy_mode
+        title: turn_off
   mode: single
