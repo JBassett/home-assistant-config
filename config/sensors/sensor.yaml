@@ -73,3 +73,15 @@
         {% else %}
           Occupied
         {% endif %}
+
+- platform: template
+  sensors:
+    spa_time_to_temp:
+      friendly_name: 'Spa - Time to Temp'
+      device_class: 'timestamp'
+      value_template: >-
+        {% set target = state_attr('climate.spa_heater', 'temperature') %}
+        {% set current = state_attr('climate.spa_heater', 'current_temperature') %}
+        {% if target - current > 0 %}
+          {{ as_datetime(as_timestamp(now()) + (((target-current) * 3600)/4.5)) }}
+        {% endif %}
