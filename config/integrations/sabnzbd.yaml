@@ -1,12 +1,12 @@
-sabnzbd:
-  host: !secret sabnzbd_ip
-  port: !secret sabnzbd_port
-  api_key: !secret sabnzbd_api
-  sensors:
-    - 'current_status'
-    - 'speed'
-    - 'queue_size'
-    - 'queue_remaining'
-    - 'disk_size'
-    - 'disk_free'
-    - 'queue_count'
+# sabnzbd:
+#   host: !secret sabnzbd_ip
+#   port: !secret sabnzbd_port
+#   api_key: !secret sabnzbd_api
+#   sensors:
+#     - 'current_status'
+#     - 'speed'
+#     - 'queue_size'
+#     - 'queue_remaining'
+#     - 'disk_size'
+#     - 'disk_free'
+#     - 'queue_count'
