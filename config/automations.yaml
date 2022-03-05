@@ -1007,7 +1007,7 @@
   - type: not_plugged_in
     platform: device
     device_id: c8e4c6301fad4854a7ca09602f67e1ce
-    entity_id: binary_sensor.pixel_3a_xl_is_charging
+    entity_id: binary_sensor.pixel_5a_is_charging
     domain: binary_sensor
     for:
       hours: 0
@@ -1083,7 +1083,7 @@
   - type: plugged_in
     platform: device
     device_id: c8e4c6301fad4854a7ca09602f67e1ce
-    entity_id: binary_sensor.pixel_3a_xl_is_charging
+    entity_id: binary_sensor.pixel_5a_is_charging
     domain: binary_sensor
     for:
       hours: 0
