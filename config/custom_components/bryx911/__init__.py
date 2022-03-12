@@ -22,6 +22,8 @@ from homeassistant.config_entries import ConfigEntry
 from .const import (
     DOMAIN,
     TYPE_UPDATE_PUSH,
+    TYPE_JOB_SUB,
+    TYPE_JOB_UNSUB,
     TYPE_ACK,
     TYPE_INITAL_JOBS,
     CONF_USER,
@@ -48,6 +50,9 @@ class BryxWebsocket:
         self._message_id = 0
         self.latest = None
         self.jobs = {}
+        self.registered_jobs = []
+        self.responders = {}
+        self.supplementals = {}
     
     async def login(self):
         _LOGGER.debug('login -> Begin')
@@ -153,34 +158,40 @@ class BryxWebsocket:
 
     async def handleMessage(self, message):
         msg = message.json()
-        if msg.get("topic") == "jobs":
-            job = None
-            if msg.get("type") == TYPE_UPDATE_PUSH:
-                _LOGGER.info("Got push: %s", msg)
-                job = msg["data"].get("job")
-                await self.ack(msg["data"].get("id"))
-            elif msg.get("type") == TYPE_INITAL_JOBS:
-                try:
+        
+        try:
+            if msg.get("type") == TYPE_INITAL_JOBS:
+                if msg.get("topic") == "jobs":
+                    # Initial jobs load
                     if not msg["initialData"]["open"]:
-                        job = msg["initialData"]["closed"][0]
+                        await self.handle_job_update(msg["initialData"]["closed"][0])
                     else:
-                        job = msg["initialData"]["open"][0]
-
+                        await self.handle_job_update(msg["initialData"]["open"][0])
                     for j in msg["initialData"]["open"]:
-                        self.update_job(j)
-
+                        await self.handle_job_update(j)
                     for j in msg["initialData"]["closed"]:
-                        self.update_job(j)
-                        
-                except Exception as error:
-                    _LOGGER.warn("Unable to get last job: %s", error)
-                    job = None
-            
-            self.update_job(job)
-        else:
-            _LOGGER.debug("Got message: %s", msg)
+                        await self.handle_job_update(j)
+                elif msg.get("topic").startswith("jobs/"):
+                    await self.handle_job_update(msg.get("initialData"))
+            elif msg.get("type") == TYPE_UPDATE_PUSH:
+                _LOGGER.debug("Got job push: %s", msg)
+                topic = msg.get("topic") 
+                if topic == "jobs":
+                    # Got a job update
+                    await self.ack(msg["data"].get("id"))
+                    await self.handle_job_update(msg["data"].get("job"))
+                elif topic.startswith("jobs/") and msg.get("data").get("type") == "responders":
+                    # Responder update (no ack)
+                    self.update_responders(topic.replace("jobs/",""), msg["data"]["responders"])
+                elif topic.startswith("jobs/") and msg.get("data").get("type") == "supplementals":
+                    # Supplemental Update (no ack)
+                    pass
+            else:
+                _LOGGER.debug("Got message: %s", msg)
+        except:
+            _LOGGER.exception(f"Unable to handle message: {msg}")
 
-    def update_job(self, job_update):
+    async def handle_job_update(self, job_update):
         if job_update is None:
             _LOGGER.warn("Trying to add a None job!")
             return
@@ -196,7 +207,7 @@ class BryxWebsocket:
         if job.get("end") is None:
             job["end"] = job["start"] + timedelta(hours=1)
         
-        job["open"] = job_update.get("disposition") != "closed"
+        job["open"] = job_update.get("disposition") != "closed" # or job_id == "622bd69216d1570c1bb03309" or job_id == "622b802664511c55d1d523e3"
 
         if job.get("address") is None:
             job["address"] = job_update.get("address", {}).get("original")
@@ -209,12 +220,75 @@ class BryxWebsocket:
         
         if job.get("type") is None:
             job["type"] = job_update.get("type", {}).get("description")
+        
+        if job_id not in self.responders and job_update.get("responders") is not None:
+            self.update_responders(job_id, job_update.get("responders"))
+
+        if job_id not in self.supplementals and job_update.get("supplementals") is not None:
+            self.update_supplementals(job_id, job_update.get("supplementals"))
 
         self.jobs[job_id] = job
         
         if self.latest is None or self.latest.get("start") < job.get("start"):
             _LOGGER.debug(f"New Latest Job: {job}")
             self.latest = job
+        
+        if job["open"] and job_id not in self.registered_jobs:
+            # Register for job updates
+            _LOGGER.debug(f"Subscribing to job: {job_id}")
+            request = {
+                "type": TYPE_JOB_SUB,
+                "topic" : f"jobs/{job_id}",
+                "id" : self.message_id,
+                "params" : {},
+                "version" : 1
+            }
+            await self.ws_client.send_json(request)
+            self.registered_jobs.append(job_id)
+        elif not job["open"] and job_id in self.registered_jobs:
+            # Unregister for job updates
+            _LOGGER.debug(f"Unsubscribing to job: {job_id}")
+            request = {
+                "type": TYPE_JOB_UNSUB,
+                "topic" : f"jobs/{job_id}",
+                "id" : self.message_id,
+                "params" : {},
+                "version" : 1
+            }
+            await self.ws_client.send_json(request)
+            self.registered_jobs.remove(job_id)
+            if job_id in self.responders:
+                del self.responders[job_id]
+            if job_id in self.supplementals:
+                del self.supplementals[job_id]
+
+    def update_responders(self, job_id, inc_responders):
+        # [{
+		# 	"id": "1234",
+		# 	"name": "John Doe",
+		# 	"phone": "123",
+		# 	"currentResponse": {
+		# 		"ts": 1647018043,
+		# 		"responseOption": {
+		# 			"id": "1234",
+		# 			"text": "No",
+		# 			"type": "negative"
+		# 		}
+		# 	},
+		# 	"isMe": false
+		# }]
+        self.responders[job_id] = {}
+        for responder in inc_responders:
+            response = responder.get("currentResponse").get("responseOption").get("text").lower().replace(" ", "_")    
+            if response not in self.responders[job_id]:
+                self.responders[job_id][response] = []
+            self.responders[job_id][response].append(responder)
+        pass
+        
+    def update_supplementals(self, job_id, supplementals):
+        self.supplementals[job_id] = []
+        for sup in supplementals:
+            self.supplementals[job_id].append(sup.get("text"))
 
     def register_callback(self, callback):
         """Register callback, called when job changes state."""

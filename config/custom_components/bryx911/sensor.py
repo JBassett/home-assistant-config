@@ -8,21 +8,26 @@ from homeassistant.helpers.entity import Entity
 
 from .const import DOMAIN
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER = logging.getLogger(__package__)
 
 async def async_setup(hass, config):
     return True
 
 async def async_setup_entry(hass, entry, async_add_entities):
-    _LOGGER.debug("async_setup_entry -> Start")
+    _LOGGER.debug("sensor.async_setup_entry -> Start")
     bryx_ws = hass.data[DOMAIN]['ws']
     async_add_entities([
         CurrentJobSynopsis(bryx_ws),
         CurrentJobAddress(bryx_ws),
         CurrentJobType(bryx_ws),
-        LatestJobTime(bryx_ws)
+        LatestJobTime(bryx_ws),
+        Responders(bryx_ws, "Scene"),
+        Responders(bryx_ws, "Station 1"),
+        Responders(bryx_ws, "Station 2"),
+        Responders(bryx_ws, "Station 3"),
+        Responders(bryx_ws, "No"),
         ])
-    _LOGGER.debug("async_setup_entry -> Complete")
+    _LOGGER.debug("sensor.async_setup_entry -> Complete")
 
 class BryxSensor(Entity):
 
@@ -66,7 +71,8 @@ class CurrentJobAddress(BryxSensor):
         lj = self.ws.latest
         if self.has_job() and lj.get("gps") is not None:
             return {
-                "gps": lj.get("gps")
+                "latitude": lj.get("gps")[1], 
+                "longitude": lj.get("gps")[0]
             }
         return {}
 
@@ -117,3 +123,50 @@ class LatestJobTime(BryxSensor):
             return None
 
         return latest["start"].isoformat()
+
+class Responders(BryxSensor):
+    
+    def __init__(self, ws, response):
+        self.response = response.lower().replace(" ", "_")
+        self.entity_id = f"sensor.bryx_responders_{self.response}"
+        self._attr_name = f"Bryx {response} Responders"
+        self.ws = ws
+    
+    @property
+    def state(self):
+        """Return the state of the sensor."""
+        total = 0
+        for job_id, job_responders in self.ws.responders.items():
+            if self.response in job_responders:
+                total = total + len(job_responders[self.response])
+        return total
+        
+    @property
+    def extra_state_attributes(self):
+        all_responders = set()
+        for job_id, job_responders in self.ws.responders.items():
+            if self.response in job_responders:
+                for responder in job_responders[self.response]:
+                    all_responders.add(responder["name"])
+        return {
+            "responders": all_responders
+        }
+
+class Supplementals(BryxSensor):
+    
+    def __init__(self, ws):
+        self.entity_id = f"sensor.bryx_responders_{self.response}"
+        self._attr_name = f"Bryx {response} Responders"
+        self.ws = ws
+    
+    @property
+    def state(self):
+        """Return the state of the sensor."""
+        return len(self.ws.supplementals)
+        
+    @property
+    def extra_state_attributes(self):
+        response = {}
+        for job_id, supplementals in self.ws.supplementals.items():
+            response[job_id] = supplementals
+        return response

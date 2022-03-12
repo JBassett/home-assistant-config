@@ -5,19 +5,19 @@ from homeassistant.components.binary_sensor import DEVICE_CLASS_CONNECTIVITY
 
 from .const import DOMAIN
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER = logging.getLogger(__package__)
 
 async def async_setup(hass, config):
     return True
 
 async def async_setup_entry(hass, entry, async_add_entities):
-    _LOGGER.debug("async_setup_entry -> Start")
+    _LOGGER.debug("binary_sensor.async_setup_entry -> Start")
     bryx_ws = hass.data[DOMAIN]['ws']
     async_add_entities([
         BryxConnection(bryx_ws),
         BryxOpenJob(bryx_ws)
         ])
-    _LOGGER.debug("async_setup_entry -> Complete")
+    _LOGGER.debug("binary_sensor.async_setup_entry -> Complete")
 
 class BryxConnection(BinarySensorEntity):
     name = "Bryx Connected"

@@ -17,18 +17,18 @@ from homeassistant.components.calendar import (
 
 from .const import DOMAIN
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER = logging.getLogger(__package__)
 
 async def async_setup(hass, config):
     return True
 
 async def async_setup_entry(hass, entry, async_add_entities):
-    _LOGGER.debug("async_setup_entry -> Start")
+    _LOGGER.debug("calendar.async_setup_entry -> Start")
     bryx_ws = hass.data[DOMAIN]['ws']
     async_add_entities([
         BryxCalendarEventDevice(bryx_ws)
         ])
-    _LOGGER.debug("async_setup_entry -> Complete")
+    _LOGGER.debug("calendar.async_setup_entry -> Complete")
 
 class BryxCalendarEventDevice(CalendarEventDevice):
     def __init__(self, ws):
