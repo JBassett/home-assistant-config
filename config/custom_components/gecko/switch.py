@@ -2,22 +2,24 @@
 from geckolib import GeckoBlower, GeckoPump
 from homeassistant.components.switch import SwitchEntity
 
-from .const import DOMAIN, ICON
+from .const import DOMAIN
 from .entity import GeckoEntity
+from .spa_manager import GeckoSpaManager
 
 
 async def async_setup_entry(hass, entry, async_add_entities):
     """Setup sensor platform."""
-    facade = hass.data[DOMAIN][entry.entry_id].facade
-    entities = [GeckoBinarySwitch(entry, blower) for blower in facade.blowers]
-    async_add_entities(entities, True)
+    spaman: GeckoSpaManager = hass.data[DOMAIN][entry.entry_id]
+    entities = [
+        GeckoBinarySwitch(spaman, entry, blower) for blower in spaman.facade.blowers
+    ]
+    if spaman.facade.eco_mode is not None:
+        entities.append(GeckoBinarySwitch(spaman, entry, spaman.facade.eco_mode))
+    async_add_entities(entities)
 
 
 class GeckoBinarySwitch(GeckoEntity, SwitchEntity):
     """gecko switch class."""
-
-    def __init__(self, config_entry, automation_entity):
-        super().__init__(config_entry, automation_entity)
 
     async def async_turn_on(self, **kwargs):  # pylint: disable=unused-argument
         """Turn on the switch."""
