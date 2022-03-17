@@ -130,9 +130,10 @@ class BatteryTempSensor(AutopiSensor):
     @property
     def native_value(self):
         """Return the state of the sensor."""
+        state = None
         if self.autopi.latest and 'battery_temp' in self.autopi.latest:
-            self._last_state = self.autopi.latest['battery_temp']
-        return self._last_state
+            state = self.autopi.latest['battery_temp']
+        return state
 
 class ExternalTempSensor(AutopiSensor):
     
@@ -147,9 +148,10 @@ class ExternalTempSensor(AutopiSensor):
     @property
     def native_value(self):
         """Return the state of the sensor."""
+        state = None
         if self.autopi.latest and 'external_temp' in self.autopi.latest:
-            self._last_state = self.autopi.latest['external_temp']
-        return self._last_state
+            state = self.autopi.latest['external_temp']
+        return state
 
 class PiVoltageSensor(AutopiSensor):
     
@@ -288,9 +290,10 @@ class BatteryCoolantTempSensor(AutopiSensor):
     @property
     def native_value(self):
         """Return the state of the sensor."""
+        state = None
         if self.autopi.latest and 'battery_coolant_temp' in self.autopi.latest:
-            self._last_state = self.autopi.latest['battery_coolant_temp']
-        return self._last_state
+            state = self.autopi.latest['battery_coolant_temp']
+        return state
 
 class BatteryHeaterPowerSensor(AutopiSensor):
     
