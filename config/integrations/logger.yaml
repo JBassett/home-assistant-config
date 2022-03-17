@@ -3,3 +3,4 @@ logger:
   logs:
     sucks: error
     custom_components.bryx911: info
+    custom_components.gecko: info
