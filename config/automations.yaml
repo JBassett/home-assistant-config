@@ -1301,21 +1301,68 @@
   trigger:
   - platform: state
     entity_id: sensor.pixel_4a_bluetooth_connection
+    for:
+      hours: 0
+      minutes: 3
+      seconds: 0
   condition: []
   action:
   - choose:
     - conditions:
       - condition: template
-        value_template: '{{ ''90:E8:68:45:27:9E'' in state_attr(''sensor.pixel_4a_bluetooth_connection'',
-          ''connected_paired_devices'') and   ''A0:6F:AA:92:C0:74'' in state_attr(''sensor.pixel_4a_bluetooth_connection'',
-          ''connected_paired_devices'') }}'
+        value_template: '{% set inBolt = ''90:E8:68:45:27:9E'' in state_attr(''sensor.pixel_4a_bluetooth_connection'',
+          ''connected_paired_devices'') %}
+
+          {% set inEquinox = ''BC:75:36:4F:6F:3A'' in state_attr(''sensor.pixel_4a_bluetooth_connection'',
+          ''connected_paired_devices'') %}
+
+          {{ inBolt or inEquinox }}'
       sequence:
       - service: notify.mobile_app_pixel_4a
         data:
           message: command_high_accuracy_mode
           title: turn_on
+          data:
+            ttl: 0
+            priority: high
     default:
     - service: notify.mobile_app_pixel_4a
+      data:
+        message: command_high_accuracy_mode
+        title: turn_off
+  mode: single
+- id: '1647561243012'
+  alias: Pixel 5a - High Accuracy Mode
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: sensor.pixel_5a_bluetooth_connection
+    for:
+      hours: 0
+      minutes: 3
+      seconds: 0
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{% set inBolt = ''90:E8:68:45:27:9E'' in state_attr(''sensor.pixel_5a_bluetooth_connection'',
+          ''connected_paired_devices'') %}
+
+          {% set inEquinox = ''BC:75:36:4F:6F:3A'' in state_attr(''sensor.pixel_5a_bluetooth_connection'',
+          ''connected_paired_devices'') %}
+
+          {{ inBolt or inEquinox }}'
+      sequence:
+      - service: notify.mobile_app_pixel_5a
+        data:
+          message: command_high_accuracy_mode
+          title: turn_on
+          data:
+            ttl: 0
+            priority: high
+    default:
+    - service: notify.mobile_app_pixel_5a
       data:
         message: command_high_accuracy_mode
         title: turn_off
