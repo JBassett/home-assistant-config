@@ -26,6 +26,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
         Responders(bryx_ws, "Station 2"),
         Responders(bryx_ws, "Station 3"),
         Responders(bryx_ws, "No"),
+        Supplementals(bryx_ws)
         ])
     _LOGGER.debug("sensor.async_setup_entry -> Complete")
 
@@ -155,8 +156,8 @@ class Responders(BryxSensor):
 class Supplementals(BryxSensor):
     
     def __init__(self, ws):
-        self.entity_id = f"sensor.bryx_responders_{self.response}"
-        self._attr_name = f"Bryx {response} Responders"
+        self.entity_id = f"sensor.bryx_supplementals"
+        self._attr_name = f"Bryx Supplementals"
         self.ws = ws
     
     @property

@@ -10,9 +10,7 @@ from homeassistant.const import (
 
 from homeassistant.components.calendar import (
     ENTITY_ID_FORMAT,
-    CalendarEventDevice,
-    calculate_offset,
-    is_offset_reached,
+    CalendarEventDevice
 )
 
 from .const import DOMAIN
