@@ -119,11 +119,6 @@
       cache: false
       message: 'Alert: {{ states(''sensor.bryx_current_job_type'') }} {{ states(''sensor.bryx_current_job_synopsis'')
         }} at {{ states(''sensor.bryx_current_job_address'') }}'
-  - service: scene.turn_on
-    data:
-      entity_id:
-      - scene.kitchen_fire_call
-      transition: 10
   - delay:
       seconds: 15
   - service: media_player.play_media
