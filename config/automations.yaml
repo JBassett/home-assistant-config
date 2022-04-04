@@ -245,7 +245,7 @@
   alias: Harrison - Sleep
   trigger:
   - platform: time
-    at: '12:30'
+    at: '13:00:00'
   - platform: time
     at: '19:15'
   condition:
@@ -657,7 +657,7 @@
   alias: Weston - Sleep
   trigger:
   - platform: time
-    at: '12:30'
+    at: '13:00:00'
   - platform: time
     at: '19:15'
   condition:
