@@ -80,8 +80,14 @@
       friendly_name: 'Spa - Time to Temp'
       device_class: 'timestamp'
       value_template: >-
+        {% set last_updated = states.climate.spa_heater.last_updated %}
         {% set target = state_attr('climate.spa_heater', 'temperature') %}
         {% set current = state_attr('climate.spa_heater', 'current_temperature') %}
+        {% set estimate = as_timestamp(last_updated) + (((target-current) * 3600)/4.25) %}
+        {# This is rounding to nearest 5 minutes. #}
+        {% set estimateRounded = (estimate//300) * 300 %}
         {% if target - current > 0 %}
-          {{ as_datetime(as_timestamp(now()) + (((target-current) * 3600)/4.5)) }}
+          {{ as_datetime(estimateRounded) }}
+        {% else %}
+          {{ as_datetime(0) }}
         {% endif %}

@@ -1149,6 +1149,11 @@
   - condition: state
     entity_id: binary_sensor.dryer_running
     state: 'off'
+  - condition: not
+    conditions:
+    - condition: state
+      entity_id: media_player.kitchen_display
+      state: playing
   action:
   - service: tts.google_translate_say
     data:
@@ -1158,8 +1163,7 @@
     data:
       title: Laundry
       message: Laundry is done!
-  mode: queued
-  max: 10
+  mode: single
 - id: '1635038524793'
   alias: Front Door - Doorbell
   description: ''
