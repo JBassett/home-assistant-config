@@ -26,7 +26,7 @@ def get_power(device):
     data_time = datetime.strptime(device["DATATIME"], "%Y,%m,%d,%H,%M,%S")
     time_since_data = datetime.utcnow() - data_time
 
-    return float(device["p_3phsum_kw"]) if  time_since_data < timedelta(minutes=3) else 0
+    return float(device["p_3phsum_kw"]) if  time_since_data < timedelta(minutes=5) else 0
 
 async def async_setup(hass, config):
     return True
