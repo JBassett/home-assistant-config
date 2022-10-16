@@ -3,7 +3,6 @@ import logging
 import time
 from datetime import timedelta, datetime
 import json
-import push_receiver
 import random
 import requests
 from urllib.parse import parse_qs, urlparse
@@ -186,7 +185,7 @@ class HyundaiBlueLinkAPIUSA(KiaUvoApiImpl):
             "dateTime"
         ]
         vehicle_status["vehicleStatus"]["doorLock"] = vehicle_status["vehicleStatus"][
-            "doorLockStatus"
+            "doorLock"
         ]
         vehicle_status["vehicleLocation"] = vehicle_status["vehicleStatus"][
             "vehicleLocation"

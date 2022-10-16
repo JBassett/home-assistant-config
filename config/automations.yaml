@@ -121,28 +121,6 @@
       message: The AC has been running for 2 hours non stop.
       data:
         channel: Critical
-- id: cd89cab1-5e0a-4b74-bd3f-59c7f11c64af
-  alias: Furnace - Away Mode
-  trigger:
-  - platform: state
-    entity_id: sensor.home_status
-    to: Unoccupied
-    for:
-      minutes: 5
-  action:
-  - service: nest.set_away_mode
-    data:
-      away_mode: away
-- id: dff2efb3-c16c-46d9-9f8f-56e920ea1a06
-  alias: Furnace - Home Mode
-  trigger:
-  - platform: state
-    entity_id: sensor.home_status
-    to: Occupied
-  action:
-  - service: nest.set_away_mode
-    data:
-      away_mode: home
 - alias: Garage Door - Left Open Notification
   id: f2e584e1-3c07-4da2-ac24-99ada3fd659f
   mode: restart
@@ -225,6 +203,12 @@
   - service: input_boolean.turn_on
     data:
       entity_id: input_boolean.harrison_nap
+  - service: light.turn_on
+    data:
+      transition: 20
+      color_name: blue
+    target:
+      area_id: cc252b70ae4745539da280dbb3c14a4e
 - id: 71ff4a11-7a4d-4f49-9d8e-de8b024feaa6
   alias: Harrison - Wakup
   trigger:
@@ -234,17 +218,25 @@
   - platform: time
     at: '16:00:00'
   - platform: time
-    at: 08:30:00
+    at: 07:30:00
   action:
   - service: input_boolean.turn_off
-    data:
+    data: {}
+    target:
       entity_id: input_boolean.harrison_nap
   - service: media_player.turn_off
+    data: {}
+    target:
+      device_id: 29ec25f8a73f43e793550bb2a48066fd
+  - type: turn_off
+    device_id: a4e1dac5d9ac8b7fd14131e431464d58
+    entity_id: fan.harrison
+    domain: fan
+  - service: light.turn_on
     data:
-      entity_id: media_player.harrisons_room_speaker
-  - service: fan.turn_off
-    data:
-      entity_id: fan.harrison
+      color_name: green
+    target:
+      device_id: 33922259cfa9bf75b0e3ef7d3946f190
 - id: a212fb84-d631-4227-a434-54df8801b915
   alias: Maintenance - HA Update Notification
   trigger:
@@ -273,9 +265,9 @@
   - service: notify.mobile_app_pixel_4a
     data:
       title: New HACS Componenet Release
-      message: "Updates ready for:  {% for repo in states.sensor.hacs.attributes.repositories\
-        \ -%} \n  {{repo.display_name}}{%- if not loop.last %}, {% endif -%}\n{%-\
-        \ endfor %}"
+      message: "Updates ready for:  {% for repo in states.sensor.hacs.attributes.repositories
+        -%} \n  {{repo.display_name}}{%- if not loop.last %}, {% endif -%}\n{%- endfor
+        %}"
       data:
         clickAction: /hacs
         channel: Updates
@@ -599,6 +591,11 @@
   - service: input_boolean.turn_on
     data:
       entity_id: input_boolean.weston_nap
+  - service: light.turn_on
+    data:
+      color_name: blue
+    target:
+      area_id: 55db04442f6e4b8bb24192bfdacfe989
 - id: 8ab6d2cd-32fa-494f-a0e8-271dda57fa04
   alias: Weston - Wakup
   trigger:
@@ -608,7 +605,7 @@
   - platform: time
     at: '16:00:00'
   - platform: time
-    at: 08:30:00
+    at: 07:30:00
   action:
   - service: input_boolean.turn_off
     data:
@@ -619,9 +616,11 @@
   - service: fan.turn_off
     data:
       entity_id: fan.weston
-  - service: light.turn_off
+  - service: light.turn_on
     data:
-      entity_id: light.weston_lamp
+      color_name: green
+    target:
+      device_id: 9d084c1cf9aa7b67b2cd36f37825f8de
 - id: '1619140975621'
   alias: Living Room - Turn On
   description: ''
@@ -696,6 +695,7 @@
       device_id:
       - 7c727713b4c10847856049e1838a1049
       - dbcf0119cffc243fc7c525d3fc7eeedc
+    data: {}
   - choose:
     - conditions:
       - condition: or
@@ -709,7 +709,13 @@
       sequence:
       - service: homeassistant.turn_off
         target:
-          area_id: 55df309dbd39451faef1412557a7d222
+          device_id:
+          - 5cb9d3b2156245349bad29d472203941
+          - 575427cc0b5911eb85400dc50cfd8af5
+          - b4601ac8ea2acee390ce24c782b47bd2
+          - 7c727713b4c10847856049e1838a1049
+          - dbcf0119cffc243fc7c525d3fc7eeedc
+        data: {}
     default: []
   mode: single
 - id: '1619142165820'
@@ -723,12 +729,25 @@
     to: below_horizon
   - platform: homeassistant
     event: start
+  - platform: state
+    entity_id:
+    - binary_sensor.front_door_motion_detected
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 30
+    enabled: false
   condition:
-  - condition: not
+  - condition: or
     conditions:
+    - not:
+      - condition: state
+        entity_id: sensor.home_status
+        state: Sleeping
     - condition: state
-      entity_id: sensor.home_status
-      state: Sleeping
+      entity_id: binary_sensor.front_door_motion_detected
+      state: 'on'
+      enabled: false
   - condition: state
     entity_id: sun.sun
     state: below_horizon
@@ -736,6 +755,7 @@
   - service: switch.turn_on
     target:
       area_id: c8266fda6fc64c02a068ff87b9eefccd
+    data: {}
   mode: single
 - id: '1619142330837'
   alias: Outside - Turn Off
@@ -748,12 +768,30 @@
   - platform: state
     entity_id: sun.sun
     to: above_horizon
+  - platform: state
+    entity_id:
+    - binary_sensor.front_door_motion_detected
+    for:
+      hours: 0
+      minutes: 2
+      seconds: 0
+    enabled: false
   condition:
   - condition: or
     conditions:
-    - condition: state
-      entity_id: sensor.home_status
-      state: Sleeping
+    - condition: and
+      conditions:
+      - condition: state
+        entity_id: sensor.home_status
+        state: Sleeping
+      - condition: state
+        entity_id: binary_sensor.front_door_motion_detected
+        state: 'off'
+        for:
+          hours: 0
+          minutes: 2
+          seconds: 0
+        enabled: false
     - condition: state
       entity_id: sun.sun
       state: above_horizon
@@ -763,6 +801,7 @@
       entity_id:
       - switch.porch_lights
       - switch.driveway_lights
+    data: {}
   - choose:
     - conditions:
       - condition: state
@@ -1268,3 +1307,64 @@
       input_boolean: input_boolean.harrison_nap
       media_player: media_player.harrisons_room_speaker
       media_url: https://storage.googleapis.com/relaxation-sounds/ocean_3600.mp3
+- id: '1655505552160'
+  alias: Security - Door Opens
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.garage_man_door_sensor
+    from: 'off'
+    to: 'on'
+    id: Garage Man Door
+  - platform: state
+    entity_id:
+    - binary_sensor.sliding_door_sensor
+    from: 'off'
+    to: 'on'
+    id: Sliding Door
+  - platform: state
+    entity_id:
+    - binary_sensor.front_door_sensor
+    id: Front Door
+    from: 'off'
+    to: 'on'
+  condition: []
+  action:
+  - if:
+    - condition: not
+      conditions:
+      - condition: state
+        entity_id: sensor.home_status
+        state: Occupied
+      enabled: true
+    then:
+    - service: tts.google_translate_say
+      data:
+        entity_id: media_player.master_bedroom_speaker
+        message: '{{trigger.id}} Opened'
+    - service: notify.mobile_app_pixel_4a
+      data:
+        title: Door Opened
+        message: The {{ trigger.id }} was opened!
+        data:
+          ttl: 0
+          priority: high
+  mode: single
+- id: '1659895521698'
+  alias: Master -Wakeup
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.master_sleeping
+    - automation.master_sleeping
+    from: 'on'
+    to: 'off'
+  condition: []
+  action:
+  - service: fan.turn_off
+    data: {}
+    target:
+      entity_id: fan.master
+  mode: single
