@@ -1,4 +1,0 @@
-http:
-  use_x_forwarded_for: true
-  trusted_proxies:
-    - !secret unraid_ip

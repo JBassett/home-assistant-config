@@ -1,8 +1,0 @@
-logger:
-  default: warn
-  logs:
-    sucks: error
-    custom_components.bryx911: info
-    custom_components.gecko: info
-    custom_components.reolink_dev: debug
-    reolink: info

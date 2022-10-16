@@ -1,7 +1,0 @@
-zone:
-  # This will override the default home zone
-  - name: Home
-    latitude: !secret home_lat_num
-    longitude: !secret home_lon_num
-    radius: 300
-    icon: mdi:home

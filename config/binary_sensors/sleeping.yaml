@@ -1,9 +1,0 @@
-- platform: template
-  sensors:
-    master_sleeping:
-      friendly_name: "Master Sleeping"
-      value_template: >-
-        {% set jsleep =is_state('input_boolean.justin_sleeping', 'on') %}
-        {% set ssleep =is_state('input_boolean.shannon_sleeping', 'on') %}
-
-        {{ jsleep or ssleep}}

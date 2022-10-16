@@ -1,7 +1,0 @@
-switch:
-
-  - platform: wake_on_lan
-    name: Gaming PC
-    mac: !secret gaming_pc_mac
-    broadcast_address: !secret gaming_pc_brodcast_ip
-    host: !secret gaming_pc_ip

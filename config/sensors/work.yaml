@@ -1,7 +1,0 @@
-- platform: history_stats
-  name: Justin Time at Work
-  entity_id: person.justin
-  state: "Bryx"
-  type: time
-  start: "{{ now().replace(hour=0, minute=0, second=0) }}"
-  end: "{{ now() }}"

@@ -1,9 +1,0 @@
-input_datetime:
-  spacex_notification_push_time:
-    name: SpaceX - Push Notification Time
-    has_date: true
-    has_time: true
-  spacex_notification_tts_time:
-    name: SpaceX - Push Notification Time
-    has_date: true
-    has_time: true
