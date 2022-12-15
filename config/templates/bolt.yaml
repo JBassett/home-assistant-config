@@ -1,0 +1,37 @@
+- sensor:
+  - name: Bolt Time Until 90
+    device_class: timestamp
+    state: >-
+      {% set is_charging = is_state('binary_sensor.bolt_charging', 'on') %}
+      {% set target_percent = 87 %}
+      {% set nominal_battery = 66 %}
+      {% set target_kwh = 66 * (target_percent / 100.0) %}
+      {% set current = states('sensor.bolt_soc') | round(2) %}
+      {% set power = (states('sensor.bolt_power') | round(1)) * -1 %}
+      {% if is_charging and current < target_percent %}
+        {% set kwh_left = target_kwh - current*(nominal_battery/100) %}
+        {% set estimate = as_timestamp(now()) + ((kwh_left/power)*60*60) %}
+        {# This is rounding to nearest 10 minutes. #}
+        {% set estimateRounded = ((estimate/600) | round(method='ceil')) * 600 %}
+        {{ as_datetime(estimateRounded) }}
+      {% else %}
+        {{ as_datetime(0) }}
+      {% endif %}
+  - name: Bolt Time Until Full
+    device_class: timestamp
+    state: >-
+      {% set is_charging = is_state('binary_sensor.bolt_charging', 'on') %}
+      {% set target_percent = 100 %}
+      {% set nominal_battery = 66 %}
+      {% set target_kwh = 66 * (target_percent / 100.0) %}
+      {% set current = states('sensor.bolt_soc') | round(1) %}
+      {% set power = (states('sensor.bolt_power') | round(1)) * -1 %}
+      {% if is_charging and current < target_percent %}
+        {% set kwh_left = target_kwh - current*(nominal_battery/100) %}
+        {% set estimate = as_timestamp(now()) + ((kwh_left/power)*60*60) %}
+        {# This is rounding to nearest 5 minutes. #}
+        {% set estimateRounded = ((estimate/600) | round(method='ceil')) * 600 %}
+        {{ as_datetime(estimateRounded) }}
+      {% else %}
+        {{ as_datetime(0) }}
+      {% endif %}

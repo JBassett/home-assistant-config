@@ -1,0 +1,614 @@
+- id: '1665955128972'
+  alias: Weston - Sleep
+  description: ''
+  use_blueprint:
+    path: loop_media.yaml
+    input:
+      input_boolean: input_boolean.weston_nap
+      media_player: media_player.weston_s_room_speaker
+      media_url: https://storage.googleapis.com/relaxation-sounds/ocean_3600.mp3
+- id: '1665955215413'
+  alias: Harrison - Sleep
+  description: ''
+  use_blueprint:
+    path: loop_media.yaml
+    input:
+      input_boolean: input_boolean.harrison_nap
+      media_player: media_player.harrison_s_room_speaker
+      media_url: https://storage.googleapis.com/relaxation-sounds/ocean_3600.mp3
+- id: '1665956652468'
+  alias: Master - Sleeping
+  description: ''
+  use_blueprint:
+    path: loop_media.yaml
+    input:
+      input_boolean: binary_sensor.master_sleeping
+      media_player: media_player.master_bedroom_speaker
+      media_url: https://storage.googleapis.com/relaxation-sounds/country_night_3600.mp3
+- id: '1665957065931'
+  alias: Justin - Sleeping
+  description: ''
+  trigger:
+  - type: plugged_in
+    platform: device
+    device_id: d7cb7bb46037674444d3866a97b125d7
+    entity_id: binary_sensor.pixel_4a_is_charging
+    domain: binary_sensor
+  condition:
+  - condition: and
+    conditions:
+    - condition: state
+      entity_id: person.justin
+      state: home
+    - condition: time
+      before: 04:00:00
+      after: '22:00:00'
+  action:
+  - service: input_boolean.turn_on
+    data: {}
+    target:
+      entity_id: input_boolean.justin_sleeping
+  mode: single
+- id: '1665957139573'
+  alias: Shannon - Sleeping
+  description: ''
+  trigger:
+  - type: plugged_in
+    platform: device
+    device_id: d7cfbd703594ba584a56dfc256c8b7ce
+    entity_id: binary_sensor.s22_is_charging
+    domain: binary_sensor
+  condition:
+  - condition: and
+    conditions:
+    - type: is_plugged_in
+      condition: device
+      device_id: d7cfbd703594ba584a56dfc256c8b7ce
+      entity_id: binary_sensor.s22_is_charging
+      domain: binary_sensor
+    - condition: time
+      before: 04:00:00
+      after: '22:00:00'
+  action:
+  - service: input_boolean.turn_on
+    data: {}
+    target:
+      entity_id: input_boolean.shannon_sleeping
+  mode: single
+- id: '1665957216248'
+  alias: Justin - Wakeup
+  description: ''
+  trigger:
+  - type: not_plugged_in
+    platform: device
+    device_id: d7cb7bb46037674444d3866a97b125d7
+    entity_id: binary_sensor.pixel_4a_is_charging
+    domain: binary_sensor
+  condition: []
+  action:
+  - service: input_boolean.turn_off
+    data: {}
+    target:
+      entity_id: input_boolean.justin_sleeping
+  mode: single
+- id: '1665960879923'
+  alias: Kids - Bedtime
+  description: ''
+  trigger:
+  - platform: time
+    at: '19:00:00'
+  - platform: time
+    at: '13:30:00'
+  condition:
+  - condition: state
+    entity_id: sensor.main_house_status
+    state: Occupied
+  action:
+  - service: input_boolean.turn_on
+    data: {}
+    target:
+      entity_id:
+      - input_boolean.weston_nap
+      - input_boolean.harrison_nap
+  - service: light.turn_on
+    data:
+      transition: 60
+      rgb_color:
+      - 0
+      - 0
+      - 255
+      brightness_pct: 10
+    target:
+      entity_id:
+      - light.weston_lamp_light
+  - service: light.turn_on
+    data:
+      transition: 60
+      rgb_color:
+      - 0
+      - 0
+      - 255
+      brightness_pct: 10
+    target:
+      entity_id:
+      - light.harrison_lamp_light
+  mode: single
+- id: '1665960973192'
+  alias: Kids - Wakup
+  description: ''
+  trigger:
+  - platform: time
+    at: 07:30:00
+  - platform: time
+    at: '16:00:00'
+  condition: []
+  action:
+  - service: input_boolean.turn_off
+    data: {}
+    target:
+      entity_id:
+      - input_boolean.harrison_nap
+      - input_boolean.weston_nap
+  - if:
+    - condition: state
+      entity_id: light.weston_lamp_light
+      state: 'on'
+    then:
+    - service: light.turn_on
+      data:
+        color_name: green
+        brightness_pct: 50
+      target:
+        entity_id: light.weston_lamp_light
+  - if:
+    - condition: state
+      entity_id: light.harrison_lamp_light
+      state: 'on'
+    then:
+    - service: light.turn_on
+      data:
+        color_name: green
+        brightness_pct: 50
+      target:
+        entity_id: light.harrison_lamp_light
+  - delay:
+      hours: 0
+      minutes: 15
+      seconds: 0
+      milliseconds: 0
+  - service: light.turn_off
+    data: {}
+    target:
+      entity_id: light.weston_lamp_light
+  - service: light.turn_off
+    data: {}
+    target:
+      entity_id: light.harrison_lamp_light
+  mode: single
+- id: '1666045196645'
+  alias: Shannon - Wakeup
+  description: ''
+  trigger:
+  - type: not_plugged_in
+    platform: device
+    device_id: d7cfbd703594ba584a56dfc256c8b7ce
+    entity_id: binary_sensor.s22_is_charging
+    domain: binary_sensor
+  condition: []
+  action:
+  - service: input_boolean.turn_off
+    data: {}
+    target:
+      entity_id:
+      - input_boolean.shannon_sleeping
+  mode: single
+- id: '1667263773136'
+  alias: Living Room - Lights
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - sensor.main_house_status
+  - platform: state
+    entity_id:
+    - binary_sensor.dark_outside
+  condition: []
+  action:
+  - if:
+    - condition: state
+      entity_id: binary_sensor.dark_outside
+      state: 'on'
+    - condition: state
+      entity_id: sensor.main_house_status
+      state: Occupied
+    then:
+    - service: light.turn_on
+      data:
+        kelvin: 2800
+      target:
+        area_id: living_room
+    - service: switch.turn_on
+      data: {}
+      target:
+        entity_id:
+        - switch.stair_lights_relay
+        - switch.living_room_outlet_switch_top
+        - switch.living_room_outlet_switch_bottom
+    else:
+    - service: light.turn_off
+      data: {}
+      target:
+        area_id: living_room
+    - service: switch.turn_off
+      data: {}
+      target:
+        entity_id:
+        - switch.stair_lights_relay
+        - switch.living_room_outlet_switch_top
+        - switch.living_room_outlet_switch_bottom
+  mode: restart
+- id: '1667264266778'
+  alias: Office - Lights
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - sensor.main_house_status
+  - platform: state
+    entity_id:
+    - binary_sensor.dark_outside
+  condition: []
+  action:
+  - if:
+    - condition: state
+      entity_id: binary_sensor.dark_outside
+      state: 'on'
+    - condition: state
+      entity_id: sensor.main_house_status
+      state: Occupied
+    then:
+    - service: light.turn_on
+      data:
+        kelvin: 2800
+      target:
+        entity_id: light.office_lamp_light
+    else:
+    - service: light.turn_off
+      data: {}
+      target:
+        entity_id: light.office_lamp_light
+  mode: restart
+- id: '1667869686664'
+  alias: Christmas - Lights
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.dark_outside
+  - platform: time
+    at: '22:30:00'
+  condition: []
+  action:
+  - if:
+    - condition: time
+      after: '12:00:00'
+      before: '22:30:00'
+    - condition: state
+      entity_id: binary_sensor.dark_outside
+      state: 'on'
+    then:
+    - service: switch.turn_on
+      data: {}
+      target:
+        entity_id:
+        - switch.spare_relay
+        - switch.laundry_relay
+    else:
+    - service: switch.turn_off
+      data: {}
+      target:
+        entity_id:
+        - switch.spare_relay
+        - switch.laundry_relay
+    alias: If dark and before 2230
+  mode: single
+- id: '1668621609140'
+  alias: House - Temperature
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - sensor.main_house_status
+    - schedule.thermostat_saver
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: sensor.main_house_status
+        state: Occupied
+      - condition: state
+        entity_id: schedule.thermostat_saver
+        state: 'off'
+      sequence:
+      - service: climate.set_temperature
+        data:
+          temperature: 65
+        target:
+          entity_id: climate.main_thermostat
+      - delay:
+          hours: 0
+          minutes: 0
+          seconds: 30
+          milliseconds: 0
+      - service: climate.set_temperature
+        data:
+          temperature: 65
+        target:
+          entity_id: climate.main_thermostat
+    - conditions:
+      - condition: state
+        entity_id: sensor.main_house_status
+        state: Occupied
+      - condition: state
+        entity_id: schedule.thermostat_saver
+        state: 'on'
+      sequence:
+      - service: climate.set_temperature
+        data:
+          temperature: 62
+        target:
+          entity_id: climate.main_thermostat
+      - delay:
+          hours: 0
+          minutes: 0
+          seconds: 30
+          milliseconds: 0
+      - service: climate.set_temperature
+        data:
+          temperature: 62
+        target:
+          entity_id: climate.main_thermostat
+    default:
+    - service: climate.set_temperature
+      data:
+        temperature: 61
+      target:
+        entity_id: climate.main_thermostat
+    - delay:
+        hours: 0
+        minutes: 0
+        seconds: 30
+        milliseconds: 0
+    - service: climate.set_temperature
+      data:
+        temperature: 61
+      target:
+        entity_id: climate.main_thermostat
+  mode: restart
+- id: '1668955538534'
+  alias: Garage - Temperature
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - cover.main_garage_door
+    - cover.3rd_car_garage
+    to: open
+    for:
+      hours: 0
+      minutes: 2
+      seconds: 0
+  - platform: state
+    entity_id:
+    - cover.main_garage_door
+    - cover.3rd_car_garage
+    to: closed
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 0
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: or
+        conditions:
+        - condition: state
+          entity_id: cover.main_garage_door
+          state: open
+        - condition: state
+          entity_id: cover.3rd_car_garage
+          state: open
+        alias: If any Garage Doors are open
+      sequence:
+      - service: climate.turn_off
+        data: {}
+        target:
+          entity_id: climate.garage_thermostat
+    default:
+    - service: climate.turn_on
+      data: {}
+      target:
+        entity_id: climate.garage_thermostat
+  mode: single
+- id: '1668958485089'
+  alias: NFL - Score
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - sensor.buffalo_bills
+    attribute: team_score
+  condition:
+  - condition: state
+    entity_id: sensor.main_house_status
+    state: Occupied
+  - condition: state
+    entity_id: sensor.buffalo_bills
+    state: IN
+  action:
+  - service: media_player.play_media
+    data:
+      media_content_id: media-source://media_source/cache/nfl/shout.mp3
+      media_content_type: music
+    target:
+      entity_id: media_player.kitchen_display
+  - repeat:
+      until:
+      - condition: state
+        entity_id: media_player.kitchen_display
+        state: idle
+        for:
+          hours: 0
+          minutes: 0
+          seconds: 5
+      sequence:
+      - service: light.turn_on
+        data:
+          color_name: blue
+          brightness_pct: 100
+        target:
+          entity_id: light.living_room_lamp_light
+        alias: Set Light Red
+      - delay:
+          hours: 0
+          minutes: 0
+          seconds: 2
+          milliseconds: 0
+      - service: light.turn_on
+        data:
+          color_name: red
+          brightness_pct: 100
+        target:
+          entity_id: light.living_room_lamp_light
+        alias: Set Light Blue
+      - delay:
+          hours: 0
+          minutes: 0
+          seconds: 2
+          milliseconds: 0
+    alias: Blink Red - Blue Until Music Stops
+  - service: automation.trigger
+    data: {}
+    target:
+      entity_id: automation.living_room_lights
+  mode: single
+- id: '1669256707241'
+  alias: Dinning Room - Lights
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - sensor.main_house_status
+  - platform: state
+    entity_id:
+    - binary_sensor.dark_outside
+  condition: []
+  action:
+  - if:
+    - condition: state
+      entity_id: binary_sensor.dark_outside
+      state: 'on'
+    - condition: state
+      entity_id: sensor.main_house_status
+      state: Occupied
+    then:
+    - service: switch.turn_on
+      data: {}
+      target:
+        entity_id: switch.dining_room_outlet_switch
+    else:
+    - service: switch.turn_off
+      data: {}
+      target:
+        entity_id: switch.dining_room_outlet_switch
+  mode: restart
+- id: '1670163832317'
+  alias: NFL - Kickoff
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - sensor.buffalo_bills
+    from: PRE
+    to: IN
+  condition:
+  - condition: state
+    entity_id: sensor.main_house_status
+    state: Occupied
+  action:
+  - service: media_player.play_media
+    data:
+      media_content_id: media-source://media_source/cache/nfl/theme.mp3
+      media_content_type: music
+    target:
+      entity_id: media_player.kitchen_display
+  mode: single
+- id: '1670164027027'
+  alias: Fire - New Job
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.bryx_open_job
+    from: 'off'
+    to: 'on'
+  condition:
+  - condition: state
+    entity_id: person.justin
+    state: home
+  action:
+  - service: tts.google_translate_say
+    data:
+      entity_id:
+      - media_player.kitchen_display
+      - media_player.office_speaker
+      - media_player.master_bedroom_speaker
+      cache: false
+      message: 'Alert: {{ states(''sensor.bryx_current_job_type'') }} {{ states(''sensor.bryx_current_job_synopsis'')
+        }} at {{ states(''sensor.bryx_current_job_address'') }}'
+  - delay:
+      seconds: 15
+  - service: media_player.play_media
+    data:
+      entity_id:
+      - media_player.office_speaker
+      - media_player.kitchen_display
+      media_content_id: '{{states(''sensor.wcf_scanner_stream'')}}'
+      media_content_type: music
+  - wait_for_trigger:
+    - platform: state
+      entity_id: binary_sensor.bryx_open_job
+      from: 'on'
+      to: 'off'
+      for: 0:05:00
+  - service: media_player.media_stop
+    data:
+      entity_id:
+      - media_player.office_speaker
+      - media_player.kitchen_display
+  mode: single
+- id: '1670633918685'
+  alias: 'Master - Light '
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.master_sleeping
+  condition: []
+  action:
+  - service: switch.turn_on
+    data: {}
+    target:
+      entity_id: switch.master_relay
+  - delay:
+      hours: 0
+      minutes: 5
+      seconds: 0
+      milliseconds: 0
+  - service: switch.turn_off
+    data: {}
+    target:
+      entity_id: switch.master_relay
+  mode: single

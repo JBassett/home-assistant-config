@@ -1,0 +1,68 @@
+# Loads default set of integrations. Do not remove.
+default_config:
+
+homeassistant:
+  media_dirs:
+    cache: /config/media
+
+http:
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - 192.168.2.1
+
+recorder:
+  db_url: !secret recorder_db_url
+  purge_keep_days: 60
+
+# Text to speech
+tts:
+  - platform: google_translate
+
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+sensor: !include_dir_merge_list ./sensors
+
+template: !include_dir_merge_list ./templates
+
+google_assistant:
+  project_id: !secret google_assistant_project
+  service_account: !include google-service-account.json
+  secure_devices_pin: !secret google_assistant_pin
+  report_state: true
+  exposed_domains:
+    - camera
+    # - group
+    - input_boolean
+    - scene
+    - script
+    - switch
+    - fan
+    - light
+    - lock
+    - cover
+    # - media_player
+    - climate
+    - vacuum
+    - sensor
+
+logbook:
+  exclude:
+    entities: []
+    entity_globs:
+      - binary_sensor.pixel_4a_*
+      - sensor.pixel_4a_*
+      - binary_sensor.s22_*
+      - sensor.s22_*
+      - binary_sensor.jbassett_*
+      - sensor.jbassett_*
+      - sensor.google_pixel_watch*
+      - binary_sensor.google_pixel_watch*
+      - sensor.bolt_time_until_*
+
+switch:
+  - platform: wake_on_lan
+    name: Gaming PC
+    mac: !secret gaming_pc_mac
+    broadcast_address: !secret gaming_pc_brodcast_ip
+    host: !secret gaming_pc_ip

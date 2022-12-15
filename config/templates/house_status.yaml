@@ -1,0 +1,21 @@
+- sensor:
+  - name: Main House Status
+    state: >
+      {% set jhome =is_state('person.justin', 'home') %}
+      {% set shome =is_state('person.shannon', 'home') %}
+      {% set ghome =is_state('input_boolean.guest_mode', 'on') %}
+      {% set jsleep =is_state('input_boolean.justin_sleeping', 'on') %}
+      {% set ssleep =is_state('input_boolean.shannon_sleeping', 'on') %}
+      {% if not(jhome or shome or ghome) %}
+        Empty
+      {% elif 
+        (not jhome or jsleep)
+        and
+        (not shome or ssleep)
+        and
+        (not ghome)
+      %}
+        Sleeping
+      {% else %}
+        Occupied
+      {% endif %}

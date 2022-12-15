@@ -1,0 +1,10 @@
+- binary_sensor:
+  - name: Master Sleeping
+    state: >-
+      {% set jsleep =is_state('input_boolean.justin_sleeping', 'on') %}
+      {% set ssleep =is_state('input_boolean.shannon_sleeping', 'on') %}
+
+      {{ jsleep or ssleep}}
+  - name: Dark Outside
+    state: >-
+      {{ is_state('sun.sun', 'below_horizon') }}

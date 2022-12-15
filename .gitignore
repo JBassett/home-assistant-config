@@ -58,5 +58,6 @@ __pycache__/
 .vscode/*
 
 config/google_calendars.yaml
-config/zigbee.db
+config/zigbee.db*
 config/google-service-account.json
+config/image/

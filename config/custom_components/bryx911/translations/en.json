@@ -1,0 +1,14 @@
+{
+    "config": {
+        "step": {
+            "user": {
+                "title": "Input login info",
+                "data": {
+                  "username": "Username",
+                  "password": "Password",
+                  "device_id": "Device Id"
+                }
+            }
+        }
+    }
+}
