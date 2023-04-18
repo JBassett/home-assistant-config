@@ -1,6 +1,9 @@
+""" Constants for teamtracker sensor"""
+
 # API
 URL_HEAD = "http://site.api.espn.com/apis/site/v2/sports/"
 URL_TAIL = "/scoreboard"
+API_LIMIT = 25
 USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 11_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Safari/605.1.15"
 
 LEAGUE_LIST = [
@@ -19,32 +22,34 @@ LEAGUE_LIST = [
     ["IRL", "racing", "irl"],
     ["NASCAR", "racing", "nascar-premier"],
     ["BUND", "soccer", "ger.1"],
-    ["CL", "soccer", "uefa.champions"], 
-    ["EPL", "soccer", "eng.1"], 
-    ["LIGA", "soccer", "esp.1"], 
-    ["LIG1", "soccer", "fra.1"], 
-    ["MLS", "soccer", "usa.1"], 
-    ["NWSL", "soccer", "usa.nwsl"], 
+    ["CL", "soccer", "uefa.champions"],
+    ["EPL", "soccer", "eng.1"],
+    ["LIGA", "soccer", "esp.1"],
+    ["LIG1", "soccer", "fra.1"],
+    ["MLS", "soccer", "usa.1"],
+    ["NWSL", "soccer", "usa.nwsl"],
     ["SERA", "soccer", "ita.1"],
     ["WC", "soccer", "fifa.world"],
     ["ATP", "tennis", "atp"],
     ["WTA", "tennis", "wta"],
     ["NCAAVB", "volleyball", "mens-college-volleyball"],
     ["NCAAVBW", "volleyball", "womens-college-volleyball"],
-    ]
+]
 
 SPORT_LIST = [
     ["australian-football", "mdi:football-australian"],
     ["baseball", "mdi:baseball"],
     ["basketball", "mdi:basketball"],
+    ["cricket", "mdi:cricket"],
     ["football", "mdi:football"],
     ["golf", "mdi:golf-tee"],
     ["hockey", "mdi:hockey-puck"],
     ["mma", "mdi:karate"],
     ["racing", "mdi:flag-checkered"],
+    ["rugby", "mdi:rugby"],
     ["soccer", "mdi:soccer"],
     ["tennis", "mdi:tennis"],
-    ["volleyball", "mdi:volleyball"]
+    ["volleyball", "mdi:volleyball"],
 ]
 
 # Config
@@ -59,16 +64,20 @@ CONF_TEAM_ID = "team_id"
 DEFAULT_CONFERENCE_ID = ""
 DEFAULT_ICON = "mdi:scoreboard"
 DEFAULT_LEAGUE = "NFL"
-DEFAULT_LOGO = "https://cdn0.iconfinder.com/data/icons/shift-interfaces/32/Error-512.png"
+DEFAULT_LOGO = (
+    "https://cdn0.iconfinder.com/data/icons/shift-interfaces/32/Error-512.png"
+)
 DEFAULT_LEAGUE_PATH = "league_not_found"
 DEFAULT_NAME = "team_tracker"
 DEFAULT_PROB = 0.0
 DEFAULT_SPORT_PATH = "sport_not_found"
 DEFAULT_TIMEOUT = 120
+DEFAULT_LAST_UPDATE = "2022-02-02 02:02:02-05:00"
+DEFAULT_KICKOFF_IN = "{test} days"
 
 # Misc
 TEAM_ID = ""
-VERSION = "v0.5.3"
+VERSION = "v0.7.3"
 ISSUE_URL = "https://github.com/vasqued2/ha-teamtracker"
 DOMAIN = "teamtracker"
 PLATFORM = "sensor"

@@ -11,7 +11,9 @@ export const en = {
         "tourney32": "Round of 32",
         "tourney64": "Round of 64",
         "tourney128": "Early Rounds",
-        "tourney256": "Early Rounds"
+        "tourney256": "Early Rounds",
+        "today": "Today",
+        "tomorrow": "Tomorrow"
     },
     "australian-football": {
         "startTerm": "Start",
@@ -35,6 +37,16 @@ export const en = {
     },
     "basketball": {
         "startTerm": "Tipoff",
+        "overUnder": "O/U: %s",
+        "gameStat1": "%s",
+        "gameStat2": "%s",
+        "gameStat3": "",
+        "gameBar": "Win Probability",
+        "teamBarLabel": "%s%",
+        "oppoBarLabel": "%s%"
+    },
+    "cricket": {
+        "startTerm": "Start",
         "overUnder": "O/U: %s",
         "gameStat1": "%s",
         "gameStat2": "%s",

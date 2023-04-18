@@ -185,6 +185,31 @@ SENSOR_DESCRIPTIONS: Final[tuple[SensorEntityDescription, ...]] = (
         name="Geocoded Location",
         icon="mdi:map",
     ),
+    SensorEntityDescription(
+        key="dtc_count",
+        name="DTC Count",
+        icon="mdi:alert-circle",
+    ),
+    SensorEntityDescription(
+        key="ev_first_departure_time",
+        name="EV First Scheduled Depature Time",
+        icon="mdi:clock-outline",
+    ),
+    SensorEntityDescription(
+        key="ev_second_departure_time",
+        name="EV Second Scheduled Depature Time",
+        icon="mdi:clock-outline",
+    ),
+    SensorEntityDescription(
+        key="ev_off_peak_start_time",
+        name="EV Off Peak Start Time",
+        icon="mdi:clock-outline",
+    ),
+    SensorEntityDescription(
+        key="ev_off_peak_end_time",
+        name="EV Off Peak End Time",
+        icon="mdi:clock-outline",
+    ),
 )
 
 
@@ -204,6 +229,10 @@ async def async_setup_entry(
                     HyundaiKiaConnectSensor(coordinator, description, vehicle)
                 )
     async_add_entities(entities)
+    async_add_entities(
+        [VehicleEntity(coordinator, coordinator.vehicle_manager.vehicles[vehicle_id])],
+        True,
+    )
     return True
 
 
@@ -240,3 +269,33 @@ class HyundaiKiaConnectSensor(SensorEntity, HyundaiKiaConnectEntity):
     def state_attributes(self):
         if self._description.key == "_geocode_name":
             return {"address": getattr(self.vehicle, "_geocode_address")}
+        elif self._description.key == "dtc_count":
+            return {"DTC Text": getattr(self.vehicle, "dtc_descriptions")}
+
+
+class VehicleEntity(SensorEntity, HyundaiKiaConnectEntity):
+    def __init__(self, coordinator, vehicle: Vehicle):
+        super().__init__(coordinator, vehicle)
+
+    @property
+    def state(self):
+        return "on"
+
+    @property
+    def is_on(self) -> bool:
+        return True
+
+    @property
+    def state_attributes(self):
+        return {
+            "vehicle_data": self.vehicle.data,
+            "vehicle_name": self.vehicle.name,
+        }
+
+    @property
+    def name(self):
+        return f"{self.vehicle.name} Data"
+
+    @property
+    def unique_id(self):
+        return f"{DOMAIN}-all-data-{self.vehicle.id}"

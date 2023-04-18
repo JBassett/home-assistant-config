@@ -10,6 +10,9 @@ from hyundai_kia_connect_api import (
     VehicleManager,
     ClimateRequestOptions,
 )
+from hyundai_kia_connect_api.exceptions import *
+
+from homeassistant.exceptions import ConfigEntryAuthFailed
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import (
@@ -19,6 +22,7 @@ from homeassistant.const import (
     CONF_SCAN_INTERVAL,
     CONF_USERNAME,
 )
+from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 from homeassistant.util import dt as dt_util
@@ -60,6 +64,7 @@ class HyundaiKiaConnectDataUpdateCoordinator(DataUpdateCoordinator):
             geocode_api_use_email=config_entry.options.get(
                 CONF_USE_EMAIL_WITH_GEOCODE_API, DEFAULT_USE_EMAIL_WITH_GEOCODE_API
             ),
+            language=hass.config.language,
         )
         self.scan_interval: int = (
             config_entry.options.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL) * 60
@@ -98,7 +103,10 @@ class HyundaiKiaConnectDataUpdateCoordinator(DataUpdateCoordinator):
         Allow to update for the first time without further checking
         Allow force update, if time diff between latest update and `now` is greater than force refresh delta
         """
-        await self.async_check_and_refresh_token()
+        try:
+            await self.async_check_and_refresh_token()
+        except AuthenticationError as AuthError:
+            raise ConfigEntryAuthFailed(AuthError) from AuthError
         current_hour = dt_util.now().hour
 
         if (
@@ -125,7 +133,7 @@ class HyundaiKiaConnectDataUpdateCoordinator(DataUpdateCoordinator):
                         self.vehicle_manager.update_all_vehicles_with_cached_state
                     )
                     _LOGGER.exception(
-                        "Force update failed, falling back to cached: {err}"
+                        f"Force update failed, falling back to cached: {err}"
                     )
                 except Exception as err_nested:
                     raise UpdateFailed(f"Error communicating with API: {err_nested}")
@@ -202,7 +210,7 @@ class HyundaiKiaConnectDataUpdateCoordinator(DataUpdateCoordinator):
     async def async_start_charge(self, vehicle_id: str):
         await self.async_check_and_refresh_token()
         await self.hass.async_add_executor_job(
-            self.vehicle_manager.stop_charge, vehicle_id
+            self.vehicle_manager.start_charge, vehicle_id
         )
         await self.async_request_refresh()
 

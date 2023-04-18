@@ -110,8 +110,12 @@ def async_setup_services(hass: HomeAssistant) -> bool:
         ac = call.data.get("ac_limit")
         dc = call.data.get("dc_limit")
 
-        if ac is not None or dc is not None:
-            await coordinator.set_charge_limits(vehicle_id, ac, dc)
+        if ac is not None and dc is not None:
+            await coordinator.set_charge_limits(vehicle_id, int(ac), int(dc))
+        else:
+            _LOGGER.error(
+                f"{DOMAIN} - Enable to set charge limits.  Both AC and DC value required, but not provided."
+            )
 
     services = {
         SERVICE_FORCE_UPDATE: async_handle_force_update,
@@ -139,6 +143,13 @@ def async_unload_services(hass) -> None:
 
 
 def _get_vehicle_id_from_device(hass: HomeAssistant, call: ServiceCall) -> str:
+    coordinators = list(hass.data[DOMAIN].keys())
+    if len(coordinators) == 1:
+        coordinator = hass.data[DOMAIN][coordinators[0]]
+        vehicles = coordinator.vehicle_manager.vehicles
+        if len(vehicles) == 1:
+            return list(vehicles.keys())[0]
+
     device_entry = device_registry.async_get(hass).async_get(call.data[ATTR_DEVICE_ID])
     for entry in device_entry.identifiers:
         if entry[0] == DOMAIN:
@@ -149,21 +160,27 @@ def _get_vehicle_id_from_device(hass: HomeAssistant, call: ServiceCall) -> str:
 def _get_coordinator_from_device(
     hass: HomeAssistant, call: ServiceCall
 ) -> HyundaiKiaConnectDataUpdateCoordinator:
-    device_entry = device_registry.async_get(hass).async_get(call.data[ATTR_DEVICE_ID])
-    config_entry_ids = device_entry.config_entries
-    config_entry_id = next(
-        (
+    coordinators = list(hass.data[DOMAIN].keys())
+    if len(coordinators) == 1:
+        return hass.data[DOMAIN][coordinators[0]]
+    else:
+        device_entry = device_registry.async_get(hass).async_get(
+            call.data[ATTR_DEVICE_ID]
+        )
+        config_entry_ids = device_entry.config_entries
+        config_entry_id = next(
+            (
+                config_entry_id
+                for config_entry_id in config_entry_ids
+                if cast(
+                    ConfigEntry,
+                    hass.config_entries.async_get_entry(config_entry_id),
+                ).domain
+                == DOMAIN
+            ),
+            None,
+        )
+        config_entry_unique_id = hass.config_entries.async_get_entry(
             config_entry_id
-            for config_entry_id in config_entry_ids
-            if cast(
-                ConfigEntry,
-                hass.config_entries.async_get_entry(config_entry_id),
-            ).domain
-            == DOMAIN
-        ),
-        None,
-    )
-    config_entry_unique_id = hass.config_entries.async_get_entry(
-        config_entry_id
-    ).unique_id
-    return hass.data[DOMAIN][config_entry_unique_id]
+        ).unique_id
+        return hass.data[DOMAIN][config_entry_unique_id]
