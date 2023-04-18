@@ -5,6 +5,3 @@
       {% set ssleep =is_state('input_boolean.shannon_sleeping', 'on') %}
 
       {{ jsleep or ssleep}}
-  - name: Dark Outside
-    state: >-
-      {{ is_state('sun.sun', 'below_horizon') }}
