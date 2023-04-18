@@ -35,14 +35,12 @@
     entity_id: binary_sensor.pixel_4a_is_charging
     domain: binary_sensor
   condition:
-  - condition: and
-    conditions:
-    - condition: state
-      entity_id: person.justin
-      state: home
-    - condition: time
-      before: 04:00:00
-      after: '22:00:00'
+  - condition: state
+    entity_id: person.justin
+    state: home
+  - condition: time
+    before: 04:00:00
+    after: '22:00:00'
   action:
   - service: input_boolean.turn_on
     data: {}
@@ -59,16 +57,12 @@
     entity_id: binary_sensor.s22_is_charging
     domain: binary_sensor
   condition:
-  - condition: and
-    conditions:
-    - type: is_plugged_in
-      condition: device
-      device_id: d7cfbd703594ba584a56dfc256c8b7ce
-      entity_id: binary_sensor.s22_is_charging
-      domain: binary_sensor
-    - condition: time
-      before: 04:00:00
-      after: '22:00:00'
+  - condition: time
+    before: 04:00:00
+    after: '22:00:00'
+  - condition: state
+    entity_id: person.shannon
+    state: home
   action:
   - service: input_boolean.turn_on
     data: {}
@@ -98,7 +92,7 @@
   - platform: time
     at: '19:00:00'
   - platform: time
-    at: '13:30:00'
+    at: '12:45:00'
   condition:
   - condition: state
     entity_id: sensor.main_house_status
@@ -140,7 +134,7 @@
   - platform: time
     at: 07:30:00
   - platform: time
-    at: '16:00:00'
+    at: '15:00:00'
   condition: []
   action:
   - service: input_boolean.turn_off
@@ -211,41 +205,34 @@
     - sensor.main_house_status
   - platform: state
     entity_id:
-    - binary_sensor.dark_outside
+    - input_boolean.dark_outside
+  - platform: state
+    entity_id:
+    - media_player.living_room_tv
   condition: []
   action:
   - if:
     - condition: state
-      entity_id: binary_sensor.dark_outside
+      entity_id: input_boolean.dark_outside
       state: 'on'
     - condition: state
       entity_id: sensor.main_house_status
       state: Occupied
+    - condition: not
+      conditions:
+      - condition: state
+        entity_id: media_player.living_room_tv
+        state: playing
     then:
-    - service: light.turn_on
-      data:
-        kelvin: 2800
-      target:
-        area_id: living_room
     - service: switch.turn_on
       data: {}
       target:
-        entity_id:
-        - switch.stair_lights_relay
-        - switch.living_room_outlet_switch_top
-        - switch.living_room_outlet_switch_bottom
+        entity_id: switch.living_room_outlet_switch_bottom
     else:
-    - service: light.turn_off
-      data: {}
-      target:
-        area_id: living_room
     - service: switch.turn_off
       data: {}
       target:
-        entity_id:
-        - switch.stair_lights_relay
-        - switch.living_room_outlet_switch_top
-        - switch.living_room_outlet_switch_bottom
+        entity_id: switch.living_room_outlet_switch_bottom
   mode: restart
 - id: '1667264266778'
   alias: Office - Lights
@@ -256,12 +243,12 @@
     - sensor.main_house_status
   - platform: state
     entity_id:
-    - binary_sensor.dark_outside
+    - input_boolean.dark_outside
   condition: []
   action:
   - if:
     - condition: state
-      entity_id: binary_sensor.dark_outside
+      entity_id: input_boolean.dark_outside
       state: 'on'
     - condition: state
       entity_id: sensor.main_house_status
@@ -272,11 +259,19 @@
         kelvin: 2800
       target:
         entity_id: light.office_lamp_light
+    - service: switch.turn_on
+      data: {}
+      target:
+        entity_id: switch.office_outlet_switch
     else:
     - service: light.turn_off
       data: {}
       target:
         entity_id: light.office_lamp_light
+    - service: switch.turn_off
+      data: {}
+      target:
+        entity_id: switch.office_outlet_switch
   mode: restart
 - id: '1667869686664'
   alias: Christmas - Lights
@@ -284,7 +279,7 @@
   trigger:
   - platform: state
     entity_id:
-    - binary_sensor.dark_outside
+    - input_boolean.dark_outside
   - platform: time
     at: '22:30:00'
   condition: []
@@ -294,7 +289,7 @@
       after: '12:00:00'
       before: '22:30:00'
     - condition: state
-      entity_id: binary_sensor.dark_outside
+      entity_id: input_boolean.dark_outside
       state: 'on'
     then:
     - service: switch.turn_on
@@ -333,17 +328,7 @@
       sequence:
       - service: climate.set_temperature
         data:
-          temperature: 65
-        target:
-          entity_id: climate.main_thermostat
-      - delay:
-          hours: 0
-          minutes: 0
-          seconds: 30
-          milliseconds: 0
-      - service: climate.set_temperature
-        data:
-          temperature: 65
+          temperature: 67
         target:
           entity_id: climate.main_thermostat
     - conditions:
@@ -359,27 +344,7 @@
           temperature: 62
         target:
           entity_id: climate.main_thermostat
-      - delay:
-          hours: 0
-          minutes: 0
-          seconds: 30
-          milliseconds: 0
-      - service: climate.set_temperature
-        data:
-          temperature: 62
-        target:
-          entity_id: climate.main_thermostat
     default:
-    - service: climate.set_temperature
-      data:
-        temperature: 61
-      target:
-        entity_id: climate.main_thermostat
-    - delay:
-        hours: 0
-        minutes: 0
-        seconds: 30
-        milliseconds: 0
     - service: climate.set_temperature
       data:
         temperature: 61
@@ -503,12 +468,12 @@
     - sensor.main_house_status
   - platform: state
     entity_id:
-    - binary_sensor.dark_outside
+    - input_boolean.dark_outside
   condition: []
   action:
   - if:
     - condition: state
-      entity_id: binary_sensor.dark_outside
+      entity_id: input_boolean.dark_outside
       state: 'on'
     - condition: state
       entity_id: sensor.main_house_status
@@ -583,6 +548,16 @@
       from: 'on'
       to: 'off'
       for: 0:05:00
+    - platform: state
+      entity_id:
+      - person.justin
+      from: home
+      to: not_home
+    timeout:
+      hours: 1
+      minutes: 0
+      seconds: 0
+      milliseconds: 0
   - service: media_player.media_stop
     data:
       entity_id:
@@ -601,7 +576,7 @@
   - service: switch.turn_on
     data: {}
     target:
-      entity_id: switch.master_relay
+      entity_id: switch.master_lamp_switch
   - delay:
       hours: 0
       minutes: 5
@@ -610,5 +585,150 @@
   - service: switch.turn_off
     data: {}
     target:
-      entity_id: switch.master_relay
+      entity_id: switch.master_lamp_switch
+  mode: single
+- id: '1671768815389'
+  alias: ZHA - Status
+  description: ''
+  trigger:
+  - device_id: d8949c59ee747cceaf416afd3b82e8c4
+    domain: zha
+    platform: device
+    type: device_offline
+    subtype: device_offline
+  condition: []
+  action:
+  - service: notify.mobile_app_pixel_4a
+    data:
+      title: Device Offline!
+      message: The thermostat is offline!
+  mode: single
+- id: '1678416614805'
+  alias: 'Watch - Charged '
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - sensor.google_pixel_watch_battery_state
+    from: charging
+    to: full
+  - platform: numeric_state
+    entity_id: sensor.google_pixel_watch_battery_level
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+    above: 99
+  condition: []
+  action:
+  - service: notify.mobile_app_pixel_4a
+    data:
+      title: Pixel Watch Charged
+      message: Put your watch back on.
+  mode: single
+- id: '1681684803118'
+  alias: Kitchen - Lights
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - sensor.main_house_status
+  - platform: state
+    entity_id:
+    - input_boolean.dark_outside
+  - platform: state
+    entity_id:
+    - media_player.living_room_tv
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: sensor.living_room_tv_active_app_id
+        state: '13535'
+        alias: 'App is Plex '
+      - condition: state
+        entity_id: input_boolean.dark_outside
+        state: 'on'
+      - condition: state
+        entity_id: media_player.living_room_tv
+        state: playing
+      sequence:
+      - service: light.turn_on
+        data:
+          brightness_pct: 13
+        target:
+          device_id: 25827e347004a1f40b6bc319b2b8cc7c
+    - conditions:
+      - condition: state
+        entity_id: sensor.living_room_tv_active_app_id
+        state: '13535'
+        alias: 'App is Plex '
+      - condition: state
+        entity_id: input_boolean.dark_outside
+        state: 'on'
+      sequence:
+      - service: light.turn_on
+        data:
+          brightness_pct: 25
+        target:
+          device_id: 25827e347004a1f40b6bc319b2b8cc7c
+    - conditions:
+      - condition: state
+        entity_id: input_boolean.dark_outside
+        state: 'on'
+      sequence:
+      - service: light.turn_on
+        data:
+          brightness_pct: 100
+        target:
+          device_id: 25827e347004a1f40b6bc319b2b8cc7c
+    default:
+    - service: light.turn_off
+      data: {}
+      target:
+        device_id: 25827e347004a1f40b6bc319b2b8cc7c
+  mode: restart
+- id: '1681821203093'
+  alias: Overall - Dark Outside
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sun.sun
+    attribute: elevation
+    above: 21
+  - platform: numeric_state
+    entity_id: sun.sun
+    below: 19
+    attribute: elevation
+  - platform: state
+    entity_id:
+    - weather.forecast_lakeside
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: weather.forecast_lakeside
+        state: cloudy
+      sequence:
+      - service: input_boolean.turn_on
+        data: {}
+        target:
+          entity_id: input_boolean.dark_outside
+    - conditions:
+      - condition: numeric_state
+        entity_id: sun.sun
+        attribute: elevation
+        below: 20
+      sequence:
+      - service: input_boolean.turn_off
+        data: {}
+        target:
+          entity_id: input_boolean.dark_outside
+    default:
+    - service: input_boolean.turn_off
+      data: {}
+      target:
+        entity_id: input_boolean.dark_outside
   mode: single

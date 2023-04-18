@@ -14,6 +14,8 @@ recorder:
   db_url: !secret recorder_db_url
   purge_keep_days: 60
 
+conversation:
+
 # Text to speech
 tts:
   - platform: google_translate

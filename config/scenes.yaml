@@ -1,0 +1,37 @@
+- id: '1674617706420'
+  name: Office - On
+  entities:
+    light.office_lamp_light:
+      min_color_temp_kelvin: 1501
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 666
+      effect_list:
+      - colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: color_temp
+      brightness: 254
+      color_temp_kelvin: 2801
+      color_temp: 357
+      hs_color:
+      - 28.185
+      - 62.588
+      rgb_color:
+      - 255
+      - 170
+      - 95
+      xy_color:
+      - 0.516
+      - 0.386
+      off_with_transition: false
+      off_brightness:
+      friendly_name: Office Lamp Light
+      supported_features: 44
+      state: 'on'
+    switch.office_outlet_switch:
+      friendly_name: Office Outlet Switch
+      state: 'off'
+  icon: mdi:office-building
+  metadata: {}
