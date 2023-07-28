@@ -57,7 +57,6 @@ class AutopiBinarySensor(RestoreEntity, BinarySensorEntity):
             "identifiers": {(DOMAIN, self.autopi.webhook_id)},
             "manufacturer": "Chevrolet",
             "model": "Bolt",
-            "device_name": "BoltyMcBoltface",
             "name": "BoltyMcBoltface",
             "sw_version": "2017",
         }

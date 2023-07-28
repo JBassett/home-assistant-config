@@ -33,13 +33,11 @@ from .const import (
     DEFAULT_KICKOFF_IN,
     DEFAULT_LAST_UPDATE,
     DEFAULT_LEAGUE,
-    DEFAULT_LEAGUE_PATH,
     DEFAULT_LOGO,
-    DEFAULT_SPORT_PATH,
     DEFAULT_TIMEOUT,
     DOMAIN,
     ISSUE_URL,
-    LEAGUE_LIST,
+    LEAGUE_MAP,
     PLATFORMS,
     URL_HEAD,
     URL_TAIL,
@@ -121,7 +119,7 @@ async def async_unload_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> 
 #    hass.async_add_job(hass.config_entries.async_forward_entry_setup(entry, "sensor"))
 
 
-async def async_migrate_entry(hass, config_entry):
+async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> bool:
     """Migrate an old config entry."""
     version = config_entry.version
 
@@ -139,12 +137,7 @@ async def async_migrate_entry(hass, config_entry):
             CONF_LEAGUE_PATH not in updated_config.keys()
         ):
             league_id = updated_config[CONF_LEAGUE_ID].upper()
-            updated_config[CONF_SPORT_PATH] = DEFAULT_SPORT_PATH
-            updated_config[CONF_LEAGUE_PATH] = DEFAULT_LEAGUE_PATH
-            for league in LEAGUE_LIST:
-                if league[0] == league_id:
-                    updated_config[CONF_SPORT_PATH] = league[1]
-                    updated_config[CONF_LEAGUE_PATH] = league[2]
+            updated_config.update(LEAGUE_MAP[league_id])
 
         if updated_config != config_entry.data:
             hass.config_entries.async_update_entry(config_entry, data=updated_config)
@@ -180,7 +173,7 @@ class TeamTrackerDataUpdateCoordinator(DataUpdateCoordinator):
     #  Top-level method called from HA to update data for all teamtracker sensors
     #
     async def _async_update_data(self):
-
+        """Update data."""
         async with timeout(self.timeout):
             try:
                 data = await self.async_update_game_data(self.config, self.hass)
@@ -248,9 +241,13 @@ class TeamTrackerDataUpdateCoordinator(DataUpdateCoordinator):
                     "last_update"
                 ] = DEFAULT_LAST_UPDATE  # set to fixed time for compares
                 values["kickoff_in"] = DEFAULT_KICKOFF_IN
-                with open(path, "w", encoding="utf-8") as convert_file:
-                    convert_file.write(json.dumps(values, indent=4))
-
+                try:
+                    with open(path, "w", encoding="utf-8") as convert_file:
+                        convert_file.write(json.dumps(values, indent=4))
+                except:
+                    _LOGGER.debug(
+                        "%s: Error creating results file '%s'", sensor_name, path
+                    )
         return values
 
     #
@@ -268,17 +265,22 @@ class TeamTrackerDataUpdateCoordinator(DataUpdateCoordinator):
         sport_path = config[CONF_SPORT_PATH]
         league_path = config[CONF_LEAGUE_PATH]
 
-#
-#  For some reason, the tennis API has behaves inconsistently when language is french so
-#    override it to 'en' to get consistent behavior ¯\_(ツ)_/¯
-#
+        #
+        #  For some reason, the tennis API has behaves inconsistently when language is french so
+        #    override it to 'en' to get consistent behavior ¯\_(ツ)_/¯
+        #
         if lang == "fr" and sport_path == "tennis":
-            _LOGGER.debug("%s: Overriding language '%s' to 'en' for '%s'", sensor_name, lang, sport_path)
+            _LOGGER.debug(
+                "%s: Overriding language '%s' to 'en' for '%s'",
+                sensor_name,
+                lang,
+                sport_path,
+            )
             lang = "en"
 
         url_parms = "?lang=" + lang[:2] + "&limit=" + str(API_LIMIT)
 
-        if sport_path not in ('tennis', 'baseball'):
+        if sport_path not in ("tennis", "baseball"):
             d1 = (date.today() - timedelta(days=1)).strftime("%Y%m%d")
             d2 = (date.today() + timedelta(days=5)).strftime("%Y%m%d")
             url_parms = url_parms + "&dates=" + d1 + "-" + d2
@@ -293,17 +295,26 @@ class TeamTrackerDataUpdateCoordinator(DataUpdateCoordinator):
 
         if file_override:
             _LOGGER.debug("%s: Overriding API for '%s'", sensor_name, team_id)
-            async with aiofiles.open("/share/tt/test.json", mode="r") as f:
+            file_path = "/share/tt/test.json"
+            if not os.path.exists(file_path):
+                file_path = "tests/tt/all.json"
+            async with aiofiles.open(file_path, mode="r") as f:
                 contents = await f.read()
             data = json.loads(contents)
         else:
             async with aiohttp.ClientSession() as session:
-                async with session.get(url, headers=headers) as r:
-                    _LOGGER.debug(
-                        "%s: Getting state for '%s' from %s", sensor_name, team_id, url
-                    )
-                    if r.status == 200:
-                        data = await r.json()
+                try:
+                    async with session.get(url, headers=headers) as r:
+                        _LOGGER.debug(
+                            "%s: Getting state for '%s' from %s",
+                            sensor_name,
+                            team_id,
+                            url,
+                        )
+                        if r.status == 200:
+                            data = await r.json()
+                except:
+                    data = None
 
             num_events = 0
             if data is not None:
@@ -312,7 +323,7 @@ class TeamTrackerDataUpdateCoordinator(DataUpdateCoordinator):
                     sensor_name,
                     team_id,
                     url,
-                    )
+                )
                 try:
                     num_events = len(data["events"])
                 except:
@@ -323,7 +334,7 @@ class TeamTrackerDataUpdateCoordinator(DataUpdateCoordinator):
                 sensor_name,
                 num_events,
                 url,
-                )
+            )
             if num_events == 0:
                 url_parms = "?lang=" + lang[:2]
                 if CONF_CONFERENCE_ID in config.keys():
@@ -337,20 +348,23 @@ class TeamTrackerDataUpdateCoordinator(DataUpdateCoordinator):
                     sensor_name,
                     url_parms,
                     url,
-                    )
+                )
 
                 url = URL_HEAD + sport_path + "/" + league_path + URL_TAIL + url_parms
 
                 async with aiohttp.ClientSession() as session:
-                    async with session.get(url, headers=headers) as r:
-                        _LOGGER.debug(
-                            "%s: Getting state without date constraint for '%s' from %s",
-                            sensor_name,
-                            team_id,
-                            url,
-                        )
-                        if r.status == 200:
-                            data = await r.json()
+                    try:
+                        async with session.get(url, headers=headers) as r:
+                            _LOGGER.debug(
+                                "%s: Getting state without date constraint for '%s' from %s",
+                                sensor_name,
+                                team_id,
+                                url,
+                            )
+                            if r.status == 200:
+                                data = await r.json()
+                    except:
+                        data = None
 
             num_events = 0
             if data is not None:
@@ -359,7 +373,7 @@ class TeamTrackerDataUpdateCoordinator(DataUpdateCoordinator):
                     sensor_name,
                     team_id,
                     url,
-                    )
+                )
 
                 try:
                     num_events = len(data["events"])
@@ -371,7 +385,7 @@ class TeamTrackerDataUpdateCoordinator(DataUpdateCoordinator):
                 sensor_name,
                 num_events,
                 url,
-                )
+            )
 
             if num_events == 0:
                 url_parms = ""
@@ -386,21 +400,23 @@ class TeamTrackerDataUpdateCoordinator(DataUpdateCoordinator):
                     sensor_name,
                     url_parms,
                     url,
-                    )
+                )
 
                 url = URL_HEAD + sport_path + "/" + league_path + URL_TAIL + url_parms
 
                 async with aiohttp.ClientSession() as session:
-                    async with session.get(url, headers=headers) as r:
-                        _LOGGER.debug(
-                            "%s: Getting state without language for '%s' from %s",
-                            sensor_name,
-                            team_id,
-                            url,
-                        )
-                        if r.status == 200:
-                            data = await r.json()
-
+                    try:
+                        async with session.get(url, headers=headers) as r:
+                            _LOGGER.debug(
+                                "%s: Getting state without language for '%s' from %s",
+                                sensor_name,
+                                team_id,
+                                url,
+                            )
+                            if r.status == 200:
+                                data = await r.json()
+                    except:
+                        data = None
 
         return data, file_override
 

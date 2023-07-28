@@ -1,6 +1,6 @@
 - platform: history_stats
-  name: Pixel 4a Interactive Time Today
-  entity_id: binary_sensor.pixel_4a_interactive
+  name: Pixel Fold Interactive Time Today
+  entity_id: binary_sensor.pixel_fold_interactive
   state: "on"
   type: time
   start: "{{ now().replace(hour=0, minute=0, second=0) }}"

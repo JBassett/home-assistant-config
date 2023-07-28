@@ -35,7 +35,7 @@ google_assistant:
   exposed_domains:
     - camera
     # - group
-    - input_boolean
+    # - input_boolean
     - scene
     - script
     - switch
@@ -52,8 +52,8 @@ logbook:
   exclude:
     entities: []
     entity_globs:
-      - binary_sensor.pixel_4a_*
-      - sensor.pixel_4a_*
+      - binary_sensor.pixel_fold_*
+      - sensor.pixel_fold_*
       - binary_sensor.s22_*
       - sensor.s22_*
       - binary_sensor.jbassett_*

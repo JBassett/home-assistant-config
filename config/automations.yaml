@@ -31,8 +31,8 @@
   trigger:
   - type: plugged_in
     platform: device
-    device_id: d7cb7bb46037674444d3866a97b125d7
-    entity_id: binary_sensor.pixel_4a_is_charging
+    device_id: 96ca827c658be4b5de0e9dad121a50c8
+    entity_id: binary_sensor.pixel_fold_is_charging
     domain: binary_sensor
   condition:
   - condition: state
@@ -73,11 +73,10 @@
   alias: Justin - Wakeup
   description: ''
   trigger:
-  - type: not_plugged_in
-    platform: device
-    device_id: d7cb7bb46037674444d3866a97b125d7
-    entity_id: binary_sensor.pixel_4a_is_charging
-    domain: binary_sensor
+  - platform: state
+    entity_id:
+    - sensor.pixel_fold_charger_type
+    to: none
   condition: []
   action:
   - service: input_boolean.turn_off
@@ -120,8 +119,8 @@
       transition: 60
       rgb_color:
       - 0
-      - 0
       - 255
+      - 0
       brightness_pct: 10
     target:
       entity_id:
@@ -206,9 +205,6 @@
   - platform: state
     entity_id:
     - input_boolean.dark_outside
-  - platform: state
-    entity_id:
-    - media_player.living_room_tv
   condition: []
   action:
   - if:
@@ -218,21 +214,25 @@
     - condition: state
       entity_id: sensor.main_house_status
       state: Occupied
-    - condition: not
-      conditions:
-      - condition: state
-        entity_id: media_player.living_room_tv
-        state: playing
     then:
     - service: switch.turn_on
       data: {}
       target:
         entity_id: switch.living_room_outlet_switch_bottom
+    - service: light.turn_on
+      data:
+        brightness_pct: 33
+      target:
+        area_id: living_room
     else:
     - service: switch.turn_off
       data: {}
       target:
         entity_id: switch.living_room_outlet_switch_bottom
+    - service: light.turn_off
+      data: {}
+      target:
+        area_id: living_room
   mode: restart
 - id: '1667264266778'
   alias: Office - Lights
@@ -317,39 +317,76 @@
     - schedule.thermostat_saver
   condition: []
   action:
-  - choose:
-    - conditions:
-      - condition: state
-        entity_id: sensor.main_house_status
-        state: Occupied
-      - condition: state
-        entity_id: schedule.thermostat_saver
-        state: 'off'
-      sequence:
+  - if:
+    - condition: state
+      entity_id: climate.main_thermostat
+      state: heat
+    then:
+    - choose:
+      - conditions:
+        - condition: state
+          entity_id: sensor.main_house_status
+          state: Occupied
+        - condition: state
+          entity_id: schedule.thermostat_saver
+          state: 'off'
+        sequence:
+        - service: climate.set_temperature
+          data:
+            temperature: 67
+          target:
+            entity_id: climate.main_thermostat
+      - conditions:
+        - condition: state
+          entity_id: sensor.main_house_status
+          state: Occupied
+        - condition: state
+          entity_id: schedule.thermostat_saver
+          state: 'on'
+        sequence:
+        - service: climate.set_temperature
+          data:
+            temperature: 62
+          target:
+            entity_id: climate.main_thermostat
+      default:
       - service: climate.set_temperature
         data:
-          temperature: 67
+          temperature: 61
         target:
           entity_id: climate.main_thermostat
-    - conditions:
-      - condition: state
-        entity_id: sensor.main_house_status
-        state: Occupied
-      - condition: state
-        entity_id: schedule.thermostat_saver
-        state: 'on'
-      sequence:
+  - if:
+    - condition: state
+      entity_id: climate.main_thermostat
+      state: cool
+    then:
+    - choose:
+      - conditions:
+        - condition: state
+          entity_id: sensor.main_house_status
+          state: Empty
+        sequence:
+        - service: climate.set_temperature
+          data:
+            temperature: 77
+          target:
+            entity_id: climate.main_thermostat
+      - conditions:
+        - condition: state
+          entity_id: sensor.main_house_status
+          state: Sleeping
+        sequence:
+        - service: climate.set_temperature
+          data:
+            temperature: 70
+          target:
+            entity_id: climate.main_thermostat
+      default:
       - service: climate.set_temperature
         data:
-          temperature: 62
+          temperature: 73
         target:
           entity_id: climate.main_thermostat
-    default:
-    - service: climate.set_temperature
-      data:
-        temperature: 61
-      target:
-        entity_id: climate.main_thermostat
   mode: restart
 - id: '1668955538534'
   alias: Garage - Temperature
@@ -598,7 +635,7 @@
     subtype: device_offline
   condition: []
   action:
-  - service: notify.mobile_app_pixel_4a
+  - service: notify.mobile_app_pixel_fold
     data:
       title: Device Offline!
       message: The thermostat is offline!
@@ -621,7 +658,7 @@
     above: 99
   condition: []
   action:
-  - service: notify.mobile_app_pixel_4a
+  - service: notify.mobile_app_pixel_fold
     data:
       title: Pixel Watch Charged
       message: Put your watch back on.
@@ -639,8 +676,36 @@
   - platform: state
     entity_id:
     - media_player.living_room_tv
+    to: playing
+    enabled: false
+  - platform: state
+    entity_id:
+    - media_player.living_room_tv
+    from: playing
+    enabled: false
   condition: []
   action:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: input_boolean.dark_outside
+        state: 'on'
+      - condition: state
+        entity_id: sensor.main_house_status
+        state: Occupied
+      sequence:
+      - service: light.turn_on
+        data:
+          brightness_pct: 50
+        target:
+          device_id:
+          - 25827e347004a1f40b6bc319b2b8cc7c
+          - 86a173e26bfd2110c75748bd38d21ba4
+    default:
+    - service: light.turn_off
+      data: {}
+      target:
+        area_id: kitchen
   - choose:
     - conditions:
       - condition: state
@@ -653,12 +718,15 @@
       - condition: state
         entity_id: media_player.living_room_tv
         state: playing
+      - condition: state
+        entity_id: sensor.main_house_status
+        state: Occupied
       sequence:
       - service: light.turn_on
         data:
           brightness_pct: 13
         target:
-          device_id: 25827e347004a1f40b6bc319b2b8cc7c
+          area_id: kitchen
     - conditions:
       - condition: state
         entity_id: sensor.living_room_tv_active_app_id
@@ -667,27 +735,34 @@
       - condition: state
         entity_id: input_boolean.dark_outside
         state: 'on'
+      - condition: state
+        entity_id: sensor.main_house_status
+        state: Occupied
       sequence:
       - service: light.turn_on
         data:
           brightness_pct: 25
         target:
-          device_id: 25827e347004a1f40b6bc319b2b8cc7c
+          area_id: kitchen
     - conditions:
       - condition: state
         entity_id: input_boolean.dark_outside
         state: 'on'
+      - condition: state
+        entity_id: sensor.main_house_status
+        state: Occupied
       sequence:
       - service: light.turn_on
         data:
-          brightness_pct: 100
+          brightness_pct: 50
         target:
-          device_id: 25827e347004a1f40b6bc319b2b8cc7c
+          area_id: kitchen
     default:
     - service: light.turn_off
       data: {}
       target:
-        device_id: 25827e347004a1f40b6bc319b2b8cc7c
+        area_id: kitchen
+    enabled: false
   mode: restart
 - id: '1681821203093'
   alias: Overall - Dark Outside
@@ -708,9 +783,21 @@
   action:
   - choose:
     - conditions:
-      - condition: state
-        entity_id: weather.forecast_lakeside
-        state: cloudy
+      - condition: or
+        conditions:
+        - condition: state
+          entity_id: weather.forecast_lakeside
+          state: cloudy
+        - condition: state
+          entity_id: weather.forecast_lakeside
+          state: lightning-rainy
+        - condition: state
+          entity_id: weather.forecast_lakeside
+          state: pouring
+        - condition: state
+          entity_id: weather.forecast_lakeside
+          state: rainy
+        alias: If forecast could be dark
       sequence:
       - service: input_boolean.turn_on
         data: {}
@@ -722,7 +809,7 @@
         attribute: elevation
         below: 20
       sequence:
-      - service: input_boolean.turn_off
+      - service: input_boolean.turn_on
         data: {}
         target:
           entity_id: input_boolean.dark_outside
@@ -731,4 +818,30 @@
       data: {}
       target:
         entity_id: input_boolean.dark_outside
+  mode: single
+- id: '1689608684747'
+  alias: Justin - Android Auto
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - sensor.pixel_fold_car_battery
+    - binary_sensor.pixel_fold_android_auto
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 5
+  condition:
+  - condition: state
+    entity_id: binary_sensor.pixel_fold_android_auto
+    state: 'on'
+  - condition: state
+    entity_id: sensor.pixel_fold_car_name
+    state: unknown
+  action:
+  - service: notify.mobile_app_pixel_fold
+    data:
+      message: Open HA on AA
+      data:
+        car_ui: true
   mode: single

@@ -48,7 +48,9 @@ async def async_process_event(
             competition_date_str = await async_get_value(
                 competition, "date", default=(await async_get_value(event, "date"))
             )
-            competition_date = datetime.strptime(competition_date_str, "%Y-%m-%dT%H:%Mz")
+            competition_date = datetime.strptime(
+                competition_date_str, "%Y-%m-%dT%H:%Mz"
+            )
             if competition_date > last_date:
                 last_date = competition_date
             if competition_date < first_date:
@@ -67,7 +69,7 @@ async def async_process_event(
                     competition,
                     competitor,
                     team_index,
-                    sport_path
+                    sport_path,
                 )
 
                 if matched_index is not None:
@@ -171,11 +173,20 @@ async def async_process_event(
 
 
 async def async_find_search_key(
-    values, sensor_name, search_key, event, competition, competitor, team_index, sport_path
+    values,
+    sensor_name,
+    search_key,
+    event,
+    competition,
+    competitor,
+    team_index,
+    sport_path,
 ):
     """Check if there is a match on wildcard, team_abbreviation, event_name, or athlete_name"""
 
-    if search_key == "*" and (competitor["type"] == "athlete" or sport_path != "tennis"):
+    if search_key == "*" and (
+        competitor["type"] == "athlete" or sport_path not in ["tennis", "golf"]
+    ):
         _LOGGER.debug(
             "%s: Found competitor using wildcard '%s'; parsing data.",
             sensor_name,
@@ -195,6 +206,18 @@ async def async_find_search_key(
             )
             return team_index
 
+        team_id = str(await async_get_value(
+            competitor, "team", "id", default=""
+        ))
+
+        if search_key == team_id:
+            _LOGGER.debug(
+                "%s: Found competition for team '%s' in team id; parsing data.",
+                sensor_name,
+                search_key,
+            )
+            return team_index
+            
         # Abbreviations in event_name can be different than team_abbr so look there if neither team abbrevations match
         team0_abbreviation = str(
             await async_get_value(
