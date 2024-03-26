@@ -54,8 +54,8 @@ logbook:
     entity_globs:
       - binary_sensor.pixel_fold_*
       - sensor.pixel_fold_*
-      - binary_sensor.s22_*
-      - sensor.s22_*
+      - binary_sensor.pixel_7_*
+      - sensor.pixel_7_*
       - binary_sensor.jbassett_*
       - sensor.jbassett_*
       - sensor.google_pixel_watch*

@@ -1,0 +1,26 @@
+retry_actions:
+  alias: Retry Actions
+  sequence:
+  - if:
+    - condition: template
+      value_template: '{{turn_on}}'
+    then: []
+  mode: parallel
+  fields:
+    light_entities:
+      selector:
+        entity:
+          multiple: true
+      name: Light Entities
+      required: false
+    switch_entities:
+      selector:
+        entity:
+          multiple: true
+      name: switch_entities
+    turn_on:
+      selector:
+        boolean: {}
+      name: Turn On
+      required: true
+  icon: mdi:repeat-variant

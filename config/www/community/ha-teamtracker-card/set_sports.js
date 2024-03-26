@@ -218,10 +218,16 @@ export function setSoccer(t, stateObj, c, team, oppo) {
 //    timeoutsDisplay = 'inline';
 //
 export function setTennis(t, stateObj, c, team, oppo) {
-    c.venue = stateObj.attributes.event_name;
-    c.pre1 = t.translate("common.tourney" + stateObj.attributes.odds)
-    c.in1 = c.pre1;
-    c.finalTerm = stateObj.attributes.clock + " - " + c.gameDatePOST  + " (" + c.pre1 + ")";
+    c.venue = stateObj.attributes.venue;
+    c.location = stateObj.attributes.location;
+
+    c.pre1 = stateObj.attributes.event_name
+    c.pre2 = stateObj.attributes.overunder
+    c.pre3 = stateObj.attributes.down_distance_text
+
+    c.in1 = c.pre1
+    c.in2 = c.pre3
+    c.finalTerm = stateObj.attributes.clock + " - " + c.gameDatePOST  + " (" + c.pre3 + ")";
 
     c.gameBar = t.translate("tennis.gameBar", "%s", stateObj.attributes.clock);
     c.barLength[team] = stateObj.attributes.team_score;
@@ -262,6 +268,6 @@ export function setVolleyball(t, stateObj, c, team, oppo) {
     c.barLabel[team] = t.translate("volleyball.teamBarLabel", "%s", String(stateObj.attributes.team_score));
     c.barLabel[oppo] = t.translate("volleyball.oppoBarLabel", "%s", String(stateObj.attributes.opponent_score));
     c.timeouts[team] = stateObj.attributes.team_sets_won;
-    c.timeouts[team] = stateObj.attributes.opponent_sets_won;
+    c.timeouts[oppo] = stateObj.attributes.opponent_sets_won;
     c.timeoutsDisplay = 'inline';
 }

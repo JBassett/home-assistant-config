@@ -7,8 +7,8 @@
   end: "{{ now() }}"
 
 - platform: history_stats
-  name: S22 Interactive Time Today
-  entity_id: binary_sensor.s22_interactive
+  name: Pixel 7 Interactive Time Today
+  entity_id: binary_sensor.pixel_7_interactive
   state: "on"
   type: time
   start: "{{ now().replace(hour=0, minute=0, second=0) }}"

@@ -29,11 +29,10 @@
   alias: Justin - Sleeping
   description: ''
   trigger:
-  - type: plugged_in
-    platform: device
-    device_id: 96ca827c658be4b5de0e9dad121a50c8
-    entity_id: binary_sensor.pixel_fold_is_charging
-    domain: binary_sensor
+  - platform: state
+    entity_id:
+    - binary_sensor.pixel_fold_is_charging
+    to: 'on'
   condition:
   - condition: state
     entity_id: person.justin
@@ -53,8 +52,8 @@
   trigger:
   - type: plugged_in
     platform: device
-    device_id: d7cfbd703594ba584a56dfc256c8b7ce
-    entity_id: binary_sensor.s22_is_charging
+    device_id: 696fba9349ae3533504d7614e40aa951
+    entity_id: f4d3c8a46c49d108b74e7b60efecea28
     domain: binary_sensor
   condition:
   - condition: time
@@ -90,8 +89,6 @@
   trigger:
   - platform: time
     at: '19:00:00'
-  - platform: time
-    at: '12:45:00'
   condition:
   - condition: state
     entity_id: sensor.main_house_status
@@ -114,16 +111,6 @@
     target:
       entity_id:
       - light.weston_lamp_light
-  - service: light.turn_on
-    data:
-      transition: 60
-      rgb_color:
-      - 0
-      - 255
-      - 0
-      brightness_pct: 10
-    target:
-      entity_id:
       - light.harrison_lamp_light
   mode: single
 - id: '1665960973192'
@@ -131,17 +118,9 @@
   description: ''
   trigger:
   - platform: time
-    at: 07:30:00
-  - platform: time
-    at: '15:00:00'
+    at: 07:05:00
   condition: []
   action:
-  - service: input_boolean.turn_off
-    data: {}
-    target:
-      entity_id:
-      - input_boolean.harrison_nap
-      - input_boolean.weston_nap
   - if:
     - condition: state
       entity_id: light.weston_lamp_light
@@ -166,6 +145,17 @@
         entity_id: light.harrison_lamp_light
   - delay:
       hours: 0
+      minutes: 20
+      seconds: 0
+      milliseconds: 0
+  - service: input_boolean.turn_off
+    data: {}
+    target:
+      entity_id:
+      - input_boolean.harrison_nap
+      - input_boolean.weston_nap
+  - delay:
+      hours: 0
       minutes: 15
       seconds: 0
       milliseconds: 0
@@ -184,8 +174,8 @@
   trigger:
   - type: not_plugged_in
     platform: device
-    device_id: d7cfbd703594ba584a56dfc256c8b7ce
-    entity_id: binary_sensor.s22_is_charging
+    device_id: 696fba9349ae3533504d7614e40aa951
+    entity_id: f4d3c8a46c49d108b74e7b60efecea28
     domain: binary_sensor
   condition: []
   action:
@@ -195,129 +185,60 @@
       entity_id:
       - input_boolean.shannon_sleeping
   mode: single
-- id: '1667263773136'
-  alias: Living Room - Lights
-  description: ''
-  trigger:
-  - platform: state
-    entity_id:
-    - sensor.main_house_status
-  - platform: state
-    entity_id:
-    - input_boolean.dark_outside
-  condition: []
-  action:
-  - if:
-    - condition: state
-      entity_id: input_boolean.dark_outside
-      state: 'on'
-    - condition: state
-      entity_id: sensor.main_house_status
-      state: Occupied
-    then:
-    - service: switch.turn_on
-      data: {}
-      target:
-        entity_id: switch.living_room_outlet_switch_bottom
-    - service: light.turn_on
-      data:
-        brightness_pct: 33
-      target:
-        area_id: living_room
-    else:
-    - service: switch.turn_off
-      data: {}
-      target:
-        entity_id: switch.living_room_outlet_switch_bottom
-    - service: light.turn_off
-      data: {}
-      target:
-        area_id: living_room
-  mode: restart
 - id: '1667264266778'
-  alias: Office - Lights
+  alias: Lights - Outdoor
   description: ''
   trigger:
   - platform: state
     entity_id:
     - sensor.main_house_status
-  - platform: state
-    entity_id:
-    - input_boolean.dark_outside
-  condition: []
-  action:
-  - if:
-    - condition: state
-      entity_id: input_boolean.dark_outside
-      state: 'on'
-    - condition: state
-      entity_id: sensor.main_house_status
-      state: Occupied
-    then:
-    - service: light.turn_on
-      data:
-        kelvin: 2800
-      target:
-        entity_id: light.office_lamp_light
-    - service: switch.turn_on
-      data: {}
-      target:
-        entity_id: switch.office_outlet_switch
-    else:
-    - service: light.turn_off
-      data: {}
-      target:
-        entity_id: light.office_lamp_light
-    - service: switch.turn_off
-      data: {}
-      target:
-        entity_id: switch.office_outlet_switch
-  mode: restart
-- id: '1667869686664'
-  alias: Christmas - Lights
-  description: ''
-  trigger:
-  - platform: state
-    entity_id:
-    - input_boolean.dark_outside
+  - platform: sun
+    event: sunset
+    offset: 0
   - platform: time
-    at: '22:30:00'
+    at: 00:00:30
   condition: []
   action:
-  - if:
-    - condition: time
-      after: '12:00:00'
-      before: '22:30:00'
-    - condition: state
-      entity_id: input_boolean.dark_outside
-      state: 'on'
-    then:
-    - service: switch.turn_on
-      data: {}
-      target:
-        entity_id:
-        - switch.spare_relay
-        - switch.laundry_relay
-    else:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: sensor.main_house_status
+        state: Occupied
+        enabled: false
+      - condition: sun
+        after: sunset
+      sequence:
+      - service: switch.turn_on
+        data: {}
+        target:
+          entity_id:
+          - switch.laundry_relay
+          - switch.outdoor_relay
+      alias: Home and after sunset
+    default:
     - service: switch.turn_off
       data: {}
       target:
         entity_id:
-        - switch.spare_relay
         - switch.laundry_relay
-    alias: If dark and before 2230
-  mode: single
+        - switch.outdoor_relay
+  mode: restart
 - id: '1668621609140'
-  alias: House - Temperature
+  alias: House - Thermostat - Temperature
   description: ''
   trigger:
   - platform: state
     entity_id:
     - sensor.main_house_status
     - schedule.thermostat_saver
+    for:
+      hours: 0
+      minutes: 1
+      seconds: 0
   condition: []
   action:
-  - if:
+  - alias: If Heating
+    if:
     - condition: state
       entity_id: climate.main_thermostat
       state: heat
@@ -333,7 +254,7 @@
         sequence:
         - service: climate.set_temperature
           data:
-            temperature: 67
+            temperature: 65
           target:
             entity_id: climate.main_thermostat
       - conditions:
@@ -346,13 +267,13 @@
         sequence:
         - service: climate.set_temperature
           data:
-            temperature: 62
+            temperature: 65
           target:
             entity_id: climate.main_thermostat
       default:
       - service: climate.set_temperature
         data:
-          temperature: 61
+          temperature: 63
         target:
           entity_id: climate.main_thermostat
   - if:
@@ -378,7 +299,7 @@
         sequence:
         - service: climate.set_temperature
           data:
-            temperature: 70
+            temperature: 72
           target:
             entity_id: climate.main_thermostat
       default:
@@ -387,53 +308,8 @@
           temperature: 73
         target:
           entity_id: climate.main_thermostat
+    alias: If Cooling
   mode: restart
-- id: '1668955538534'
-  alias: Garage - Temperature
-  description: ''
-  trigger:
-  - platform: state
-    entity_id:
-    - cover.main_garage_door
-    - cover.3rd_car_garage
-    to: open
-    for:
-      hours: 0
-      minutes: 2
-      seconds: 0
-  - platform: state
-    entity_id:
-    - cover.main_garage_door
-    - cover.3rd_car_garage
-    to: closed
-    for:
-      hours: 0
-      minutes: 0
-      seconds: 0
-  condition: []
-  action:
-  - choose:
-    - conditions:
-      - condition: or
-        conditions:
-        - condition: state
-          entity_id: cover.main_garage_door
-          state: open
-        - condition: state
-          entity_id: cover.3rd_car_garage
-          state: open
-        alias: If any Garage Doors are open
-      sequence:
-      - service: climate.turn_off
-        data: {}
-        target:
-          entity_id: climate.garage_thermostat
-    default:
-    - service: climate.turn_on
-      data: {}
-      target:
-        entity_id: climate.garage_thermostat
-  mode: single
 - id: '1668958485089'
   alias: NFL - Score
   description: ''
@@ -491,41 +367,22 @@
           seconds: 2
           milliseconds: 0
     alias: Blink Red - Blue Until Music Stops
+    enabled: false
+  - wait_for_trigger:
+    - platform: state
+      entity_id:
+      - media_player.kitchen_display
+      from: playing
+      to: idle
+      for:
+        hours: 0
+        minutes: 0
+        seconds: 5
   - service: automation.trigger
     data: {}
     target:
       entity_id: automation.living_room_lights
   mode: single
-- id: '1669256707241'
-  alias: Dinning Room - Lights
-  description: ''
-  trigger:
-  - platform: state
-    entity_id:
-    - sensor.main_house_status
-  - platform: state
-    entity_id:
-    - input_boolean.dark_outside
-  condition: []
-  action:
-  - if:
-    - condition: state
-      entity_id: input_boolean.dark_outside
-      state: 'on'
-    - condition: state
-      entity_id: sensor.main_house_status
-      state: Occupied
-    then:
-    - service: switch.turn_on
-      data: {}
-      target:
-        entity_id: switch.dining_room_outlet_switch
-    else:
-    - service: switch.turn_off
-      data: {}
-      target:
-        entity_id: switch.dining_room_outlet_switch
-  mode: restart
 - id: '1670163832317'
   alias: NFL - Kickoff
   description: ''
@@ -589,7 +446,6 @@
       entity_id:
       - person.justin
       from: home
-      to: not_home
     timeout:
       hours: 1
       minutes: 0
@@ -649,13 +505,6 @@
     - sensor.google_pixel_watch_battery_state
     from: charging
     to: full
-  - platform: numeric_state
-    entity_id: sensor.google_pixel_watch_battery_level
-    for:
-      hours: 0
-      minutes: 5
-      seconds: 0
-    above: 99
   condition: []
   action:
   - service: notify.mobile_app_pixel_fold
@@ -663,107 +512,6 @@
       title: Pixel Watch Charged
       message: Put your watch back on.
   mode: single
-- id: '1681684803118'
-  alias: Kitchen - Lights
-  description: ''
-  trigger:
-  - platform: state
-    entity_id:
-    - sensor.main_house_status
-  - platform: state
-    entity_id:
-    - input_boolean.dark_outside
-  - platform: state
-    entity_id:
-    - media_player.living_room_tv
-    to: playing
-    enabled: false
-  - platform: state
-    entity_id:
-    - media_player.living_room_tv
-    from: playing
-    enabled: false
-  condition: []
-  action:
-  - choose:
-    - conditions:
-      - condition: state
-        entity_id: input_boolean.dark_outside
-        state: 'on'
-      - condition: state
-        entity_id: sensor.main_house_status
-        state: Occupied
-      sequence:
-      - service: light.turn_on
-        data:
-          brightness_pct: 50
-        target:
-          device_id:
-          - 25827e347004a1f40b6bc319b2b8cc7c
-          - 86a173e26bfd2110c75748bd38d21ba4
-    default:
-    - service: light.turn_off
-      data: {}
-      target:
-        area_id: kitchen
-  - choose:
-    - conditions:
-      - condition: state
-        entity_id: sensor.living_room_tv_active_app_id
-        state: '13535'
-        alias: 'App is Plex '
-      - condition: state
-        entity_id: input_boolean.dark_outside
-        state: 'on'
-      - condition: state
-        entity_id: media_player.living_room_tv
-        state: playing
-      - condition: state
-        entity_id: sensor.main_house_status
-        state: Occupied
-      sequence:
-      - service: light.turn_on
-        data:
-          brightness_pct: 13
-        target:
-          area_id: kitchen
-    - conditions:
-      - condition: state
-        entity_id: sensor.living_room_tv_active_app_id
-        state: '13535'
-        alias: 'App is Plex '
-      - condition: state
-        entity_id: input_boolean.dark_outside
-        state: 'on'
-      - condition: state
-        entity_id: sensor.main_house_status
-        state: Occupied
-      sequence:
-      - service: light.turn_on
-        data:
-          brightness_pct: 25
-        target:
-          area_id: kitchen
-    - conditions:
-      - condition: state
-        entity_id: input_boolean.dark_outside
-        state: 'on'
-      - condition: state
-        entity_id: sensor.main_house_status
-        state: Occupied
-      sequence:
-      - service: light.turn_on
-        data:
-          brightness_pct: 50
-        target:
-          area_id: kitchen
-    default:
-    - service: light.turn_off
-      data: {}
-      target:
-        area_id: kitchen
-    enabled: false
-  mode: restart
 - id: '1681821203093'
   alias: Overall - Dark Outside
   description: ''
@@ -776,33 +524,9 @@
     entity_id: sun.sun
     below: 19
     attribute: elevation
-  - platform: state
-    entity_id:
-    - weather.forecast_lakeside
   condition: []
   action:
   - choose:
-    - conditions:
-      - condition: or
-        conditions:
-        - condition: state
-          entity_id: weather.forecast_lakeside
-          state: cloudy
-        - condition: state
-          entity_id: weather.forecast_lakeside
-          state: lightning-rainy
-        - condition: state
-          entity_id: weather.forecast_lakeside
-          state: pouring
-        - condition: state
-          entity_id: weather.forecast_lakeside
-          state: rainy
-        alias: If forecast could be dark
-      sequence:
-      - service: input_boolean.turn_on
-        data: {}
-        target:
-          entity_id: input_boolean.dark_outside
     - conditions:
       - condition: numeric_state
         entity_id: sun.sun
@@ -819,29 +543,210 @@
       target:
         entity_id: input_boolean.dark_outside
   mode: single
-- id: '1689608684747'
-  alias: Justin - Android Auto
+- id: '1691088773736'
+  alias: House - Thermostat - Fan
   description: ''
   trigger:
   - platform: state
     entity_id:
-    - sensor.pixel_fold_car_battery
-    - binary_sensor.pixel_fold_android_auto
+    - climate.main_thermostat
+    attribute: hvac_action
+    from: cooling
+    to: fan
+    for:
+      hours: 0
+      minutes: 30
+      seconds: 0
+  - platform: state
+    entity_id:
+    - climate.main_thermostat
+    attribute: hvac_action
+    to: cooling
+    for:
+      hours: 0
+      minutes: 2
+      seconds: 0
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: climate.main_thermostat
+        attribute: hvac_action
+        state: fan
+        for:
+          hours: 0
+          minutes: 20
+          seconds: 0
+      sequence:
+      - service: climate.set_fan_mode
+        data:
+          fan_mode: auto
+        target:
+          entity_id: climate.main_thermostat
+      - service: notify.mobile_app_pixel_fold
+        data:
+          message: Turning A/C Fan to Auto
+          title: A/C Change
+    - conditions:
+      - condition: state
+        entity_id: climate.main_thermostat
+        attribute: hvac_action
+        state: cooling
+        for:
+          hours: 0
+          minutes: 2
+          seconds: 0
+      sequence:
+      - service: climate.set_fan_mode
+        data:
+          fan_mode: 'on'
+        target:
+          entity_id: climate.main_thermostat
+      - service: notify.mobile_app_pixel_fold
+        data:
+          message: Turning A/C Fan On
+          title: A/C Change
+  mode: restart
+- id: '1693661948520'
+  alias: Garage - Power Out
+  description: ''
+  trigger:
+  - type: not_connected
+    platform: device
+    device_id: 3217afc6ee177c4d88975ed4383ac764
+    entity_id: c63fe67db61a9bc6540af015e3a30991
+    domain: binary_sensor
     for:
       hours: 0
       minutes: 0
-      seconds: 5
-  condition:
-  - condition: state
-    entity_id: binary_sensor.pixel_fold_android_auto
-    state: 'on'
-  - condition: state
-    entity_id: sensor.pixel_fold_car_name
-    state: unknown
+      seconds: 30
+  condition: []
   action:
   - service: notify.mobile_app_pixel_fold
     data:
-      message: Open HA on AA
-      data:
-        car_ui: true
+      title: Garage Power Out
+      message: The power in the garage is currently out and the garage fridge is not
+        running!!!
   mode: single
+- id: '1696297872437'
+  alias: Kids - Bus Reminder
+  description: ''
+  trigger:
+  - platform: time
+    at: '15:55:00'
+  condition:
+  - condition: time
+    weekday:
+    - mon
+    - tue
+    - wed
+    - thu
+    - fri
+  - condition: state
+    entity_id: sensor.main_house_status
+    state: Occupied
+  action:
+  - service: media_player.play_media
+    target:
+      entity_id: media_player.first_floor
+    data:
+      media_content_id: media-source://tts/google_translate?message=Time+to+get+Weston+off+the+bus%21&language=en-us
+      media_content_type: provider
+    metadata:
+      title: Time to get Weston off the bus!
+      thumbnail: https://brands.home-assistant.io/_/google_translate/logo.png
+      media_class: app
+      children_media_class:
+      navigateIds:
+      - {}
+      - media_content_type: app
+        media_content_id: media-source://tts
+      - media_content_type: provider
+        media_content_id: media-source://tts/google_translate?message=Time+to+get+Weston+off+the+bus%21&language=en-us
+  mode: single
+- id: '1700511612566'
+  alias: Lights - Indoor
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - sensor.main_house_status
+  - platform: state
+    entity_id:
+    - input_boolean.dark_outside
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: input_boolean.dark_outside
+        state: 'on'
+      - condition: state
+        entity_id: sensor.main_house_status
+        state: Occupied
+      sequence:
+      - service: light.turn_on
+        data:
+          transition: 20
+          brightness_pct: 30
+        target:
+          entity_id:
+          - light.kitchen_can_lights
+          - light.kitchen_pendant_lights
+          - light.living_room_cans_light
+      - service: light.turn_on
+        data:
+          kelvin: 2800
+          transition: 20
+        target:
+          entity_id: light.office_lamp
+      - service: switch.turn_on
+        data: {}
+        target:
+          entity_id:
+          - switch.entryway_outlet_switch
+          - switch.living_room_outlet_switch_bottom
+      alias: Dark and Home
+    - conditions:
+      - condition: or
+        conditions:
+        - condition: not
+          conditions:
+          - condition: state
+            entity_id: sensor.main_house_status
+            state: Occupied
+          alias: House is not Occupied
+        - condition: state
+          entity_id: input_boolean.dark_outside
+          state: 'off'
+      sequence:
+      - service: retry.actions
+        continue_on_error: true
+        metadata: {}
+        data:
+          sequence:
+          - service: homeassistant.turn_off
+            data: {}
+            target:
+              entity_id:
+              - switch.living_room_outlet_switch_bottom
+              - switch.entryway_outlet_switch
+      - service: retry.actions
+        continue_on_error: true
+        metadata: {}
+        data:
+          sequence:
+          - service: light.turn_off
+            metadata: {}
+            data:
+              transition: 20
+            target:
+              entity_id:
+              - light.office_lamp
+              - light.kitchen_can_lights
+              - light.kitchen_pendant_lights
+              - light.living_room_cans_light
+          state_grace: 22
+      alias: Not Home Or Not Dark
+  mode: restart

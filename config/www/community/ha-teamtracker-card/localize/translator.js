@@ -3,6 +3,8 @@ import {en_US} from "./languages/en_US.js"
 import {es} from "./languages/es.js"
 import {es_419} from "./languages/es_419.js"
 import {fr} from "./languages/fr.js"
+import {it} from "./languages/it.js"
+import {nl} from "./languages/nl.js"
 import {pt_BR} from "./languages/pt_BR.js"
 import {sk} from "./languages/sk.js"
 import {sk_SK} from "./languages/sk_SK.js"
@@ -12,7 +14,9 @@ var languages = {
     en_US: en_US,
     es: es,
     es_419: es_419,
+    nl: nl,
     fr: fr,
+    it: it,
     pt_BR: pt_BR,
     sk: sk,    
     sk_SK: sk_SK,    

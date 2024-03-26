@@ -15,9 +15,8 @@ from homeassistant.components.sensor import (
 )
 from homeassistant.const import (
     PERCENTAGE,
-    TIME_MINUTES,
-    ENERGY_WATT_HOUR,
-    ENERGY_KILO_WATT_HOUR,
+    UnitOfEnergy,
+    UnitOfTime,
 )
 
 from homeassistant.config_entries import ConfigEntry
@@ -78,6 +77,23 @@ SENSOR_DESCRIPTIONS: Final[tuple[SensorEntityDescription, ...]] = (
         name="EV Battery Level",
         native_unit_of_measurement=PERCENTAGE,
         device_class=SensorDeviceClass.BATTERY,
+        state_class=SensorStateClass.MEASUREMENT,
+    ),
+    SensorEntityDescription(
+        key="ev_battery_soh_percentage",
+        name="EV State of Health Battery",
+        native_unit_of_measurement=PERCENTAGE,
+        device_class=SensorDeviceClass.BATTERY,
+    ),
+    SensorEntityDescription(
+        key="ev_battery_remain",
+        name="EV Battery Level",
+        state_class=SensorStateClass.MEASUREMENT,
+    ),
+    SensorEntityDescription(
+        key="ev_battery_capacity",
+        name="EV Battery Capacity",
+        state_class=SensorStateClass.MEASUREMENT,
     ),
     SensorEntityDescription(
         key="_ev_driving_range",
@@ -110,25 +126,25 @@ SENSOR_DESCRIPTIONS: Final[tuple[SensorEntityDescription, ...]] = (
         key="ev_estimated_current_charge_duration",
         name="Estimated Charge Duration",
         icon="mdi:ev-station",
-        native_unit_of_measurement=TIME_MINUTES,
+        native_unit_of_measurement=UnitOfTime.MINUTES,
     ),
     SensorEntityDescription(
         key="ev_estimated_fast_charge_duration",
         name="Estimated Fast Charge Duration",
         icon="mdi:ev-station",
-        native_unit_of_measurement=TIME_MINUTES,
+        native_unit_of_measurement=UnitOfTime.MINUTES,
     ),
     SensorEntityDescription(
         key="ev_estimated_portable_charge_duration",
-        name="Estimated portable Charge Duration",
+        name="Estimated Portable Charge Duration",
         icon="mdi:ev-station",
-        native_unit_of_measurement=TIME_MINUTES,
+        native_unit_of_measurement=UnitOfTime.MINUTES,
     ),
     SensorEntityDescription(
         key="ev_estimated_station_charge_duration",
         name="Estimated Station Charge Duration",
         icon="mdi:ev-station",
-        native_unit_of_measurement=TIME_MINUTES,
+        native_unit_of_measurement=UnitOfTime.MINUTES,
     ),
     SensorEntityDescription(
         key="_ev_target_range_charge_AC",
@@ -146,9 +162,17 @@ SENSOR_DESCRIPTIONS: Final[tuple[SensorEntityDescription, ...]] = (
     ),
     SensorEntityDescription(
         key="total_power_consumed",
-        name="Monthly Energy Consumption",
+        name="Total Energy Consumption",
         icon="mdi:car-electric",
-        native_unit_of_measurement=ENERGY_WATT_HOUR,
+        native_unit_of_measurement=UnitOfEnergy.WATT_HOUR,
+        device_class=SensorDeviceClass.ENERGY,
+        state_class=SensorStateClass.TOTAL_INCREASING,
+    ),
+    SensorEntityDescription(
+        key="total_power_regenerated",
+        name="Total Energy Regeneration",
+        icon="mdi:car-electric",
+        native_unit_of_measurement=UnitOfEnergy.WATT_HOUR,
         device_class=SensorDeviceClass.ENERGY,
         state_class=SensorStateClass.TOTAL_INCREASING,
     ),
@@ -158,7 +182,7 @@ SENSOR_DESCRIPTIONS: Final[tuple[SensorEntityDescription, ...]] = (
         name="Average Energy Consumption",
         icon="mdi:car-electric",
         state_class=SensorStateClass.MEASUREMENT,
-        native_unit_of_measurement=f"{ENERGY_WATT_HOUR}/km",
+        native_unit_of_measurement=f"{UnitOfEnergy.WATT_HOUR}/km",
     ),
     SensorEntityDescription(
         key="front_left_seat_status",
@@ -192,12 +216,12 @@ SENSOR_DESCRIPTIONS: Final[tuple[SensorEntityDescription, ...]] = (
     ),
     SensorEntityDescription(
         key="ev_first_departure_time",
-        name="EV First Scheduled Depature Time",
+        name="EV First Scheduled Departure Time",
         icon="mdi:clock-outline",
     ),
     SensorEntityDescription(
         key="ev_second_departure_time",
-        name="EV Second Scheduled Depature Time",
+        name="EV Second Scheduled Departure Time",
         icon="mdi:clock-outline",
     ),
     SensorEntityDescription(
@@ -209,6 +233,12 @@ SENSOR_DESCRIPTIONS: Final[tuple[SensorEntityDescription, ...]] = (
         key="ev_off_peak_end_time",
         name="EV Off Peak End Time",
         icon="mdi:clock-outline",
+    ),
+    SensorEntityDescription(
+        key="ev_v2l_discharge_limit",
+        name="V2L Discharge Limit",
+        native_unit_of_measurement=PERCENTAGE,
+        device_class=SensorDeviceClass.BATTERY,
     ),
 )
 
@@ -228,11 +258,15 @@ async def async_setup_entry(
                 entities.append(
                     HyundaiKiaConnectSensor(coordinator, description, vehicle)
                 )
+        entities.append(
+            DailyDrivingStatsEntity(
+                coordinator, coordinator.vehicle_manager.vehicles[vehicle_id]
+            )
+        )
+        entities.append(
+            VehicleEntity(coordinator, coordinator.vehicle_manager.vehicles[vehicle_id])
+        )
     async_add_entities(entities)
-    async_add_entities(
-        [VehicleEntity(coordinator, coordinator.vehicle_manager.vehicles[vehicle_id])],
-        True,
-    )
     return True
 
 
@@ -299,3 +333,41 @@ class VehicleEntity(SensorEntity, HyundaiKiaConnectEntity):
     @property
     def unique_id(self):
         return f"{DOMAIN}-all-data-{self.vehicle.id}"
+
+
+class DailyDrivingStatsEntity(SensorEntity, HyundaiKiaConnectEntity):
+    def __init__(self, coordinator, vehicle: Vehicle):
+        super().__init__(coordinator, vehicle)
+
+    @property
+    def state(self):
+        return len(self.vehicle.daily_stats)
+
+    @property
+    def state_attributes(self):
+        m = {}
+        for day in self.vehicle.daily_stats:
+            key = day.date.strftime("%Y-%m-%d")
+            value = {
+                "total_consumed": day.total_consumed,
+                "engine_consumption": day.engine_consumption,
+                "climate_consumption": day.climate_consumption,
+                "onboard_electronics_consumption": day.onboard_electronics_consumption,
+                "battery_care_consumption": day.battery_care_consumption,
+                "regenerated_energy": day.regenerated_energy,
+                "distance": day.distance,
+            }
+            m[key] = value
+        return m
+
+    @property
+    def name(self):
+        return f"{self.vehicle.name} Daily Driving Stats"
+
+    @property
+    def unique_id(self):
+        return f"{DOMAIN}-daily-driving-stats-{self.vehicle.id}"
+
+    @property
+    def unit_of_measurement(self):
+        return UnitOfTime.DAYS

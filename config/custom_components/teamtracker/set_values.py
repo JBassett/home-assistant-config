@@ -5,7 +5,7 @@ import logging
 
 import arrow
 
-from .const import DEFAULT_LOGO, DEFAULT_PROB
+from .const import DEFAULT_LOGO, DEFAULT_PROB, DEFAULT_REFRESH_RATE, RAPID_REFRESH_RATE
 from .set_baseball import async_set_baseball_values
 from .set_cricket import async_set_cricket_values
 from .set_golf import async_set_golf_values
@@ -26,7 +26,7 @@ oppo_prob = {}
 #  Set Values
 #
 async def async_set_values(
-    new_values, event, competition_index, team_index, lang, sensor_name
+    new_values, event, grouping_index, competition_index, team_index, lang, sensor_name
 ) -> bool:
     """Function to set all new_values for the specified event/competition/team"""
 
@@ -36,7 +36,11 @@ async def async_set_values(
         oppo_index = 1
     else:
         oppo_index = 0
-    competition = await async_get_value(event, "competitions", competition_index)
+    grouping = await async_get_value(event, "groupings", grouping_index)
+    if grouping is None:
+        competition = await async_get_value(event, "competitions", competition_index)
+    else:
+        competition = await async_get_value(grouping, "competitions", competition_index)
     competitor = await async_get_value(competition, "competitors", team_index)
     opponent = await async_get_value(competition, "competitors", oppo_index)
 
@@ -49,7 +53,7 @@ async def async_set_values(
         return False
 
     rc = await async_set_universal_values(
-        new_values, event, competition_index, team_index, lang, sensor_name
+        new_values, event, grouping_index, competition_index, team_index, lang, sensor_name
     )
     if not rc:
         _LOGGER.debug(
@@ -88,7 +92,7 @@ async def async_set_values(
 
     if new_values["state"] == "IN":
         rc = await async_set_in_values(
-            new_values, event, competition_index, team_index, sensor_name
+            new_values, event, grouping_index, competition_index, team_index, sensor_name
         )
         if not rc:
             _LOGGER.debug(
@@ -123,7 +127,7 @@ async def async_set_values(
         )
     elif new_values["sport"] == "tennis":
         rc = await async_set_tennis_values(
-            new_values, event, competition_index, team_index, lang, sensor_name
+            new_values, event, grouping_index, competition_index, team_index, lang, sensor_name
         )
     elif new_values["sport"] == "mma":
         rc = await async_set_mma_values(
@@ -148,16 +152,16 @@ async def async_set_values(
 
     new_values["private_fast_refresh"] = False
     if new_values["state"] == "IN":
-        _LOGGER.debug(
-            "%s: Event in progress, setting refresh rate to 5 seconds.", sensor_name
-        )
         new_values["private_fast_refresh"] = True
     if new_values["state"] == "PRE" and (
-        abs((arrow.get(new_values["date"]) - arrow.now()).total_seconds()) < 1200
+        abs((arrow.get(new_values["date"]) - arrow.now()).total_seconds()) < 
+        (int(DEFAULT_REFRESH_RATE.total_seconds())*2)
     ):
         _LOGGER.debug(
-            "%s: Event is within 20 minutes, setting refresh rate to 5 seconds.",
+            "%s: Event is within %s minutes, setting refresh rate to %s seconds.",
             sensor_name,
+            int(DEFAULT_REFRESH_RATE.total_seconds()/60)*2,
+            int(RAPID_REFRESH_RATE.total_seconds())
         )
         new_values["private_fast_refresh"] = True
 
@@ -170,7 +174,7 @@ async def async_set_values(
 #  Set Universal Values
 #
 async def async_set_universal_values(
-    new_values, event, competition_index, team_index, lang, sensor_name
+    new_values, event, grouping_index, competition_index, team_index, lang, sensor_name
 ) -> bool:
     """Function to set new_values common for all sports"""
 
@@ -180,7 +184,11 @@ async def async_set_universal_values(
         oppo_index = 1
     else:
         oppo_index = 0
-    competition = await async_get_value(event, "competitions", competition_index)
+    grouping = await async_get_value(event, "groupings", grouping_index)
+    if grouping is None:
+        competition = await async_get_value(event, "competitions", competition_index)
+    else:
+        competition = await async_get_value(grouping, "competitions", competition_index)
     competitor = await async_get_value(competition, "competitors", team_index)
     opponent = await async_get_value(competition, "competitors", oppo_index)
 
@@ -429,7 +437,7 @@ async def async_set_pre_values(new_values, event) -> bool:
 #  IN
 #
 async def async_set_in_values(
-    new_values, event, competition_index, team_index, sensor_name
+    new_values, event, grouping_index, competition_index, team_index, sensor_name
 ) -> dict:
     """Function to set new_values common for IN state"""
 
@@ -445,7 +453,13 @@ async def async_set_in_values(
         oppo_index = 1
     else:
         oppo_index = 0
-    competition = await async_get_value(event, "competitions", competition_index)
+
+    grouping = await async_get_value(event, "groupings", grouping_index)
+    if grouping is None:
+        competition = await async_get_value(event, "competitions", competition_index)
+    else:
+        competition = await async_get_value(grouping, "competitions", competition_index)
+
     competitor = await async_get_value(competition, "competitors", team_index)
     opponent = await async_get_value(competition, "competitors", oppo_index)
 
